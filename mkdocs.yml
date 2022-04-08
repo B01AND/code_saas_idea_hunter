@@ -1,10 +1,10 @@
 site_author: "wanghaisheng"
-repo_name: "wanghaisheng/code_saas_idea_monitor-"
-repo_url: "https://github.com/wanghaisheng/code_saas_idea_monitor-/"
+repo_name: "wanghaisheng/ code_saas_idea_hunter"
+repo_url: "https://github.com/wanghaisheng/ code_saas_idea_hunter/"
 docs_dir: web/
 site_name: code saas ideas Monitor
 theme:
-  name: material
+  name: minty
 
 
 markdown_extensions:
@@ -33,6 +33,6 @@ markdown_extensions:
   - pymdownx.tasklist
   - pymdownx.tilde
 
-copyright: "https://github.com/p1ay8y3ar"
-google_analytics: ['G-xxxx', 'wanghaisheng/vercel_netlify_monitor']
+copyright: "https://github.com/wanghaisheng"
+google_analytics: ['G-xxxx', 'wanghaisheng/ code_saas_idea_hunter']
 plugins: []
