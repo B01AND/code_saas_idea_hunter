@@ -203,7 +203,7 @@ def db_match_airtable(table,items):
     # print(type(table.all(),len(table.all())))
     for idx,item in enumerate(table.all()):
         print(item)
-        result.append(item['fileds'])
+        result.append(item['fields'])
     return result
 
 def main(table,keyword,topic):
