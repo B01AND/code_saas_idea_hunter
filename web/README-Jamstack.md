@@ -1,10 +1,13 @@
 # Automatic monitor github Jamstack using Github Actions 
 
- > update time: 2022-04-08 16:05:50.801818  total: 1000 
+ > update time: 2022-04-08 17:09:05.627451  total: 1000 
 
  
  ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_monitor-)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_monitor-/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=cve_monitor) 
 
+## 2022-04-08 17:09:05.627416
+|id|name|url|update_at|description|
+|---|---|---|---|---|
 ## 2022-04-08 16:05:50.801765
 |id|name|url|update_at|description|
 |---|---|---|---|---|
