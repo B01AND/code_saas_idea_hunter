@@ -246,12 +246,15 @@ if __name__ == "__main__":
     keywords=['genshin']
     topic='genshin'
     apikey=os.environ['AIRTABLE_API_KEY']
+    baseid=os.environ[upper(topic)+'_AIRTABLE_BASE_KEY']
+    tableid=os.environ[upper(topic)+'_AIRTABLE_TABLE_KEY']
 
-    # api = Api(os.environ['AIRTABLE_API_KEY'])
+    api = Api(os.environ['AIRTABLE_API_KEY'])
 
     # base = Base(apikey, 'test')
+    table = Table(apikey, baseid, tableid)
 
-    table = Table(apikey, 'appWkSf7vEfNE9XTi', 'tblkjzHWZtb1msbQR')
+    # table = Table(apikey, 'appWkSf7vEfNE9XTi', 'tblkjzHWZtb1msbQR')
 
 
     for k in keywords:
