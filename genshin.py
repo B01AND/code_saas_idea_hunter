@@ -188,10 +188,10 @@ def db_match_airtable(table,items):
             created_at = item["created_at"]
             row =[{
                 "id": item['id'],
-                "full_name": full_name,
+                "name": full_name,
                 "description": description,
                 "url": url,
-                "created_at": created_at
+                "update_at": created_at
             }]
 
             updaterow(table,row)
@@ -243,9 +243,8 @@ def main(table,keyword,topic):
 
 
 if __name__ == "__main__":
-    keywords=['wanghaisheng']
-    topic='wanghaisheng'
-    os.environ['AIRTABLE_API_KEY']='keyZCMyQRAtJ0hH2I'    
+    keywords=['genshin']
+    topic='genshin'
     apikey=os.environ['AIRTABLE_API_KEY']
 
     # api = Api(os.environ['AIRTABLE_API_KEY'])
