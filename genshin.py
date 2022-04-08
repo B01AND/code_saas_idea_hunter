@@ -18,23 +18,8 @@ import os
 from pyairtable.formulas import match
 from pyairtable import *
 
-db = SqliteDatabase("genshin.sqlite")
 
 keywords=''
-
-class DB(Model):
-    id = IntegerField()
-    full_name = CharField(max_length=1024)
-    description = CharField(max_length=4098)
-    url = CharField(max_length=1024)
-    created_at = CharField(max_length=128)
-
-    class Meta:
-        database = db
-
-
-db.connect()
-db.create_tables([DB])
 
 
 def write_file(new_contents,topic):
@@ -138,40 +123,6 @@ def updaterow(table,rows):
                 insert2airtable(table,[row])            
             else:
                 table.update(id,[row])      
-
-
-def db_match(items):
-    # print(items)
-    r_list = []
-    for item in items:
-        if not item["id"]=='':
-            id = int(item["id"])
-            
-            if DB.select().where(DB.id == id).count() != 0:
-                pass
-            else:
-                full_name = item["full_name"]
-                description = item["description"]
-                if description == "" or description == None:
-                    description = 'no description'
-                else:
-                    description = description.strip()
-                url = item["html_url"]
-                created_at = item["created_at"]
-                r_list.append({
-                    "id": id,
-                    "full_name": full_name,
-                    "description": description,
-                    "url": url,
-                    "created_at": created_at
-                })
-                DB.create(id=id,
-                            full_name=full_name,
-                            description=description,
-                            url=url,
-                            created_at=created_at)
-
-    return sorted(r_list, key=lambda e: e.__getitem__('created_at'))
 
 def db_match_airtable(table,items):
     print('waiting to check',len(items))
