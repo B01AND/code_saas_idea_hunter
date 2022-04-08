@@ -1,8 +1,8 @@
 site_author: "wanghaisheng"
-repo_name: "wanghaisheng/vercel_netlify_monitor"
-repo_url: "https://github.com/wanghaisheng/vercel_netlify_monitor/"
+repo_name: "wanghaisheng/code_saas_idea_monitor-"
+repo_url: "https://github.com/wanghaisheng/code_saas_idea_monitor-/"
 docs_dir: web/
-site_name: vercel profolio Monitor
+site_name: code saas ideas Monitor
 theme:
   name: material
 
