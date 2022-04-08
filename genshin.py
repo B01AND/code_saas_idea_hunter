@@ -62,20 +62,20 @@ def craw_all(topic):
             for_count=0
         for_count = math.ceil(total_count / 30) + 1
         print(total_count)
-        items = reqtem["items"]
-        for j in range(0, for_count, 1):
-            try:
-                api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+        item_list = reqtem["items"]
+        # for j in range(0, for_count, 1):
+        #     try:
+        #         api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
 
-                req = requests.get(api).json()
-                items = req["items"]
-                item_list.extend(items)
-                print("第{}轮，爬取{}条".format( j, len(items)))
-            except Exception as e:
-                print("网络发生错误", e)
-                continue
+        #         req = requests.get(api).json()
+        #         items = req["items"]
+        #         item_list.extend(items)
+        #         print("第{}轮，爬取{}条".format( j, len(items)))
+        #     except Exception as e:
+        #         print("网络发生错误", e)
+        #         continue
 
-            time.sleep(random.randint(3, 15)*(math.ceil(for_count / 30) + 1))
+        #     time.sleep(random.randint(3, 15)*(math.ceil(for_count / 30) + 1))
     except Exception as e:
         print("请求数量的时候发生错误", e)
     # print(item_list)
