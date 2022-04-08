@@ -246,8 +246,8 @@ if __name__ == "__main__":
     keywords=['genshin']
     topic='genshin'
     apikey=os.environ['AIRTABLE_API_KEY']
-    baseid=os.environ[upper(topic)+'_AIRTABLE_BASE_KEY']
-    tableid=os.environ[upper(topic)+'_AIRTABLE_TABLE_KEY']
+    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
 
     api = Api(os.environ['AIRTABLE_API_KEY'])
 
