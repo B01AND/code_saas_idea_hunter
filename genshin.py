@@ -232,14 +232,14 @@ def main(table,keyword,topic):
 
         for idx,s in enumerate(sorted_list):
             line = "|{}|{}|{}|{}|{}|\n".format(str(idx),
-                s["full_name"], s["description"], s["created_at"],s["url"])    
+                s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
             newline = newline+line
         # print(newline)
         if newline != "":
             old=f"## {day}\n"
-            old=old+"|id|name|description|update_at|url|\n" + "|---|---|---|---|---|\n"                   
-            newline = "# Automatic monitor github {} using Github Actions \n\n > update time: {}  total: {} \n\n \n ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_monitor-)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_monitor-/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=cve_monitor) \n\n{}".format(
+            old=old+"|id|name|description|update_at|url|topic|language|\n" + "|---|---|---|---|---|---|---|\n"                   
+            newline = "# Automatic monitor github {} using Github Actions \n\n > update time: {}  total: {} \n\n \n ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_hunter)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_hunter/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=code_saas_idea_hunter) \n\n{}".format(
                 topic,
                 datetime.now(),
                 len(sorted)
