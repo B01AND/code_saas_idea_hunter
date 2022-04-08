@@ -200,7 +200,7 @@ def db_match_airtable(table,items):
 
             updaterow(table,row)
     result=[]
-    print(type(table.all(),len(table.all())))
+    # print(type(table.all(),len(table.all())))
     for idx,item in enumerate(table.all()['records']):
         result.append(item['fileds'])
     return result
