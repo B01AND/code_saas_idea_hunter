@@ -14,7 +14,7 @@ import time
 import random
 import math
 import os
-db = SqliteDatabase("genshin.sqlite")
+db = SqliteDatabase("shopify.sqlite")
 
 keywords=''
 
@@ -36,15 +36,15 @@ db.create_tables([DB])
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
         open("web/README-{}.md".format(topic),'w').write('')
-    with open("web/README-{}.md".format(topic),'r',encoding='utf8') as f:
-        #去除标题
-        for _ in range(7):
-            f.readline()
+    # with open("web/README-{}.md".format(topic),'r',encoding='utf8') as f:
+    #     #去除标题
+    #     for _ in range(7):
+    #         f.readline()
 
-        old = f.read()
-    new = new_contents + old
+    #     old = f.read()
+    # new = new_contents + old
     with open("web/README-{}.md".format(topic), "w") as f:
-        f.write(new)
+        f.write(new_contents)
 
 
 def craw_all(topic):
@@ -60,12 +60,12 @@ def craw_all(topic):
         for j in range(0, for_count, 1):
             try:
                 api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                time.sleep(random.randint(3, 15))
 
                 req = requests.get(api).json()
                 items = req["items"]
                 item_list.extend(items)
                 print("第{}轮，爬取{}条".format( j, len(items)))
+                time.sleep(random.randint(3, 15))
             except Exception as e:
                 print("网络发生错误", e)
                 continue
@@ -103,28 +103,27 @@ def db_match(items):
             id = int(item["id"])
             
             if DB.select().where(DB.id == id).count() != 0:
-                pass
+                continue
+            full_name = item["full_name"]
+            description = item["description"]
+            if description == "" or description == None:
+                description = 'no description'
             else:
-                full_name = item["full_name"]
-                description = item["description"]
-                if description == "" or description == None:
-                    description = 'no description'
-                else:
-                    description = description.strip()
-                url = item["html_url"]
-                created_at = item["created_at"]
-                r_list.append({
-                    "id": id,
-                    "full_name": full_name,
-                    "description": description,
-                    "url": url,
-                    "created_at": created_at
-                })
-                DB.create(id=id,
-                            full_name=full_name,
-                            description=description,
-                            url=url,
-                            created_at=created_at)
+                description = description.strip()
+            url = item["html_url"]
+            created_at = item["created_at"]
+            r_list.append({
+                "id": id,
+                "full_name": full_name,
+                "description": description,
+                "url": url,
+                "created_at": created_at
+            })
+            DB.create(id=id,
+                        full_name=full_name,
+                        description=description,
+                        url=url,
+                        created_at=created_at)
 
     return sorted(r_list, key=lambda e: e.__getitem__('created_at'))
 
@@ -134,15 +133,12 @@ def main(keyword,topic):
     year = datetime.now().year
     sorted_list = []
     total_count = get_info(keyword)
-    print("获取原始数据:{}条".format(total_count))
-
     sorted = db_match(craw_all(keyword))
-    print("quchonghou:{}条".format(total_count))
 
     if total_count is None or len(sorted) == total_count:
         pass
     else:
-
+        print("获取原始数据:{}条".format(total_count))
         if len(sorted) != 0:
             print("更新{}条".format(len(sorted)))
             sorted_list.extend(sorted)
@@ -153,10 +149,10 @@ def main(keyword,topic):
         day = str(DateToday)    
         newline = ""
         newline=newline+f"## {day}\n"
-        newline=newline+"|id|name|description|update_at|url|\n" + "|---|---|---|---|---|\n"        
+        newline=newline+"|id|name|url|update_at|description|\n" + "|---|---|---|---|---|\n"        
         for idx,s in enumerate(sorted_list):
             line = "|{}|{}|{}|{}|{}|\n".format(str(idx),
-                s["full_name"], s["description"], s["created_at"],s["url"])    
+                s["full_name"], s["url"], s["created_at"],s["description"])    
 
             newline = newline+line
         # print(newline)
@@ -170,7 +166,7 @@ def main(keyword,topic):
 
 
 if __name__ == "__main__":
-    keywords=['genshin']
-    topic='genshinimpact'
+    keywords=['shopify']
+    topic='shopify'
     for k in keywords:
         main(k,topic)
