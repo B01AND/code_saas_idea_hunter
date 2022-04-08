@@ -145,7 +145,7 @@ def db_match_airtable(table,items):
                 "url": url,
                 "topic":topic,
                 "language":language,
-                "update_at": created_at
+                "created_at": created_at
             }]
             updaterow(table,row)
     result=[]
