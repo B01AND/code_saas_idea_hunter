@@ -252,7 +252,7 @@ if __name__ == "__main__":
 
     # base = Base(apikey, 'test')
 
-    table = Table(apikey, 'test', 'test')
+    table = Table(apikey, 'appWkSf7vEfNE9XTi', 'tblkjzHWZtb1msbQR')
 
 
     for k in keywords:
