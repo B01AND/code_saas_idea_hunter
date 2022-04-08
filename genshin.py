@@ -162,12 +162,14 @@ def main(table,keyword,topic):
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
     items=craw_all(keyword)
-    sorted = db_match_airtable(table,items)
-    print("record in db:{}条".format(sorted))
+    print("获取dao原始数据:{}条".format(items))
 
-    if total_count is None or len(sorted) == total_count:
+    print("record in db:{}条".format(len(sorted)))
+
+    if total_count is None or len(items) == total_count:
         pass
     else:
+        sorted = db_match_airtable(table,items)
 
         if len(sorted) != 0:
             print("更新{}条".format(len(sorted)))
@@ -177,7 +179,7 @@ def main(table,keyword,topic):
         day = str(DateToday)    
         newline = ""
 
-        for idx,s in enumerate(items):
+        for idx,s in enumerate(sorted):
             line = "|{}|{}|{}|{}|{}|\n".format(str(idx),
                 s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
