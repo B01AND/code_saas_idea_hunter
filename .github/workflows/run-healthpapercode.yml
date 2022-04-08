@@ -1,14 +1,11 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Run Daily Arxiv
+name: Run healthpapercode
 
 on:
   workflow_dispatch:
   schedule:
     - cron: "00 12 * * *"
-  push:
-    branches:
-      - main
 env:
 
   GITHUB_NAME: wanghaisheng
