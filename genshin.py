@@ -248,9 +248,9 @@ if __name__ == "__main__":
     os.environ['AIRTABLE_API_KEY']='keyZCMyQRAtJ0hH2I'    
     apikey=os.environ['AIRTABLE_API_KEY']
 
-    api = Api(os.environ['AIRTABLE_API_KEY'])
+    # api = Api(os.environ['AIRTABLE_API_KEY'])
 
-    base = Base(apikey, 'test')
+    # base = Base(apikey, 'test')
 
     table = Table(apikey, 'test', 'test')
 
