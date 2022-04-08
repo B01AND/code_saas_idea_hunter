@@ -186,18 +186,23 @@ def db_match_airtable(table,items):
                 description = description.strip()
             url = item["html_url"]
             created_at = item["created_at"]
+            topic=''.join(item["topic"])
+            language=item['language']
             row =[{
                 "id": item['id'],
                 "name": full_name,
                 "description": description,
                 "url": url,
+                "topic":topic,
+                "language":language,
                 "update_at": created_at
             }]
 
             updaterow(table,row)
     result=[]
-    for i in table.all()['records']:
-        result.append(i['fileds'])
+    print(type(table.all(),len(table.all())))
+    for idx,item in enumerate(table.all()['records']):
+        result.append(item['fileds'])
     return result
 
 def main(table,keyword,topic):
