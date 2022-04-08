@@ -140,7 +140,6 @@ def db_match_airtable(table,items):
             topic=''.join(item["topics"])
             language=item['language']
             row =[{
-                "id": item['id'],
                 "name": full_name,
                 "description": description,
                 "url": url,
@@ -180,7 +179,7 @@ def main(table,keyword,topic):
         newline = ""
 
         for idx,s in enumerate(sorted):
-            line = "|{}|{}|{}|{}|{}|\n".format(str(idx),
+            line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
                 s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
             newline = newline+line
