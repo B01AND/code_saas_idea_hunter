@@ -137,7 +137,7 @@ def db_match_airtable(table,items):
                 description = description.strip()
             url = item["html_url"]
             created_at = item["created_at"]
-            topic=''.join(item["topics"])
+            topic=','.join(item["topics"])
             language=item['language']
             row =[{
                 "name": full_name,
