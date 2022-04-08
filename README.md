@@ -33,3 +33,5 @@ class MyScene(CodeScene):
 ## database
 
 https://github.com/gtalarico/pyairtable
+
+## charts and media using app on airtable
