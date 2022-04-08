@@ -197,8 +197,7 @@ def db_match_airtable(table,items):
                 "language":language,
                 "update_at": created_at
             }]
-            if 'id' in row:
-                updaterow(table,row)
+            updaterow(table,row)
     result=[]
     # print(type(table.all(),len(table.all())))
     for idx,item in enumerate(table.all()):
