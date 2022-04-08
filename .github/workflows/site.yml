@@ -1,5 +1,5 @@
 name: update website
-on: 
+on:
   schedule:
     - cron: "15 */1 * * *"
 
