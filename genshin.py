@@ -107,7 +107,7 @@ def newtable(db,table_name):
     table = Table(api_key, db, table_name)
     return table
 def insert2airtable(table,rows):
-    print(rows,'====',type(rows[0]))
+    # print(rows,'====',type(rows[0]))
     if len(rows)==1:
 
         table.create(rows[0])
@@ -202,6 +202,7 @@ def db_match_airtable(table,items):
     result=[]
     # print(type(table.all(),len(table.all())))
     for idx,item in enumerate(table.all()):
+        print(item)
         result.append(item['fileds'])
     return result
 
