@@ -201,7 +201,7 @@ def db_match_airtable(table,items):
     result=[]
     # print(type(table.all(),len(table.all())))
     for idx,item in enumerate(table.all()):
-        print(item)
+        # print(item)
         result.append(item['fields'])
     return result
 
@@ -211,9 +211,9 @@ def main(table,keyword,topic):
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-
-    sorted = db_match_airtable(table,craw_all(keyword))
-    print("quchonghou:{}条".format(total_count))
+    items=craw_all(keyword)
+    sorted = db_match_airtable(table,items)
+    print("quchonghou:{}条".format(sorted))
 
     if total_count is None or len(sorted) == total_count:
         pass
@@ -222,14 +222,12 @@ def main(table,keyword,topic):
         if len(sorted) != 0:
             print("更新{}条".format(len(sorted)))
             sorted_list.extend(sorted)
-        count = random.randint(3, 15)
-        time.sleep(count)
         # print(sorted_list)
         DateToday = datetime.today()
         day = str(DateToday)    
         newline = ""
 
-        for idx,s in enumerate(sorted_list):
+        for idx,s in enumerate(items):
             line = "|{}|{}|{}|{}|{}|\n".format(str(idx),
                 s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
