@@ -54,11 +54,13 @@ def craw_all(topic):
     try:
         reqtem = requests.get(api).json()
         total_count = reqtem["total_count"]
-        for_count = math.ceil(total_count / 100) + 1
+        for_count = math.ceil(total_count / 30) + 1
         print(total_count)
         items = reqtem["items"]
-        for j in range(1, for_count, 1):
+        for j in range(0, for_count, 1):
             try:
+                api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=100&page={}".format(topic,j)
+
                 req = requests.get(api).json()
                 items = req["items"]
                 item_list.extend(items)
@@ -164,7 +166,7 @@ def main(keyword,topic):
 
 
 if __name__ == "__main__":
-    keywords=['genshin impact']
+    keywords=['genshin']
     topic='genshinimpact'
     for k in keywords:
         main(k,topic)
