@@ -161,14 +161,14 @@ def main(table,keyword,topic):
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
     items=craw_all(keyword)
-    print("获取dao原始数据:{}条".format(items))
+    print("获取dao原始数据:{}条".format(len(items)))
 
-    print("record in db:{}条".format(len(sorted)))
 
     if total_count is None or len(items) == total_count:
         pass
     else:
         sorted = db_match_airtable(table,items)
+        print("record in db:{}条".format(len(sorted)))
 
         if len(sorted) != 0:
             print("更新{}条".format(len(sorted)))
