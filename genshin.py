@@ -14,7 +14,7 @@ import time
 import random
 import math
 import os
-db = SqliteDatabase("db/genshin.sqlite")
+db = SqliteDatabase("genshin.sqlite")
 
 keywords=''
 
