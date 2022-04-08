@@ -200,16 +200,14 @@ def db_match_airtable(table,items):
         result.append(i['fileds'])
     return result
 
-def main(keyword,topic):
+def main(table,keyword,topic):
     # 下面是监控用的
     year = datetime.now().year
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-    os.environ['AIRTABLE_API_KEY']='keyZCMyQRAtJ0hH2I'    
-    test=newbase('test')
-    t=newtable(test,'test')
-    sorted = db_match_airtable(t,craw_all(keyword))
+
+    sorted = db_match_airtable(table,craw_all(keyword))
     print("quchonghou:{}条".format(total_count))
 
     if total_count is None or len(sorted) == total_count:
@@ -247,6 +245,15 @@ def main(keyword,topic):
 if __name__ == "__main__":
     keywords=['wanghaisheng']
     topic='wanghaisheng'
+    os.environ['AIRTABLE_API_KEY']='keyZCMyQRAtJ0hH2I'    
+    apikey=os.environ['AIRTABLE_API_KEY']
+
+    api = Api(os.environ['AIRTABLE_API_KEY'])
+
+    base = Base(apikey, 'test')
+
+    table = Table(apikey, 'test', 'test')
+
 
     for k in keywords:
-        main(k,topic)
+        main(table,k,topic)
