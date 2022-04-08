@@ -174,7 +174,7 @@ def db_match(items):
     return sorted(r_list, key=lambda e: e.__getitem__('created_at'))
 
 def db_match_airtable(table,items):
-    # print(items)
+    print('waiting to check',len(items))
     r_list = []
     for item in items:
         if not item["id"]=='':
@@ -201,7 +201,6 @@ def db_match_airtable(table,items):
     result=[]
     # print(type(table.all(),len(table.all())))
     for idx,item in enumerate(table.all()):
-        # print(item)
         result.append(item['fields'])
     return result
 
@@ -213,7 +212,7 @@ def main(table,keyword,topic):
     print("获取原始数据:{}条".format(total_count))
     items=craw_all(keyword)
     sorted = db_match_airtable(table,items)
-    print("quchonghou:{}条".format(sorted))
+    print("record in db:{}条".format(sorted))
 
     if total_count is None or len(sorted) == total_count:
         pass
