@@ -36,15 +36,15 @@ db.create_tables([DB])
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
         open("web/README-{}.md".format(topic),'w').write('')
-    with open("web/README-{}.md".format(topic),'r',encoding='utf8') as f:
-        #去除标题
-        for _ in range(7):
-            f.readline()
+    # with open("web/README-{}.md".format(topic),'r',encoding='utf8') as f:
+    #     #去除标题
+    #     for _ in range(7):
+    #         f.readline()
 
-        old = f.read()
-    new = new_contents + old
+    #     old = f.read()
+    # new = new_contents + old
     with open("web/README-{}.md".format(topic), "w") as f:
-        f.write(new)
+        f.write(new_contents)
 
 
 def craw_all(topic):
@@ -54,12 +54,12 @@ def craw_all(topic):
     try:
         reqtem = requests.get(api).json()
         total_count = reqtem["total_count"]
-        for_count = math.ceil(total_count / 100) + 1
+        for_count = math.ceil(total_count / 30) + 1
         print(total_count)
         items = reqtem["items"]
         for j in range(0, for_count, 1):
             try:
-                api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=100&page={}".format(topic,j)
+                api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
 
                 req = requests.get(api).json()
                 items = req["items"]
@@ -70,7 +70,7 @@ def craw_all(topic):
                 print("网络发生错误", e)
                 continue
 
-            # time.sleep(random.randint(3, 15))
+            time.sleep(random.randint(3, 15))
     except Exception as e:
         print("请求数量的时候发生错误", e)
     # print(item_list)
