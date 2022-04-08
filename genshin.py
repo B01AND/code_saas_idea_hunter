@@ -7,6 +7,7 @@ LastEditTime: 2022-04-08 23:53:55
 Email: tiktoka@gmail.com
 '''
 
+from unittest import result
 import requests
 from peewee import *
 from datetime import datetime
@@ -14,6 +15,9 @@ import time
 import random
 import math
 import os
+from pyairtable.formulas import match
+from pyairtable import *
+
 db = SqliteDatabase("genshin.sqlite")
 
 keywords=''
@@ -54,13 +58,14 @@ def craw_all(topic):
     try:
         reqtem = requests.get(api).json()
         total_count = reqtem["total_count"]
+        if total_count<30:
+            for_count=0
         for_count = math.ceil(total_count / 30) + 1
         print(total_count)
         items = reqtem["items"]
         for j in range(0, for_count, 1):
             try:
                 api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                time.sleep(random.randint(3, 15))
 
                 req = requests.get(api).json()
                 items = req["items"]
@@ -70,7 +75,7 @@ def craw_all(topic):
                 print("网络发生错误", e)
                 continue
 
-            time.sleep(random.randint(30, 150))
+            time.sleep(random.randint(3, 15)*(math.ceil(for_count / 30) + 1))
     except Exception as e:
         print("请求数量的时候发生错误", e)
     # print(item_list)
@@ -93,6 +98,46 @@ def get_info(topic):
     except Exception as e:
         print("网络请求发生错误", e)
         return None
+def newbase(dbname):
+    db=Base('apikey', dbname)    
+    return dbname
+def newtable(db,table_name):
+    api_key = os.environ['AIRTABLE_API_KEY']
+
+    table = Table(api_key, db, table_name)
+    return table
+def insert2airtable(table,rows):
+    print(rows,'====',type(rows[0]))
+    if len(rows)==1:
+
+        table.create(rows[0])
+    else:
+        table.create(rows)
+
+
+def getrowid(table,row):
+
+    formula = match(row)
+    try:
+        id =table.first(formula=formula)['id']
+    except:
+        id = None
+    return id
+
+def updaterow(table,rows):
+    if len(rows)==1:
+        id =getrowid(table,rows[0])
+        if id is None:
+            insert2airtable(table,rows)            
+        else:
+            table.update(id,rows[0])
+    else:
+        for row in rows:
+            id =getrowid(table,[row])
+            if id is None:
+                insert2airtable(table,[row])            
+            else:
+                table.update(id,[row])      
 
 
 def db_match(items):
@@ -128,6 +173,32 @@ def db_match(items):
 
     return sorted(r_list, key=lambda e: e.__getitem__('created_at'))
 
+def db_match_airtable(table,items):
+    # print(items)
+    r_list = []
+    for item in items:
+        if not item["id"]=='':
+            full_name = item["full_name"]
+            description = item["description"]
+            if description == "" or description == None:
+                description = 'no description'
+            else:
+                description = description.strip()
+            url = item["html_url"]
+            created_at = item["created_at"]
+            row =[{
+                "id": item['id'],
+                "full_name": full_name,
+                "description": description,
+                "url": url,
+                "created_at": created_at
+            }]
+
+            updaterow(table,row)
+    result=[]
+    for i in table.all()['records']:
+        result.append(i['fileds'])
+    return result
 
 def main(keyword,topic):
     # 下面是监控用的
@@ -135,8 +206,10 @@ def main(keyword,topic):
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-
-    sorted = db_match(craw_all(keyword))
+    os.environ['AIRTABLE_API_KEY']='keyZCMyQRAtJ0hH2I'    
+    test=newbase('test')
+    t=newtable(test,'test')
+    sorted = db_match_airtable(t,craw_all(keyword))
     print("quchonghou:{}条".format(total_count))
 
     if total_count is None or len(sorted) == total_count:
@@ -165,14 +238,15 @@ def main(keyword,topic):
             newline = "# Automatic monitor github {} using Github Actions \n\n > update time: {}  total: {} \n\n \n ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_monitor-)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_monitor-/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=cve_monitor) \n\n{}".format(
                 topic,
                 datetime.now(),
-                DB.select().where(DB.id != None).count()
+                len(sorted)
                 ,old) + newline
 
             write_file(newline,topic)
 
 
 if __name__ == "__main__":
-    keywords=['genshin']
-    topic='genshinimpact'
+    keywords=['wanghaisheng']
+    topic='wanghaisheng'
+
     for k in keywords:
         main(k,topic)
