@@ -1,10 +1,13 @@
 # Automatic monitor github genshinimpact using Github Actions 
 
- > update time: 2022-04-08 12:33:38.966994  total: 1000 
+ > update time: 2022-04-08 12:54:24.380992  total: 1000 
 
  
  ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_monitor-)  [Browsing through the web](https://p1ay8y3ar.github.io/cve_monitor/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=cve_monitor) 
 
+## 2022-04-08 12:54:24.380956
+|id|name|description|update_at|url|
+|---|---|---|---|---|
 ## 2022-04-08 12:33:38.964634
 |id|name|url|update_at|description|
 |---|---|---|---|---|
