@@ -1,0 +1,1853 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="wanghaisheng">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.6">
+    
+    
+      
+        <title>Automatic monitor github hugo using Github Actions - code saas ideas Monitor</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.9d5733d3.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#automatic-monitor-github-hugo-using-github-actions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="code saas ideas Monitor" class="md-header__button md-logo" aria-label="code saas ideas Monitor" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            code saas ideas Monitor
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Automatic monitor github hugo using Github Actions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/wanghaisheng/code_saas_idea_monitor-/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    wanghaisheng/code_saas_idea_monitor-
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="code saas ideas Monitor" class="md-nav__button md-logo" aria-label="code saas ideas Monitor" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    code saas ideas Monitor
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/wanghaisheng/code_saas_idea_monitor-/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    wanghaisheng/code_saas_idea_monitor-
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../README-Jamstack/" class="md-nav__link">
+        Automatic monitor github Jamstack using Github Actions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Automatic monitor github hugo using Github Actions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Automatic monitor github hugo using Github Actions
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2022-04-08-140449362454" class="md-nav__link">
+    2022-04-08 14:04:49.362454
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2022-04-08-140449362454" class="md-nav__link">
+    2022-04-08 14:04:49.362454
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+<a href="https://github.com/wanghaisheng/code_saas_idea_monitor-/edit/master/docs/README-hugo.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
+
+
+
+<h1 id="automatic-monitor-github-hugo-using-github-actions">Automatic monitor github hugo using Github Actions<a class="headerlink" href="#automatic-monitor-github-hugo-using-github-actions" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>update time: 2022-04-08 14:04:49.363060  total: 210 </p>
+</blockquote>
+<p><img alt="star me" src="https://img.shields.io/badge/star%20me-click%20--%3E-orange" /> <a href="https://github.com/wanghaisheng/code_saas_idea_monitor-">code saas idea monitor</a>  <a href="https://wanghaisheng.github.io/code_saas_idea_monitor-/">Browsing through the web</a>  <img alt="visitors" src="https://visitor-badge.glitch.me/badge?page_id=cve_monitor" /> </p>
+<h2 id="2022-04-08-140449362454">2022-04-08 14:04:49.362454<a class="headerlink" href="#2022-04-08-140449362454" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>url</th>
+<th>update_at</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>DataDog/documentation</td>
+<td><a href="https://github.com/DataDog/documentation">https://github.com/DataDog/documentation</a></td>
+<td>2011-12-12T20:32:29Z</td>
+<td>The source for Datadog's documentation site.</td>
+</tr>
+<tr>
+<td>1</td>
+<td>gohugoio/hugo</td>
+<td><a href="https://github.com/gohugoio/hugo">https://github.com/gohugoio/hugo</a></td>
+<td>2013-07-04T15:26:26Z</td>
+<td>The world’s fastest framework for building websites.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>cloudify-cosmo/docs.getcloudify.org</td>
+<td><a href="https://github.com/cloudify-cosmo/docs.getcloudify.org">https://github.com/cloudify-cosmo/docs.getcloudify.org</a></td>
+<td>2015-06-23T10:45:22Z</td>
+<td>Documentation website for Cloudify Platform</td>
+</tr>
+<tr>
+<td>3</td>
+<td>mendix/docs</td>
+<td><a href="https://github.com/mendix/docs">https://github.com/mendix/docs</a></td>
+<td>2016-09-14T08:31:32Z</td>
+<td>Mendix documentation repository</td>
+</tr>
+<tr>
+<td>4</td>
+<td>LavoWeb/Lumao-Hugo</td>
+<td><a href="https://github.com/LavoWeb/Lumao-Hugo">https://github.com/LavoWeb/Lumao-Hugo</a></td>
+<td>2016-12-24T14:45:43Z</td>
+<td>Lumao code generator</td>
+</tr>
+<tr>
+<td>5</td>
+<td>kaushalmodi/ox-hugo</td>
+<td><a href="https://github.com/kaushalmodi/ox-hugo">https://github.com/kaushalmodi/ox-hugo</a></td>
+<td>2017-02-11T21:53:04Z</td>
+<td>A carefully crafted Org exporter back-end for Hugo</td>
+</tr>
+<tr>
+<td>6</td>
+<td>meyskens/blog</td>
+<td><a href="https://github.com/meyskens/blog">https://github.com/meyskens/blog</a></td>
+<td>2017-03-09T15:35:31Z</td>
+<td>My personal blog built with Hugo</td>
+</tr>
+<tr>
+<td>7</td>
+<td>lsimopoulos/lsimopoulos.github.io</td>
+<td><a href="https://github.com/lsimopoulos/lsimopoulos.github.io">https://github.com/lsimopoulos/lsimopoulos.github.io</a></td>
+<td>2017-06-12T18:41:03Z</td>
+<td>Personal blog using Hugo</td>
+</tr>
+<tr>
+<td>8</td>
+<td>gohugoio/hugoDocs</td>
+<td><a href="https://github.com/gohugoio/hugoDocs">https://github.com/gohugoio/hugoDocs</a></td>
+<td>2017-06-14T07:52:37Z</td>
+<td>The source for <a href="https://gohugo.io/">https://gohugo.io/</a></td>
+</tr>
+<tr>
+<td>9</td>
+<td>lsimopoulos/lsimopoulos.github.io-hugo</td>
+<td><a href="https://github.com/lsimopoulos/lsimopoulos.github.io-hugo">https://github.com/lsimopoulos/lsimopoulos.github.io-hugo</a></td>
+<td>2017-06-14T16:31:58Z</td>
+<td>Hugo blog’s content</td>
+</tr>
+<tr>
+<td>10</td>
+<td>rzaluska/hugo-blog-source</td>
+<td><a href="https://github.com/rzaluska/hugo-blog-source">https://github.com/rzaluska/hugo-blog-source</a></td>
+<td>2017-07-08T08:48:21Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>11</td>
+<td>davidayalas/personal_site</td>
+<td><a href="https://github.com/davidayalas/personal_site">https://github.com/davidayalas/personal_site</a></td>
+<td>2017-09-10T07:24:22Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>12</td>
+<td>ferstar/blog</td>
+<td><a href="https://github.com/ferstar/blog">https://github.com/ferstar/blog</a></td>
+<td>2017-12-05T02:26:09Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>13</td>
+<td>aidatorajiro/torablog</td>
+<td><a href="https://github.com/aidatorajiro/torablog">https://github.com/aidatorajiro/torablog</a></td>
+<td>2017-12-19T13:57:32Z</td>
+<td>: Tora Blog :</td>
+</tr>
+<tr>
+<td>14</td>
+<td>jimmyday12/plussixoneblog</td>
+<td><a href="https://github.com/jimmyday12/plussixoneblog">https://github.com/jimmyday12/plussixoneblog</a></td>
+<td>2018-01-16T09:43:43Z</td>
+<td>My blog written in Hugo using bookdown</td>
+</tr>
+<tr>
+<td>15</td>
+<td>AnXh3L0/anxh3l0.github.io</td>
+<td><a href="https://github.com/AnXh3L0/anxh3l0.github.io">https://github.com/AnXh3L0/anxh3l0.github.io</a></td>
+<td>2018-01-23T12:04:40Z</td>
+<td>The repo for my personal website</td>
+</tr>
+<tr>
+<td>16</td>
+<td>mazgi/mazgi.github.io</td>
+<td><a href="https://github.com/mazgi/mazgi.github.io">https://github.com/mazgi/mazgi.github.io</a></td>
+<td>2018-02-22T23:27:48Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>17</td>
+<td>jenkins-x/jx-docs</td>
+<td><a href="https://github.com/jenkins-x/jx-docs">https://github.com/jenkins-x/jx-docs</a></td>
+<td>2018-02-26T15:09:17Z</td>
+<td>Source code used to build the Jenkins X documentation and website</td>
+</tr>
+<tr>
+<td>18</td>
+<td>mneedham/hugo-blog</td>
+<td><a href="https://github.com/mneedham/hugo-blog">https://github.com/mneedham/hugo-blog</a></td>
+<td>2018-03-17T21:26:29Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>19</td>
+<td>matt-dray/rostrum-blog</td>
+<td><a href="https://github.com/matt-dray/rostrum-blog">https://github.com/matt-dray/rostrum-blog</a></td>
+<td>2018-03-27T22:21:20Z</td>
+<td>:memo:<img alt="🐛" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f41b.png" title=":bug:" /> Blog: fun and learning with #RStats</td>
+</tr>
+<tr>
+<td>20</td>
+<td>jakartaee/jakarta.ee</td>
+<td><a href="https://github.com/jakartaee/jakarta.ee">https://github.com/jakartaee/jakarta.ee</a></td>
+<td>2018-04-17T20:46:24Z</td>
+<td>Jakarta EE is the future of cloud native Java. Jakarta EE open source software drives cloud native innovation, modernizes enterprise applications and protects investments in Java EE.</td>
+</tr>
+<tr>
+<td>21</td>
+<td>danielmichaels/danielms</td>
+<td><a href="https://github.com/danielmichaels/danielms">https://github.com/danielmichaels/danielms</a></td>
+<td>2018-08-12T04:48:45Z</td>
+<td>My personal site built on top of hugo.</td>
+</tr>
+<tr>
+<td>22</td>
+<td>parsiya/parsiya.net</td>
+<td><a href="https://github.com/parsiya/parsiya.net">https://github.com/parsiya/parsiya.net</a></td>
+<td>2018-08-25T01:20:53Z</td>
+<td>Source for parsiya.net</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Leaking/Hunter</td>
+<td><a href="https://github.com/Leaking/Hunter">https://github.com/Leaking/Hunter</a></td>
+<td>2018-08-26T16:16:10Z</td>
+<td>A fast, incremental, concurrent framework to develop compile plugin for android project to manipulate bytecode</td>
+</tr>
+<tr>
+<td>24</td>
+<td>jrosen48/utk-homepage</td>
+<td><a href="https://github.com/jrosen48/utk-homepage">https://github.com/jrosen48/utk-homepage</a></td>
+<td>2018-10-08T15:49:26Z</td>
+<td>Joshua Rosenberg's homepage created with blogdown and Hugo</td>
+</tr>
+<tr>
+<td>25</td>
+<td>GibbonEdu/website</td>
+<td><a href="https://github.com/GibbonEdu/website">https://github.com/GibbonEdu/website</a></td>
+<td>2018-10-21T06:33:12Z</td>
+<td>The gibbonedu.org website, created with Hugo and Tailwind CSS</td>
+</tr>
+<tr>
+<td>26</td>
+<td>greenhas/hugo-website</td>
+<td><a href="https://github.com/greenhas/hugo-website">https://github.com/greenhas/hugo-website</a></td>
+<td>2018-11-14T19:41:31Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>27</td>
+<td>pudly/schmopera-hugo</td>
+<td><a href="https://github.com/pudly/schmopera-hugo">https://github.com/pudly/schmopera-hugo</a></td>
+<td>2018-12-19T19:09:38Z</td>
+<td>Hugo implementation of Schmopera.com</td>
+</tr>
+<tr>
+<td>28</td>
+<td>linchen2chris/linchen2chris.github.io</td>
+<td><a href="https://github.com/linchen2chris/linchen2chris.github.io">https://github.com/linchen2chris/linchen2chris.github.io</a></td>
+<td>2019-01-14T13:24:06Z</td>
+<td>personal blog using hugo</td>
+</tr>
+<tr>
+<td>29</td>
+<td>psi4/psicode-hugo-website</td>
+<td><a href="https://github.com/psi4/psicode-hugo-website">https://github.com/psi4/psicode-hugo-website</a></td>
+<td>2019-02-03T01:24:11Z</td>
+<td>Psi4 user website psicode.org (was <a href="https://admiring-tesla-08529a.netlify.com/">https://admiring-tesla-08529a.netlify.com/</a>)</td>
+</tr>
+<tr>
+<td>30</td>
+<td>mhkarimi1383/mhkarimi1383.github.io</td>
+<td><a href="https://github.com/mhkarimi1383/mhkarimi1383.github.io">https://github.com/mhkarimi1383/mhkarimi1383.github.io</a></td>
+<td>2019-02-08T11:34:52Z</td>
+<td>My Personal Blog Powered By Hugo</td>
+</tr>
+<tr>
+<td>31</td>
+<td>ModiiMedia/contentful-hugo</td>
+<td><a href="https://github.com/ModiiMedia/contentful-hugo">https://github.com/ModiiMedia/contentful-hugo</a></td>
+<td>2019-04-08T16:27:09Z</td>
+<td>A CLI tool that pulls data from Contentful and turns it into markdown files for Hugo and other static site generators. It also includes an express server that can be used for local development and content previews</td>
+</tr>
+<tr>
+<td>32</td>
+<td>12bitvn/news.12bit.vn</td>
+<td><a href="https://github.com/12bitvn/news.12bit.vn">https://github.com/12bitvn/news.12bit.vn</a></td>
+<td>2019-04-16T10:35:11Z</td>
+<td>Browse multiple web development sites at the same time.</td>
+</tr>
+<tr>
+<td>33</td>
+<td>111qqz/111qqz.github.io</td>
+<td><a href="https://github.com/111qqz/111qqz.github.io">https://github.com/111qqz/111qqz.github.io</a></td>
+<td>2019-05-10T19:55:09Z</td>
+<td>fully rendered version of my Hugo blog.</td>
+</tr>
+<tr>
+<td>34</td>
+<td>tix06/hugo5</td>
+<td><a href="https://github.com/tix06/hugo5">https://github.com/tix06/hugo5</a></td>
+<td>2019-05-12T16:20:08Z</td>
+<td>site SNT avec framework hugo-book</td>
+</tr>
+<tr>
+<td>35</td>
+<td>tolees/ofertas</td>
+<td><a href="https://github.com/tolees/ofertas">https://github.com/tolees/ofertas</a></td>
+<td>2019-05-16T11:11:03Z</td>
+<td>Performance test repo for hugo generation</td>
+</tr>
+<tr>
+<td>36</td>
+<td>NLaff/Lafferty.co-v2</td>
+<td><a href="https://github.com/NLaff/Lafferty.co-v2">https://github.com/NLaff/Lafferty.co-v2</a></td>
+<td>2019-05-30T02:44:09Z</td>
+<td>v2 version of personal website with hugo</td>
+</tr>
+<tr>
+<td>37</td>
+<td>gj52/HugoSample</td>
+<td><a href="https://github.com/gj52/HugoSample">https://github.com/gj52/HugoSample</a></td>
+<td>2019-06-19T05:10:11Z</td>
+<td>Hugo Sample</td>
+</tr>
+<tr>
+<td>38</td>
+<td>jakartaee/specifications</td>
+<td><a href="https://github.com/jakartaee/specifications">https://github.com/jakartaee/specifications</a></td>
+<td>2019-07-04T18:15:39Z</td>
+<td>Documentation base for Specification pages be published at jakarta.ee via Hugo and git submodules</td>
+</tr>
+<tr>
+<td>39</td>
+<td>yunionio/docs</td>
+<td><a href="https://github.com/yunionio/docs">https://github.com/yunionio/docs</a></td>
+<td>2019-07-11T12:09:20Z</td>
+<td>Documentations for Cloudpods</td>
+</tr>
+<tr>
+<td>40</td>
+<td>NuevoFoundation/workshops</td>
+<td><a href="https://github.com/NuevoFoundation/workshops">https://github.com/NuevoFoundation/workshops</a></td>
+<td>2019-07-21T22:10:13Z</td>
+<td>Repository containing all workshop materials and curricula for Nuevo Foundation.</td>
+</tr>
+<tr>
+<td>41</td>
+<td>ygeunkim/ygeunkim.github.io</td>
+<td><a href="https://github.com/ygeunkim/ygeunkim.github.io">https://github.com/ygeunkim/ygeunkim.github.io</a></td>
+<td>2019-08-15T02:58:44Z</td>
+<td>Profile github page of Young-geun Kim powered by blogdown</td>
+</tr>
+<tr>
+<td>42</td>
+<td>estruyf/vscode-front-matter</td>
+<td><a href="https://github.com/estruyf/vscode-front-matter">https://github.com/estruyf/vscode-front-matter</a></td>
+<td>2019-08-23T15:44:41Z</td>
+<td>Front Matter is a CMS running straight in Visual Studio Code. Can be used with static site generators like Hugo, Jekyll, Hexo, NextJs, Gatsby, and many more...</td>
+</tr>
+<tr>
+<td>43</td>
+<td>carlosbuenosvinos/carlosbuenosvinos.github.io</td>
+<td><a href="https://github.com/carlosbuenosvinos/carlosbuenosvinos.github.io">https://github.com/carlosbuenosvinos/carlosbuenosvinos.github.io</a></td>
+<td>2019-10-05T17:41:34Z</td>
+<td>This is my personal blog generated with Hugo and GitHub Actions</td>
+</tr>
+<tr>
+<td>44</td>
+<td>yuky2020/My-Hugo-After-Dark-blog</td>
+<td><a href="https://github.com/yuky2020/My-Hugo-After-Dark-blog">https://github.com/yuky2020/My-Hugo-After-Dark-blog</a></td>
+<td>2019-10-23T20:29:24Z</td>
+<td>This is my personal Blog Feel Free to add something if you want</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Miry1919/hugosite</td>
+<td><a href="https://github.com/Miry1919/hugosite">https://github.com/Miry1919/hugosite</a></td>
+<td>2019-11-17T13:50:58Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>46</td>
+<td>verschwoerhaus/verschwoerhaus.de</td>
+<td><a href="https://github.com/verschwoerhaus/verschwoerhaus.de">https://github.com/verschwoerhaus/verschwoerhaus.de</a></td>
+<td>2019-12-11T21:11:28Z</td>
+<td>the next website for the verschwoerhaus. now based on hugo, a static site generator.</td>
+</tr>
+<tr>
+<td>47</td>
+<td>vibeus/hugo-common</td>
+<td><a href="https://github.com/vibeus/hugo-common">https://github.com/vibeus/hugo-common</a></td>
+<td>2019-12-17T05:30:59Z</td>
+<td>Shared Hugo module for all Hugo based static sites</td>
+</tr>
+<tr>
+<td>48</td>
+<td>suihan74/hugo_files</td>
+<td><a href="https://github.com/suihan74/hugo_files">https://github.com/suihan74/hugo_files</a></td>
+<td>2019-12-17T06:08:32Z</td>
+<td>blog contents</td>
+</tr>
+<tr>
+<td>49</td>
+<td>al-esc/hugo-netlify</td>
+<td><a href="https://github.com/al-esc/hugo-netlify">https://github.com/al-esc/hugo-netlify</a></td>
+<td>2020-01-17T13:53:54Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>50</td>
+<td>aimerneige/aimerneige.github.io</td>
+<td><a href="https://github.com/aimerneige/aimerneige.github.io">https://github.com/aimerneige/aimerneige.github.io</a></td>
+<td>2020-01-31T18:27:54Z</td>
+<td>Personsl blog. Source Code: <a href="https://github.com/aimerneige/blog/">https://github.com/aimerneige/blog/</a></td>
+</tr>
+<tr>
+<td>51</td>
+<td>kintsuba/kintsuba-hugo-blog</td>
+<td><a href="https://github.com/kintsuba/kintsuba-hugo-blog">https://github.com/kintsuba/kintsuba-hugo-blog</a></td>
+<td>2020-02-04T06:55:06Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>52</td>
+<td>sdttttt/sdttttt.github.io</td>
+<td><a href="https://github.com/sdttttt/sdttttt.github.io">https://github.com/sdttttt/sdttttt.github.io</a></td>
+<td>2020-03-02T18:44:27Z</td>
+<td>Hugo! 我的超人!</td>
+</tr>
+<tr>
+<td>53</td>
+<td>mathieu-benoit/myblog</td>
+<td><a href="https://github.com/mathieu-benoit/myblog">https://github.com/mathieu-benoit/myblog</a></td>
+<td>2020-04-08T00:56:18Z</td>
+<td>My blog powered by Hugo ready to be deployed as container on Kubernetes</td>
+</tr>
+<tr>
+<td>54</td>
+<td>KarelZe/blog</td>
+<td><a href="https://github.com/KarelZe/blog">https://github.com/KarelZe/blog</a></td>
+<td>2020-04-12T07:18:55Z</td>
+<td>My blog.</td>
+</tr>
+<tr>
+<td>55</td>
+<td>ScilifelabDataCentre/covid-portal</td>
+<td><a href="https://github.com/ScilifelabDataCentre/covid-portal">https://github.com/ScilifelabDataCentre/covid-portal</a></td>
+<td>2020-04-17T09:25:04Z</td>
+<td>The Swedish COVID-19 Data Portal</td>
+</tr>
+<tr>
+<td>56</td>
+<td>rodrigoalcarazdelaosa/fisiquimicamente</td>
+<td><a href="https://github.com/rodrigoalcarazdelaosa/fisiquimicamente">https://github.com/rodrigoalcarazdelaosa/fisiquimicamente</a></td>
+<td>2020-04-18T15:28:51Z</td>
+<td>FisiQuímicamente / PhysiChemically / FisiQuímicament</td>
+</tr>
+<tr>
+<td>57</td>
+<td>neodigm/neodigm</td>
+<td><a href="https://github.com/neodigm/neodigm">https://github.com/neodigm/neodigm</a></td>
+<td>2020-04-19T19:10:55Z</td>
+<td>The Neodigm WASM GoLang Blog 💡</td>
+</tr>
+<tr>
+<td>58</td>
+<td>navendu-pottekkat/navendu-pottekkat.github.io</td>
+<td><a href="https://github.com/navendu-pottekkat/navendu-pottekkat.github.io">https://github.com/navendu-pottekkat/navendu-pottekkat.github.io</a></td>
+<td>2020-05-24T13:17:13Z</td>
+<td>A static blog/portfolio website built using Hugo.</td>
+</tr>
+<tr>
+<td>59</td>
+<td>Xceptance/xlt-documentation</td>
+<td><a href="https://github.com/Xceptance/xlt-documentation">https://github.com/Xceptance/xlt-documentation</a></td>
+<td>2020-06-04T14:08:00Z</td>
+<td>This is the repository for the XLT documentation. WIP. Updates will be pushed continuously to <a href="https://docs.xceptance.com/">https://docs.xceptance.com/</a></td>
+</tr>
+<tr>
+<td>60</td>
+<td>metio/seb</td>
+<td><a href="https://github.com/metio/seb">https://github.com/metio/seb</a></td>
+<td>2020-06-10T23:33:57Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>61</td>
+<td>hugoalh/hugoalh</td>
+<td><a href="https://github.com/hugoalh/hugoalh">https://github.com/hugoalh/hugoalh</a></td>
+<td>2020-07-07T03:35:26Z</td>
+<td>A special GitHub repository for public profile and template.</td>
+</tr>
+<tr>
+<td>62</td>
+<td>xiaokexiang/Blog</td>
+<td><a href="https://github.com/xiaokexiang/Blog">https://github.com/xiaokexiang/Blog</a></td>
+<td>2020-07-24T08:02:46Z</td>
+<td>Blog Design By Hugo</td>
+</tr>
+<tr>
+<td>63</td>
+<td>aspose-cells/Aspose.Cells-Doc-md</td>
+<td><a href="https://github.com/aspose-cells/Aspose.Cells-Doc-md">https://github.com/aspose-cells/Aspose.Cells-Doc-md</a></td>
+<td>2020-07-27T02:12:38Z</td>
+<td>This repo contains aspose.cells markdown docs, not for read directly, only for convert to HTML with hugo.</td>
+</tr>
+<tr>
+<td>64</td>
+<td>aspose-diagram/Aspose.Diagram-Documentation</td>
+<td><a href="https://github.com/aspose-diagram/Aspose.Diagram-Documentation">https://github.com/aspose-diagram/Aspose.Diagram-Documentation</a></td>
+<td>2020-07-27T09:33:55Z</td>
+<td>This repo contains aspose.diagram markdown docs, not for read directly, only for convert to HTML with hugo.</td>
+</tr>
+<tr>
+<td>65</td>
+<td>zhxilin/zhxilin.github.io</td>
+<td><a href="https://github.com/zhxilin/zhxilin.github.io">https://github.com/zhxilin/zhxilin.github.io</a></td>
+<td>2020-07-31T07:18:23Z</td>
+<td>My personal tech blog built via hugo.</td>
+</tr>
+<tr>
+<td>66</td>
+<td>mrcmina/academic-kickstart</td>
+<td><a href="https://github.com/mrcmina/academic-kickstart">https://github.com/mrcmina/academic-kickstart</a></td>
+<td>2020-08-03T02:13:29Z</td>
+<td>Source of my website (marco-mina.com) created with academic-hugo theme and Rblogdown</td>
+</tr>
+<tr>
+<td>67</td>
+<td>qkgoalkeeper/qkgoalkeeper.github.io</td>
+<td><a href="https://github.com/qkgoalkeeper/qkgoalkeeper.github.io">https://github.com/qkgoalkeeper/qkgoalkeeper.github.io</a></td>
+<td>2020-08-08T06:11:16Z</td>
+<td>qkgoalkeeper's blog(powered by hugo)</td>
+</tr>
+<tr>
+<td>68</td>
+<td>SamuelLawrence876/Hugo-toha-theme-deploy</td>
+<td><a href="https://github.com/SamuelLawrence876/Hugo-toha-theme-deploy">https://github.com/SamuelLawrence876/Hugo-toha-theme-deploy</a></td>
+<td>2020-08-10T22:56:32Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>69</td>
+<td>SamuelLawrence876/Hugo-Toha-files</td>
+<td><a href="https://github.com/SamuelLawrence876/Hugo-Toha-files">https://github.com/SamuelLawrence876/Hugo-Toha-files</a></td>
+<td>2020-08-10T23:15:03Z</td>
+<td>files for the Toha theme for deployment</td>
+</tr>
+<tr>
+<td>70</td>
+<td>acend/website-hugo</td>
+<td><a href="https://github.com/acend/website-hugo">https://github.com/acend/website-hugo</a></td>
+<td>2020-09-01T13:52:32Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>71</td>
+<td>opsta/opsta-<a href="http://www.github.io">www.github.io</a></td>
+<td><a href="https://github.com/opsta/opsta-www.github.io">https://github.com/opsta/opsta-www.github.io</a></td>
+<td>2020-09-04T07:08:53Z</td>
+<td><a href="https://www.opsta.co.th">https://www.opsta.co.th</a> hugo framework</td>
+</tr>
+<tr>
+<td>72</td>
+<td>knbbaseball/website</td>
+<td><a href="https://github.com/knbbaseball/website">https://github.com/knbbaseball/website</a></td>
+<td>2020-09-16T02:21:02Z</td>
+<td>愛知県豊田市南部にある少年軟式野球チーム・上郷ノーティボーイズのウェブサイトです。野球を愛する少年・少女達の夢を育み、軟式野球を正しく指導し、体力向上と礼儀を養成します。また、親友同士の友情と交歓の場を与え、規則正しい明朗な少年・少女を育成することを目的としています。</td>
+</tr>
+<tr>
+<td>73</td>
+<td>HugoCastroBR/HugoCastroBR</td>
+<td><a href="https://github.com/HugoCastroBR/HugoCastroBR">https://github.com/HugoCastroBR/HugoCastroBR</a></td>
+<td>2020-09-25T00:03:16Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>74</td>
+<td>razonyang/hugo-theme-bootstrap</td>
+<td><a href="https://github.com/razonyang/hugo-theme-bootstrap">https://github.com/razonyang/hugo-theme-bootstrap</a></td>
+<td>2020-10-15T13:20:45Z</td>
+<td>A fast, responsive and feature-rich Hugo theme for personal blog and documentations.</td>
+</tr>
+<tr>
+<td>75</td>
+<td>hugo-toha/hugo-toha.github.io</td>
+<td><a href="https://github.com/hugo-toha/hugo-toha.github.io">https://github.com/hugo-toha/hugo-toha.github.io</a></td>
+<td>2020-10-31T07:26:32Z</td>
+<td>An example hugo static site with Toha theme.</td>
+</tr>
+<tr>
+<td>76</td>
+<td>quatauta/quatauta.gitlab.io</td>
+<td><a href="https://github.com/quatauta/quatauta.gitlab.io">https://github.com/quatauta/quatauta.gitlab.io</a></td>
+<td>2020-12-30T17:25:17Z</td>
+<td>My first toy project with GitLab Pages, Hugo and Tailwind CSS. Deployed to <a href="https://quatauta.gitlab.io/">https://quatauta.gitlab.io/</a> with GitLab Pages. Mirrored from <a href="https://gitlab.com/quatauta/quatauta.gitlab.io">https://gitlab.com/quatauta/quatauta.gitlab.io</a></td>
+</tr>
+<tr>
+<td>77</td>
+<td>freshrimpsushi/freshrimpsushi.github.io</td>
+<td><a href="https://github.com/freshrimpsushi/freshrimpsushi.github.io">https://github.com/freshrimpsushi/freshrimpsushi.github.io</a></td>
+<td>2021-01-10T08:34:48Z</td>
+<td>after hugo</td>
+</tr>
+<tr>
+<td>78</td>
+<td>experimental-software/workshop-materials</td>
+<td><a href="https://github.com/experimental-software/workshop-materials">https://github.com/experimental-software/workshop-materials</a></td>
+<td>2021-01-16T18:40:32Z</td>
+<td>Hugo theme for building websites for IT workshops with tutorials and presentations</td>
+</tr>
+<tr>
+<td>79</td>
+<td>Murrx/hugo-search</td>
+<td><a href="https://github.com/Murrx/hugo-search">https://github.com/Murrx/hugo-search</a></td>
+<td>2021-01-23T15:25:17Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>80</td>
+<td>hugovidafe/Hugovidafe</td>
+<td><a href="https://github.com/hugovidafe/Hugovidafe">https://github.com/hugovidafe/Hugovidafe</a></td>
+<td>2021-02-11T22:23:34Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>81</td>
+<td>Authentic10/Authentic10.github.io</td>
+<td><a href="https://github.com/Authentic10/Authentic10.github.io">https://github.com/Authentic10/Authentic10.github.io</a></td>
+<td>2021-02-11T23:15:47Z</td>
+<td>Personal Portfolio with Hugo</td>
+</tr>
+<tr>
+<td>82</td>
+<td>dvesti/diagonaal</td>
+<td><a href="https://github.com/dvesti/diagonaal">https://github.com/dvesti/diagonaal</a></td>
+<td>2021-02-14T19:06:28Z</td>
+<td>Диагональ -- сайт на Hugo</td>
+</tr>
+<tr>
+<td>83</td>
+<td>brunoamaral/gregory</td>
+<td><a href="https://github.com/brunoamaral/gregory">https://github.com/brunoamaral/gregory</a></td>
+<td>2021-02-23T18:08:37Z</td>
+<td>Gregory uses Artificial Intelligence and Machine Learning to help research Multiple Sclerosis</td>
+</tr>
+<tr>
+<td>84</td>
+<td>semiosis/semiosis-hugo</td>
+<td><a href="https://github.com/semiosis/semiosis-hugo">https://github.com/semiosis/semiosis-hugo</a></td>
+<td>2021-03-01T08:06:33Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>85</td>
+<td>ModiiMedia/contentful-hugo-tailwind-starter</td>
+<td><a href="https://github.com/ModiiMedia/contentful-hugo-tailwind-starter">https://github.com/ModiiMedia/contentful-hugo-tailwind-starter</a></td>
+<td>2021-03-15T19:50:23Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>86</td>
+<td>time2beat/everybody-wants-some</td>
+<td><a href="https://github.com/time2beat/everybody-wants-some">https://github.com/time2beat/everybody-wants-some</a></td>
+<td>2021-03-18T06:05:41Z</td>
+<td>Source Code of My Blog</td>
+</tr>
+<tr>
+<td>87</td>
+<td>welcomments/website</td>
+<td><a href="https://github.com/welcomments/website">https://github.com/welcomments/website</a></td>
+<td>2021-03-24T13:56:42Z</td>
+<td>The official website for Welcomments - pre-rendered static HTML comments for Jekyll, Hugo, and Eleventy.</td>
+</tr>
+<tr>
+<td>88</td>
+<td>HugoRodriguesQW/hugorodriguesqw</td>
+<td><a href="https://github.com/HugoRodriguesQW/hugorodriguesqw">https://github.com/HugoRodriguesQW/hugorodriguesqw</a></td>
+<td>2021-03-24T21:36:24Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>89</td>
+<td>hazby2002/Hugo-Blog</td>
+<td><a href="https://github.com/hazby2002/Hugo-Blog">https://github.com/hazby2002/Hugo-Blog</a></td>
+<td>2021-03-26T01:02:17Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>90</td>
+<td>grayru/blognot-hugo</td>
+<td><a href="https://github.com/grayru/blognot-hugo">https://github.com/grayru/blognot-hugo</a></td>
+<td>2021-03-29T09:01:58Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>91</td>
+<td>checkly/checklyhq.com</td>
+<td><a href="https://github.com/checkly/checklyhq.com">https://github.com/checkly/checklyhq.com</a></td>
+<td>2021-04-14T14:02:31Z</td>
+<td>Checkly public site &amp; docs</td>
+</tr>
+<tr>
+<td>92</td>
+<td>zfunnily/zfunnily.github.io</td>
+<td><a href="https://github.com/zfunnily/zfunnily.github.io">https://github.com/zfunnily/zfunnily.github.io</a></td>
+<td>2021-04-17T06:13:13Z</td>
+<td>hugo的静态博客的发布</td>
+</tr>
+<tr>
+<td>93</td>
+<td>anphabe/business-hugo</td>
+<td><a href="https://github.com/anphabe/business-hugo">https://github.com/anphabe/business-hugo</a></td>
+<td>2021-04-20T06:36:54Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>94</td>
+<td>kbuzard/website</td>
+<td><a href="https://github.com/kbuzard/website">https://github.com/kbuzard/website</a></td>
+<td>2021-04-22T19:35:15Z</td>
+<td>Professional website using netlify, hugo and blogdown</td>
+</tr>
+<tr>
+<td>95</td>
+<td>haytok/hakiwata</td>
+<td><a href="https://github.com/haytok/hakiwata">https://github.com/haytok/hakiwata</a></td>
+<td>2021-04-29T16:18:33Z</td>
+<td>My Portfolio using Hugo and GitHub Pages</td>
+</tr>
+<tr>
+<td>96</td>
+<td>Cliffy57/Cliffy57</td>
+<td><a href="https://github.com/Cliffy57/Cliffy57">https://github.com/Cliffy57/Cliffy57</a></td>
+<td>2021-05-12T22:34:57Z</td>
+<td>Hugo D.P.</td>
+</tr>
+<tr>
+<td>97</td>
+<td>time2beat/blog</td>
+<td><a href="https://github.com/time2beat/blog">https://github.com/time2beat/blog</a></td>
+<td>2021-05-15T03:45:01Z</td>
+<td>Distribution of My Blog</td>
+</tr>
+<tr>
+<td>98</td>
+<td>Corfucinas/absolute-array</td>
+<td><a href="https://github.com/Corfucinas/absolute-array">https://github.com/Corfucinas/absolute-array</a></td>
+<td>2021-06-13T17:51:59Z</td>
+<td>Files generated by Hugo for my website</td>
+</tr>
+<tr>
+<td>99</td>
+<td>Akimon658/akimon658.github.io</td>
+<td><a href="https://github.com/Akimon658/akimon658.github.io">https://github.com/Akimon658/akimon658.github.io</a></td>
+<td>2021-06-15T08:42:45Z</td>
+<td>The source for @akimon658's blog.</td>
+</tr>
+<tr>
+<td>100</td>
+<td>harshvardhaniimi/personal-website</td>
+<td><a href="https://github.com/harshvardhaniimi/personal-website">https://github.com/harshvardhaniimi/personal-website</a></td>
+<td>2021-06-16T14:46:30Z</td>
+<td>Repository for personal website</td>
+</tr>
+<tr>
+<td>101</td>
+<td>hilmanski/onebite-dev</td>
+<td><a href="https://github.com/hilmanski/onebite-dev">https://github.com/hilmanski/onebite-dev</a></td>
+<td>2021-07-13T08:43:17Z</td>
+<td>Repository for onebitedev website: Developer tips &amp; trick blog using Hugo, one bite at a time</td>
+</tr>
+<tr>
+<td>102</td>
+<td>aladdinding/aladdinding.github.io</td>
+<td><a href="https://github.com/aladdinding/aladdinding.github.io">https://github.com/aladdinding/aladdinding.github.io</a></td>
+<td>2021-07-18T01:15:33Z</td>
+<td>Aladdin's blog</td>
+</tr>
+<tr>
+<td>103</td>
+<td>hugotkk/hugotkk.github.io</td>
+<td><a href="https://github.com/hugotkk/hugotkk.github.io">https://github.com/hugotkk/hugotkk.github.io</a></td>
+<td>2021-07-19T10:59:26Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>104</td>
+<td>wjm-lzjtu/hugo-academic</td>
+<td><a href="https://github.com/wjm-lzjtu/hugo-academic">https://github.com/wjm-lzjtu/hugo-academic</a></td>
+<td>2021-08-12T02:40:56Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>105</td>
+<td>wtysos11/blogTemplateByHugo</td>
+<td><a href="https://github.com/wtysos11/blogTemplateByHugo">https://github.com/wtysos11/blogTemplateByHugo</a></td>
+<td>2021-08-23T12:25:53Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>106</td>
+<td>hugotkk/hugotkk.github.io-raw</td>
+<td><a href="https://github.com/hugotkk/hugotkk.github.io-raw">https://github.com/hugotkk/hugotkk.github.io-raw</a></td>
+<td>2021-08-25T11:30:19Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>107</td>
+<td>lomirus/lomirus.github.io</td>
+<td><a href="https://github.com/lomirus/lomirus.github.io">https://github.com/lomirus/lomirus.github.io</a></td>
+<td>2021-08-27T07:12:46Z</td>
+<td>😃 Hello, here is my blog site, powered by Hugo, Stack.</td>
+</tr>
+<tr>
+<td>108</td>
+<td>JordanTheITGuy/Isconfigmgrdead.com-Hugo</td>
+<td><a href="https://github.com/JordanTheITGuy/Isconfigmgrdead.com-Hugo">https://github.com/JordanTheITGuy/Isconfigmgrdead.com-Hugo</a></td>
+<td>2021-09-02T21:16:44Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>109</td>
+<td>greeedyboy/hugowebs</td>
+<td><a href="https://github.com/greeedyboy/hugowebs">https://github.com/greeedyboy/hugowebs</a></td>
+<td>2021-09-04T18:09:39Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>110</td>
+<td>anghunk/hugo-blog</td>
+<td><a href="https://github.com/anghunk/hugo-blog">https://github.com/anghunk/hugo-blog</a></td>
+<td>2021-09-18T03:47:02Z</td>
+<td>基于 hugo 部署的个人博客源码</td>
+</tr>
+<tr>
+<td>111</td>
+<td>BBaoVanC/bobatheme</td>
+<td><a href="https://github.com/BBaoVanC/bobatheme">https://github.com/BBaoVanC/bobatheme</a></td>
+<td>2021-09-25T22:58:08Z</td>
+<td>Simple Hugo theme for boba.best and bbaovanc.com</td>
+</tr>
+<tr>
+<td>112</td>
+<td>alohaia/hugo-theme-daisilia</td>
+<td><a href="https://github.com/alohaia/hugo-theme-daisilia">https://github.com/alohaia/hugo-theme-daisilia</a></td>
+<td>2021-09-26T14:40:58Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>113</td>
+<td>JunIce/hugo-blog</td>
+<td><a href="https://github.com/JunIce/hugo-blog">https://github.com/JunIce/hugo-blog</a></td>
+<td>2021-09-30T02:53:03Z</td>
+<td>frontend daily work note</td>
+</tr>
+<tr>
+<td>114</td>
+<td>moonagic/Hugo</td>
+<td><a href="https://github.com/moonagic/Hugo">https://github.com/moonagic/Hugo</a></td>
+<td>2021-09-30T08:58:46Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>115</td>
+<td>mingjia-xie-cn/starter-hugo-academic</td>
+<td><a href="https://github.com/mingjia-xie-cn/starter-hugo-academic">https://github.com/mingjia-xie-cn/starter-hugo-academic</a></td>
+<td>2021-10-01T15:22:32Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>116</td>
+<td>yqlbu/hikariai-web</td>
+<td><a href="https://github.com/yqlbu/hikariai-web">https://github.com/yqlbu/hikariai-web</a></td>
+<td>2021-10-08T10:03:51Z</td>
+<td>My main websites built with Hugo, containerized as a microservice</td>
+</tr>
+<tr>
+<td>117</td>
+<td>alohaia/hugowiki.nvim</td>
+<td><a href="https://github.com/alohaia/hugowiki.nvim">https://github.com/alohaia/hugowiki.nvim</a></td>
+<td>2021-10-12T10:32:55Z</td>
+<td>A NeoVim plugin used to write post with Hugo.</td>
+</tr>
+<tr>
+<td>118</td>
+<td>BBaoVanC/bbaovanc.com</td>
+<td><a href="https://github.com/BBaoVanC/bbaovanc.com">https://github.com/BBaoVanC/bbaovanc.com</a></td>
+<td>2021-10-14T00:02:23Z</td>
+<td>The source code of my website, uses <a href="https://github.com/BBaoVanC/bobatheme">https://github.com/BBaoVanC/bobatheme</a></td>
+</tr>
+<tr>
+<td>119</td>
+<td>mayocream/hugo-docker</td>
+<td><a href="https://github.com/mayocream/hugo-docker">https://github.com/mayocream/hugo-docker</a></td>
+<td>2021-10-18T03:00:16Z</td>
+<td>🐳 Automation building the latest docker image of Hugo</td>
+</tr>
+<tr>
+<td>120</td>
+<td>simrikservices/simirik-hugo</td>
+<td><a href="https://github.com/simrikservices/simirik-hugo">https://github.com/simrikservices/simirik-hugo</a></td>
+<td>2021-10-23T11:00:23Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>121</td>
+<td>go-vela/vela-hugo</td>
+<td><a href="https://github.com/go-vela/vela-hugo">https://github.com/go-vela/vela-hugo</a></td>
+<td>2021-10-28T19:10:34Z</td>
+<td>Hugo Plugin for Vela (Target's official Pipeline Automation Framework)</td>
+</tr>
+<tr>
+<td>122</td>
+<td>annahri/blog.annahri.com</td>
+<td><a href="https://github.com/annahri/blog.annahri.com">https://github.com/annahri/blog.annahri.com</a></td>
+<td>2021-11-02T01:40:59Z</td>
+<td>My personal blog generated using Hugo SSG.</td>
+</tr>
+<tr>
+<td>123</td>
+<td>Hebs-Web-Design/hugo-modules</td>
+<td><a href="https://github.com/Hebs-Web-Design/hugo-modules">https://github.com/Hebs-Web-Design/hugo-modules</a></td>
+<td>2021-11-06T02:37:17Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>124</td>
+<td>JasterV/jasterv-blog</td>
+<td><a href="https://github.com/JasterV/jasterv-blog">https://github.com/JasterV/jasterv-blog</a></td>
+<td>2021-11-07T00:00:30Z</td>
+<td>Personal blog powered by Hugo Templates</td>
+</tr>
+<tr>
+<td>125</td>
+<td>danniel3/danfolio</td>
+<td><a href="https://github.com/danniel3/danfolio">https://github.com/danniel3/danfolio</a></td>
+<td>2021-11-09T07:51:28Z</td>
+<td>Minimalist Personal Portfolio Website for Hugo</td>
+</tr>
+<tr>
+<td>126</td>
+<td>lauravuo/my-heart-music</td>
+<td><a href="https://github.com/lauravuo/my-heart-music">https://github.com/lauravuo/my-heart-music</a></td>
+<td>2021-12-04T19:24:19Z</td>
+<td>PoC project for utilizing static website generation through GitHub actions workflow.</td>
+</tr>
+<tr>
+<td>127</td>
+<td>kissingfire123/kissingfire123.github.io</td>
+<td><a href="https://github.com/kissingfire123/kissingfire123.github.io">https://github.com/kissingfire123/kissingfire123.github.io</a></td>
+<td>2021-12-22T08:24:47Z</td>
+<td>Hugo, LoveIt Theme, Github-Page , Benjamin Blog</td>
+</tr>
+<tr>
+<td>128</td>
+<td>chringel21/chringel-hugo-theme</td>
+<td><a href="https://github.com/chringel21/chringel-hugo-theme">https://github.com/chringel21/chringel-hugo-theme</a></td>
+<td>2021-12-22T12:52:08Z</td>
+<td>chringel - Privacy focused theme for Hugo</td>
+</tr>
+<tr>
+<td>129</td>
+<td>iron-security/website</td>
+<td><a href="https://github.com/iron-security/website">https://github.com/iron-security/website</a></td>
+<td>2021-12-27T14:55:45Z</td>
+<td>Hugo repository for the iron.security website.</td>
+</tr>
+<tr>
+<td>130</td>
+<td>noesya/osuny-hugo-theme</td>
+<td><a href="https://github.com/noesya/osuny-hugo-theme">https://github.com/noesya/osuny-hugo-theme</a></td>
+<td>2022-01-06T10:40:00Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>131</td>
+<td>abrahamalen/alen-abraham.github.io</td>
+<td><a href="https://github.com/abrahamalen/alen-abraham.github.io">https://github.com/abrahamalen/alen-abraham.github.io</a></td>
+<td>2022-01-23T09:43:52Z</td>
+<td>A personal website created using Hugo.</td>
+</tr>
+<tr>
+<td>132</td>
+<td>leyouBaloy/leyouBaloy.github.io</td>
+<td><a href="https://github.com/leyouBaloy/leyouBaloy.github.io">https://github.com/leyouBaloy/leyouBaloy.github.io</a></td>
+<td>2022-01-28T06:38:43Z</td>
+<td>个人博客hugo</td>
+</tr>
+<tr>
+<td>133</td>
+<td>lixiang810/HexoSharp</td>
+<td><a href="https://github.com/lixiang810/HexoSharp">https://github.com/lixiang810/HexoSharp</a></td>
+<td>2022-02-17T07:24:03Z</td>
+<td>🎁可独立部署也可托管在 Cloudflare 上的现代化静态博客管理器，功能：文章编辑、图片上传、反代图床</td>
+</tr>
+<tr>
+<td>134</td>
+<td>Reaflecter/reaflecter.github.io</td>
+<td><a href="https://github.com/Reaflecter/reaflecter.github.io">https://github.com/Reaflecter/reaflecter.github.io</a></td>
+<td>2022-02-18T17:52:11Z</td>
+<td>Hugo搭建的个人博客</td>
+</tr>
+<tr>
+<td>135</td>
+<td>880831ian/blog</td>
+<td><a href="https://github.com/880831ian/blog">https://github.com/880831ian/blog</a></td>
+<td>2022-02-20T11:03:04Z</td>
+<td>Blog 主要執行檔案，使用 hugo 建置而成</td>
+</tr>
+<tr>
+<td>136</td>
+<td>Hugo0307/Hugo0307</td>
+<td><a href="https://github.com/Hugo0307/Hugo0307">https://github.com/Hugo0307/Hugo0307</a></td>
+<td>2022-02-24T23:01:06Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>137</td>
+<td>hmathieu-insat/4A-Compiler</td>
+<td><a href="https://github.com/hmathieu-insat/4A-Compiler">https://github.com/hmathieu-insat/4A-Compiler</a></td>
+<td>2022-02-28T13:31:21Z</td>
+<td>A compiler for a C-like language coded during 4A at INSA by Guillaume Aubut and Hugo Mathieu</td>
+</tr>
+<tr>
+<td>138</td>
+<td>JustinGuese/website-hugo-nft-gaming</td>
+<td><a href="https://github.com/JustinGuese/website-hugo-nft-gaming">https://github.com/JustinGuese/website-hugo-nft-gaming</a></td>
+<td>2022-03-02T11:30:15Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>139</td>
+<td>BahuangShanren/blog</td>
+<td><a href="https://github.com/BahuangShanren/blog">https://github.com/BahuangShanren/blog</a></td>
+<td>2022-03-04T14:00:30Z</td>
+<td>使用Hugo和DoIt的个人博客</td>
+</tr>
+<tr>
+<td>140</td>
+<td>amackays/starter_hugo_academic</td>
+<td><a href="https://github.com/amackays/starter_hugo_academic">https://github.com/amackays/starter_hugo_academic</a></td>
+<td>2022-03-04T20:15:51Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>141</td>
+<td>wyn430/starter-hugo-academic</td>
+<td><a href="https://github.com/wyn430/starter-hugo-academic">https://github.com/wyn430/starter-hugo-academic</a></td>
+<td>2022-03-06T21:39:13Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>142</td>
+<td>abicas/SapOnMicrosoftDemos</td>
+<td><a href="https://github.com/abicas/SapOnMicrosoftDemos">https://github.com/abicas/SapOnMicrosoftDemos</a></td>
+<td>2022-03-10T19:14:09Z</td>
+<td>SAP on Microsoft Tutorials and Demos built on HUGO</td>
+</tr>
+<tr>
+<td>143</td>
+<td>bluewhale-users/bluewhale-hugo</td>
+<td><a href="https://github.com/bluewhale-users/bluewhale-hugo">https://github.com/bluewhale-users/bluewhale-hugo</a></td>
+<td>2022-03-11T01:07:51Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>144</td>
+<td>ld-hrvoje/hugo_sample_site</td>
+<td><a href="https://github.com/ld-hrvoje/hugo_sample_site">https://github.com/ld-hrvoje/hugo_sample_site</a></td>
+<td>2022-03-11T08:25:43Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>145</td>
+<td>taontech/hugopages</td>
+<td><a href="https://github.com/taontech/hugopages">https://github.com/taontech/hugopages</a></td>
+<td>2022-03-14T14:51:36Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>146</td>
+<td>smeekings/website</td>
+<td><a href="https://github.com/smeekings/website">https://github.com/smeekings/website</a></td>
+<td>2022-03-16T12:04:03Z</td>
+<td>my academic website with blogdown, hugo and R</td>
+</tr>
+<tr>
+<td>147</td>
+<td>skytechlab/hugoCMS</td>
+<td><a href="https://github.com/skytechlab/hugoCMS">https://github.com/skytechlab/hugoCMS</a></td>
+<td>2022-03-17T06:04:58Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>148</td>
+<td>vietanhdev/geeky-curious</td>
+<td><a href="https://github.com/vietanhdev/geeky-curious">https://github.com/vietanhdev/geeky-curious</a></td>
+<td>2022-03-17T13:31:28Z</td>
+<td>Hugo theme for AICurious - 2022</td>
+</tr>
+<tr>
+<td>149</td>
+<td>ZackYJz/hugo-blog-page</td>
+<td><a href="https://github.com/ZackYJz/hugo-blog-page">https://github.com/ZackYJz/hugo-blog-page</a></td>
+<td>2022-03-18T03:36:04Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>150</td>
+<td>OhBonsai/kimix</td>
+<td><a href="https://github.com/OhBonsai/kimix">https://github.com/OhBonsai/kimix</a></td>
+<td>2022-03-19T06:39:08Z</td>
+<td>Kimix Website,  Hugo + Netlify</td>
+</tr>
+<tr>
+<td>151</td>
+<td>CloudCannon/megakit-hugo-template</td>
+<td><a href="https://github.com/CloudCannon/megakit-hugo-template">https://github.com/CloudCannon/megakit-hugo-template</a></td>
+<td>2022-03-22T03:47:16Z</td>
+<td>Business Hugo template</td>
+</tr>
+<tr>
+<td>152</td>
+<td>ydsungan/ydsungan_hugo</td>
+<td><a href="https://github.com/ydsungan/ydsungan_hugo">https://github.com/ydsungan/ydsungan_hugo</a></td>
+<td>2022-03-22T06:25:39Z</td>
+<td>ydsungan的博客网站，使用Hugo平台搭建</td>
+</tr>
+<tr>
+<td>153</td>
+<td>meinego/blog</td>
+<td><a href="https://github.com/meinego/blog">https://github.com/meinego/blog</a></td>
+<td>2022-03-22T08:20:12Z</td>
+<td>hugo site</td>
+</tr>
+<tr>
+<td>154</td>
+<td>mad-start/hugo-blog</td>
+<td><a href="https://github.com/mad-start/hugo-blog">https://github.com/mad-start/hugo-blog</a></td>
+<td>2022-03-23T05:15:05Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>155</td>
+<td>hnc-jihoon/my-hugo-site</td>
+<td><a href="https://github.com/hnc-jihoon/my-hugo-site">https://github.com/hnc-jihoon/my-hugo-site</a></td>
+<td>2022-03-23T14:50:18Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>156</td>
+<td>palza4dev/blog</td>
+<td><a href="https://github.com/palza4dev/blog">https://github.com/palza4dev/blog</a></td>
+<td>2022-03-24T09:05:37Z</td>
+<td>blog = Hugo + Github pages</td>
+</tr>
+<tr>
+<td>157</td>
+<td>hugosouza77/hugosouza77</td>
+<td><a href="https://github.com/hugosouza77/hugosouza77">https://github.com/hugosouza77/hugosouza77</a></td>
+<td>2022-03-24T18:01:10Z</td>
+<td>Config files for my GitHub profile.</td>
+</tr>
+<tr>
+<td>158</td>
+<td>fjeremic/fjeremic.github.io</td>
+<td><a href="https://github.com/fjeremic/fjeremic.github.io">https://github.com/fjeremic/fjeremic.github.io</a></td>
+<td>2022-03-27T20:27:17Z</td>
+<td>Personal website of Filip Jeremic.</td>
+</tr>
+<tr>
+<td>159</td>
+<td>Dovalight/P3_Esquinazi-hugo</td>
+<td><a href="https://github.com/Dovalight/P3_Esquinazi-hugo">https://github.com/Dovalight/P3_Esquinazi-hugo</a></td>
+<td>2022-03-27T22:55:28Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>160</td>
+<td>nickyluck/hugoprepas4</td>
+<td><a href="https://github.com/nickyluck/hugoprepas4">https://github.com/nickyluck/hugoprepas4</a></td>
+<td>2022-04-02T16:20:20Z</td>
+<td>Site Hugoprépas 4 avec Symfony 4.4</td>
+</tr>
+<tr>
+<td>161</td>
+<td>ElvanIpeker/hugo</td>
+<td><a href="https://github.com/ElvanIpeker/hugo">https://github.com/ElvanIpeker/hugo</a></td>
+<td>2022-04-03T20:35:01Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>162</td>
+<td>jswade/starter-hugo-academic</td>
+<td><a href="https://github.com/jswade/starter-hugo-academic">https://github.com/jswade/starter-hugo-academic</a></td>
+<td>2022-04-05T16:42:46Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>163</td>
+<td>HugoChollet/hugoBamFormation</td>
+<td><a href="https://github.com/HugoChollet/hugoBamFormation">https://github.com/HugoChollet/hugoBamFormation</a></td>
+<td>2022-04-07T09:55:53Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>164</td>
+<td>Lucidize/one-click-hugo-cms</td>
+<td><a href="https://github.com/Lucidize/one-click-hugo-cms">https://github.com/Lucidize/one-click-hugo-cms</a></td>
+<td>2022-04-07T10:55:18Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>165</td>
+<td>ahmedmujtabanizamani/hugo</td>
+<td><a href="https://github.com/ahmedmujtabanizamani/hugo">https://github.com/ahmedmujtabanizamani/hugo</a></td>
+<td>2022-04-08T01:05:40Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>166</td>
+<td>jmhammond/testing-hugo</td>
+<td><a href="https://github.com/jmhammond/testing-hugo">https://github.com/jmhammond/testing-hugo</a></td>
+<td>2022-04-08T01:37:05Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>167</td>
+<td>OliverMKing/blog</td>
+<td><a href="https://github.com/OliverMKing/blog">https://github.com/OliverMKing/blog</a></td>
+<td>2022-04-08T02:22:50Z</td>
+<td>My personal blog built with Hugo</td>
+</tr>
+<tr>
+<td>168</td>
+<td>HC-miss/hugoblogtalks</td>
+<td><a href="https://github.com/HC-miss/hugoblogtalks">https://github.com/HC-miss/hugoblogtalks</a></td>
+<td>2022-04-08T02:36:31Z</td>
+<td>Hugo博客评论仓库</td>
+</tr>
+<tr>
+<td>169</td>
+<td>space-takumi/starter-hugo-portfolio-theme</td>
+<td><a href="https://github.com/space-takumi/starter-hugo-portfolio-theme">https://github.com/space-takumi/starter-hugo-portfolio-theme</a></td>
+<td>2022-04-08T02:46:14Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>170</td>
+<td>mroberts1/hugo-apero-blog</td>
+<td><a href="https://github.com/mroberts1/hugo-apero-blog">https://github.com/mroberts1/hugo-apero-blog</a></td>
+<td>2022-04-08T02:51:27Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>171</td>
+<td>cyrusspeakz/gestalt-hugo</td>
+<td><a href="https://github.com/cyrusspeakz/gestalt-hugo">https://github.com/cyrusspeakz/gestalt-hugo</a></td>
+<td>2022-04-08T02:53:45Z</td>
+<td>An easy to use Hugo theme with lots of documentation for the dev-curious designer and fellow creatives. ☺️</td>
+</tr>
+<tr>
+<td>172</td>
+<td>itsukirt/static-personal-website</td>
+<td><a href="https://github.com/itsukirt/static-personal-website">https://github.com/itsukirt/static-personal-website</a></td>
+<td>2022-04-08T02:56:27Z</td>
+<td>Powered by Hugo.</td>
+</tr>
+<tr>
+<td>173</td>
+<td>quangnd159/hugo-documentation-theme</td>
+<td><a href="https://github.com/quangnd159/hugo-documentation-theme">https://github.com/quangnd159/hugo-documentation-theme</a></td>
+<td>2022-04-08T02:56:52Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>174</td>
+<td>Peelu-Dev/Hugo-Blog</td>
+<td><a href="https://github.com/Peelu-Dev/Hugo-Blog">https://github.com/Peelu-Dev/Hugo-Blog</a></td>
+<td>2022-04-08T02:58:16Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>175</td>
+<td>Peelu-Dev/parsa-hugo</td>
+<td><a href="https://github.com/Peelu-Dev/parsa-hugo">https://github.com/Peelu-Dev/parsa-hugo</a></td>
+<td>2022-04-08T03:21:58Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>176</td>
+<td>Franklin-Qi/one-click-hugo-cms</td>
+<td><a href="https://github.com/Franklin-Qi/one-click-hugo-cms">https://github.com/Franklin-Qi/one-click-hugo-cms</a></td>
+<td>2022-04-08T03:33:39Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>177</td>
+<td>ccptr/one-click-hugo-cms</td>
+<td><a href="https://github.com/ccptr/one-click-hugo-cms">https://github.com/ccptr/one-click-hugo-cms</a></td>
+<td>2022-04-08T04:01:13Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>178</td>
+<td>johnyxaxa/one-click-hugo-cms</td>
+<td><a href="https://github.com/johnyxaxa/one-click-hugo-cms">https://github.com/johnyxaxa/one-click-hugo-cms</a></td>
+<td>2022-04-08T04:02:02Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>179</td>
+<td>ascamarena/mi-sitioHUGO</td>
+<td><a href="https://github.com/ascamarena/mi-sitioHUGO">https://github.com/ascamarena/mi-sitioHUGO</a></td>
+<td>2022-04-08T04:25:14Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>180</td>
+<td>kazweda/netplan-hugo</td>
+<td><a href="https://github.com/kazweda/netplan-hugo">https://github.com/kazweda/netplan-hugo</a></td>
+<td>2022-04-08T04:33:40Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>181</td>
+<td>ptkkhiem/one-click-hugo-cms</td>
+<td><a href="https://github.com/ptkkhiem/one-click-hugo-cms">https://github.com/ptkkhiem/one-click-hugo-cms</a></td>
+<td>2022-04-08T05:50:52Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>182</td>
+<td>Sparklecleaners/one-click-hugo-cms</td>
+<td><a href="https://github.com/Sparklecleaners/one-click-hugo-cms">https://github.com/Sparklecleaners/one-click-hugo-cms</a></td>
+<td>2022-04-08T06:08:50Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>183</td>
+<td>r-iki/r-iki.github.io</td>
+<td><a href="https://github.com/r-iki/r-iki.github.io">https://github.com/r-iki/r-iki.github.io</a></td>
+<td>2022-04-08T06:18:25Z</td>
+<td>mage a blog with hugo</td>
+</tr>
+<tr>
+<td>184</td>
+<td>ndemo-richard/Hugo-blog</td>
+<td><a href="https://github.com/ndemo-richard/Hugo-blog">https://github.com/ndemo-richard/Hugo-blog</a></td>
+<td>2022-04-08T06:44:47Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>185</td>
+<td>pnckdevapp001/hugo-AVFREEX24</td>
+<td><a href="https://github.com/pnckdevapp001/hugo-AVFREEX24">https://github.com/pnckdevapp001/hugo-AVFREEX24</a></td>
+<td>2022-04-08T06:56:13Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>186</td>
+<td>xyangyan/starter-hugo-academic</td>
+<td><a href="https://github.com/xyangyan/starter-hugo-academic">https://github.com/xyangyan/starter-hugo-academic</a></td>
+<td>2022-04-08T07:03:38Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>187</td>
+<td>Vigneshtymtix/starter-hugo-research-group</td>
+<td><a href="https://github.com/Vigneshtymtix/starter-hugo-research-group">https://github.com/Vigneshtymtix/starter-hugo-research-group</a></td>
+<td>2022-04-08T07:08:12Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>188</td>
+<td>mm2022-apccpa-workshop/starter-hugo-online-course</td>
+<td><a href="https://github.com/mm2022-apccpa-workshop/starter-hugo-online-course">https://github.com/mm2022-apccpa-workshop/starter-hugo-online-course</a></td>
+<td>2022-04-08T07:55:43Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>189</td>
+<td>ZDYoung0519/starter-hugo-academic</td>
+<td><a href="https://github.com/ZDYoung0519/starter-hugo-academic">https://github.com/ZDYoung0519/starter-hugo-academic</a></td>
+<td>2022-04-08T08:01:49Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>190</td>
+<td>jimolonely/jimolonely.github.io</td>
+<td><a href="https://github.com/jimolonely/jimolonely.github.io">https://github.com/jimolonely/jimolonely.github.io</a></td>
+<td>2022-04-08T08:08:48Z</td>
+<td>my blog by hugo</td>
+</tr>
+<tr>
+<td>191</td>
+<td>dxx99/hugo-tool</td>
+<td><a href="https://github.com/dxx99/hugo-tool">https://github.com/dxx99/hugo-tool</a></td>
+<td>2022-04-08T08:55:09Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>192</td>
+<td>NejcHirci/one-click-hugo-cms</td>
+<td><a href="https://github.com/NejcHirci/one-click-hugo-cms">https://github.com/NejcHirci/one-click-hugo-cms</a></td>
+<td>2022-04-08T09:08:41Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>193</td>
+<td>ZDYoung0519/zdyoung-hugo-academic</td>
+<td><a href="https://github.com/ZDYoung0519/zdyoung-hugo-academic">https://github.com/ZDYoung0519/zdyoung-hugo-academic</a></td>
+<td>2022-04-08T09:23:20Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>194</td>
+<td>kirill-shtrykov/hugo-ghost-theme</td>
+<td><a href="https://github.com/kirill-shtrykov/hugo-ghost-theme">https://github.com/kirill-shtrykov/hugo-ghost-theme</a></td>
+<td>2022-04-08T10:02:45Z</td>
+<td>Hugo theme based on Casper, default Ghost theme</td>
+</tr>
+<tr>
+<td>195</td>
+<td>hugoostos08/hugoostos08</td>
+<td><a href="https://github.com/hugoostos08/hugoostos08">https://github.com/hugoostos08/hugoostos08</a></td>
+<td>2022-04-08T10:04:18Z</td>
+<td>Config files for my GitHub profile.</td>
+</tr>
+<tr>
+<td>196</td>
+<td>baiway/starter-hugo-academic</td>
+<td><a href="https://github.com/baiway/starter-hugo-academic">https://github.com/baiway/starter-hugo-academic</a></td>
+<td>2022-04-08T10:08:31Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>197</td>
+<td>snhou/one-click-hugo-cms</td>
+<td><a href="https://github.com/snhou/one-click-hugo-cms">https://github.com/snhou/one-click-hugo-cms</a></td>
+<td>2022-04-08T10:15:49Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>198</td>
+<td>Andrea-Rossini/hugo-website</td>
+<td><a href="https://github.com/Andrea-Rossini/hugo-website">https://github.com/Andrea-Rossini/hugo-website</a></td>
+<td>2022-04-08T10:16:01Z</td>
+<td>This is a simple tutorial for making a Hugo website with AWS</td>
+</tr>
+<tr>
+<td>199</td>
+<td>itsashmusic/one-click-hugo-cms</td>
+<td><a href="https://github.com/itsashmusic/one-click-hugo-cms">https://github.com/itsashmusic/one-click-hugo-cms</a></td>
+<td>2022-04-08T10:34:24Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>200</td>
+<td>wypbeu/hugo-static-app</td>
+<td><a href="https://github.com/wypbeu/hugo-static-app">https://github.com/wypbeu/hugo-static-app</a></td>
+<td>2022-04-08T11:58:54Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>201</td>
+<td>eeexuxu/starter-hugo-academic</td>
+<td><a href="https://github.com/eeexuxu/starter-hugo-academic">https://github.com/eeexuxu/starter-hugo-academic</a></td>
+<td>2022-04-08T12:02:35Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>202</td>
+<td>thsigit/netilfy-hugo</td>
+<td><a href="https://github.com/thsigit/netilfy-hugo">https://github.com/thsigit/netilfy-hugo</a></td>
+<td>2022-04-08T12:26:43Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>203</td>
+<td>Deepanshu-dr/bookworm-hugo-theme</td>
+<td><a href="https://github.com/Deepanshu-dr/bookworm-hugo-theme">https://github.com/Deepanshu-dr/bookworm-hugo-theme</a></td>
+<td>2022-04-08T12:45:33Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>204</td>
+<td>Cretanian/starter-hugo-research-group</td>
+<td><a href="https://github.com/Cretanian/starter-hugo-research-group">https://github.com/Cretanian/starter-hugo-research-group</a></td>
+<td>2022-04-08T13:40:32Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>205</td>
+<td>OFFTECH/starter-hugo-markdown-slides</td>
+<td><a href="https://github.com/OFFTECH/starter-hugo-markdown-slides">https://github.com/OFFTECH/starter-hugo-markdown-slides</a></td>
+<td>2022-04-08T13:53:48Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>206</td>
+<td>OFFTECH/starter-hugo-academic</td>
+<td><a href="https://github.com/OFFTECH/starter-hugo-academic">https://github.com/OFFTECH/starter-hugo-academic</a></td>
+<td>2022-04-08T13:53:50Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>207</td>
+<td>OFFTECH/starter-hugo-online-course</td>
+<td><a href="https://github.com/OFFTECH/starter-hugo-online-course">https://github.com/OFFTECH/starter-hugo-online-course</a></td>
+<td>2022-04-08T13:53:52Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>208</td>
+<td>OFFTECH/hugo-documentation-theme</td>
+<td><a href="https://github.com/OFFTECH/hugo-documentation-theme">https://github.com/OFFTECH/hugo-documentation-theme</a></td>
+<td>2022-04-08T13:54:26Z</td>
+<td>no description</td>
+</tr>
+<tr>
+<td>209</td>
+<td>pangxincheng/starter-hugo-research-group</td>
+<td><a href="https://github.com/pangxincheng/starter-hugo-research-group">https://github.com/pangxincheng/starter-hugo-research-group</a></td>
+<td>2022-04-08T13:57:04Z</td>
+<td>no description</td>
+</tr>
+</tbody>
+</table>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../README-Jamstack/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Automatic monitor github Jamstack using Github Actions" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Automatic monitor github Jamstack using Github Actions
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      https://github.com/p1ay8y3ar
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.5e67fbfe.min.js"}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e87a5f81.min.js"></script>
+      
+    
+  </body>
+</html>
