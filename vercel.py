@@ -54,7 +54,7 @@ def craw_all(topic):
     try:
         reqtem = requests.get(api).json()
         total_count = reqtem["total_count"]
-        for_count = math.ceil(total_count / 30) + 1
+        for_count = math.ceil(total_count / 100) + 1
         print(total_count)
         items = reqtem["items"]
         for j in range(0, for_count, 1):
