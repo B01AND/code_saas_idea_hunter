@@ -89,7 +89,8 @@ def craw_all_pl(topic):
         page = get_playright(p,url,True)
         try:
             res=page.goto(url)
-            item_list=res.json()['items']
+            item_list.extend(res.json()['items'])
+            print(len(item_list))
         except:
             print("请求数量的时候发生错误")
 
