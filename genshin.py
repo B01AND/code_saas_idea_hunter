@@ -17,10 +17,39 @@ import math
 import os
 from pyairtable.formulas import match
 from pyairtable import *
+import platform
+from playwright.sync_api import sync_playwright,Mouse
+
 
 
 keywords=''
+# from .util import *
+def get_playright(playwright,url,headless:bool=True):
+    #     browser = p.chromium.launch()
+    #     browser = p.firefox.launch(headless=False)
+    if headless=='':
+        headless=True
+    PROXY_SOCKS5 = "socks5://127.0.0.1:1080"
+    browser=''
+    if url_ok(url):
+        try:
+            browser = playwright.firefox.launch(headless=headless)
+            print('start is ok')
+        except:
+            print('pl start failed')
 
+    else: 
+        browserLaunchOptionDict = {
+        "headless": headless,
+        "proxy": {
+                "server": PROXY_SOCKS5,
+        }
+        } 
+        browser = playwright.firefox.launch(**browserLaunchOptionDict)
+        # Open new page    
+    page = browser.new_page()
+
+    return page
 
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
@@ -34,7 +63,37 @@ def write_file(new_contents,topic):
     new = new_contents + old
     with open("web/README-{}.md".format(topic), "w") as f:
         f.write(new)
+def url_ok(url):
+    try:
+        response = requests.head(url)
+    except Exception as e:
+        # print(f"NOT OK: {str(e)}")
+        return False
+    else:
+        if response.status_code == 400 or response.status_code==404:
+            # print("OK")
+            print(f"NOT OK: HTTP response code {response.status_code}")
 
+            return False
+        else:
+
+            return True   
+def craw_all_pl(topic):
+    item_list = []
+
+    with sync_playwright() as p:
+        start = time.time()
+        url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
+
+        print('user home url',url)
+        page = get_playright(p,url,True)
+        try
+            res=page.goto(url)
+            item_list=res.json()['items']
+        except:
+            print("请求数量的时候发生错误")
+
+    return item_list
 
 def craw_all(topic):
     # 这是爬取所有的,github api限制每分钟请求最多30次
@@ -102,7 +161,7 @@ def insert2airtable(table,rows):
 
 def getrowid(table,row):
 
-    formula = match(row['url'])
+    formula = match(row)
     try:
         id =table.first(formula=formula)['id']
     except:
@@ -160,7 +219,7 @@ def main(table,keyword,topic):
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-    items=craw_all(keyword)
+    items=craw_all_pl(keyword)
     print("获取dao原始数据:{}条".format(len(items)))
 
 
