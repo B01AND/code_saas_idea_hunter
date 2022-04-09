@@ -36,7 +36,7 @@ def signalHandler(signal, frame):
 async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
-    proxy = requests.get(proxypool).text()
+    proxy = requests.get(proxypool)
     print('proxypool',proxypool,proxy)
     
     log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
