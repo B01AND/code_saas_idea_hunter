@@ -15,7 +15,8 @@ from urllib.parse import quote_plus
 from utils import *
 import requests
 import math
-
+from pyairtable.formulas import match
+from pyairtable import *
 HEADERS = {
     'User-Agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
@@ -33,7 +34,7 @@ def signalHandler(signal, frame):
     signalTag = True
 
 
-async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str) -> dict:
+async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
     proxy = requests.get(proxypool)
@@ -75,7 +76,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                     print("网络发生错误", e)
                     continue
                     # ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
-
+            
         except Exception as e:
             newProxy = requests.get(proxypool)
             log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
@@ -83,6 +84,16 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             log.debug('[{}] Proxy EXP: {}'.format(id, e))
             proxy = newProxy
             continue
+
+        apikey=os.environ['AIRTABLE_API_KEY']
+        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+        api = Api(apikey)
+        table = Table(apikey, baseid, tableid)
+
+        save(table,keyword,topic,workerRes)
+        if len(item_list)==total_count:
+            signalTag=1
     return item_list
 
 
@@ -115,19 +126,14 @@ async def main(opts):
                     proxypool=opts.proxypool,
                     delay=opts.delay,
                     timeout=opts.timeout,
-                    topic=k))
+                    topic=topic,
+                    keyword=k))
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
-        print(workerRes)
+        # print(workerRes)
 
-        apikey=os.environ['AIRTABLE_API_KEY']
-        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-        api = Api(apikey)
-        table = Table(apikey, baseid, tableid)
 
-        save(table,k,topic,workerRes)
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
         open("web/README-{}.md".format(topic),'w').write('')
