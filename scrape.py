@@ -48,6 +48,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
             reqtem = requests.get(url).json()
+            print('raw json',reqtem)
             total_count = reqtem["total_count"]
             if total_count<30:
                 for_count=0
@@ -78,7 +79,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                     # ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
 
             except Exception as e:
-                newProxy = requests.get("https://{}".format(proxypool)).text()
+                newProxy = requests.get(proxypool)
                 log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
                                                                                     time2str(ed)))
                 log.debug('[{}] Proxy EXP: {}'.format(id, e))
