@@ -33,7 +33,9 @@ def signalHandler(signal, frame):
 
 async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
-    proxy = await popProxy(id, proxypool, timeout)
+    # proxy = await popProxy(id, proxypool, timeout)
+    proxy = requests.get(proxypool).text()
+
     log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
     item_list = []
     topic='genshin'
@@ -73,7 +75,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                     ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
 
             except Exception as e:
-                newProxy = await popProxy(id, proxypool, timeout)  # Proxy expired, pop a new one
+                newProxy = requests.get(proxypool).text()
                 log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
                                                                                     time2str(ed)))
                 log.debug('[{}] Proxy EXP: {}'.format(id, e))
