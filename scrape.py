@@ -31,8 +31,7 @@ def signalHandler(signal, frame):
     signalTag = True
 
 
-async def worker(id: int, key: str, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,
-                 toRec: str) -> dict:
+async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     proxy = await popProxy(id, proxypool, timeout)
     log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
@@ -88,27 +87,28 @@ async def main(opts):
     signal.signal(signal.SIGINT, signalHandler)
 
     # Load module
-    params, pocs = loadModule(opts.module)
+    # params, pocs = loadModule(opts.module)
 
     # Load original res.json
-    absResJson = 'module/{}/{}'.format(opts.module, params.resJson)
-    res = loadResJson(absResJson)
+    # absResJson = 'module/{}/{}'.format(opts.module, params.resJson)
+    # res = loadResJson(absResJson)
+
+    timeSt = '2021-05-01 00:00:00'
+    timeEd = '2021-05-01 01:00:00'
 
     # Assign tasks
     coroutines = []
-    timeSt = str2time(params.timeSt)
-    timeEd = str2time(params.timeEd)
+    timeSt = str2time(timeSt)
+    timeEd = str2time(timeEd)
     dt = (timeEd - timeSt) / opts.threads
     for i in range(opts.threads):
         coroutines.append(
             worker(id=i,
-                   key=params.key,
                    st=timeSt + dt * i,
                    ed=timeSt + dt * (i + 1),
                    proxypool=opts.proxypool,
                    delay=opts.delay,
-                   timeout=opts.timeout,
-                   toRec=params.toRec))
+                   timeout=opts.timeout))
 
     # Run tasks
     workerRes = await asyncio.gather(*coroutines)
