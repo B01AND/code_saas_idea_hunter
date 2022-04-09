@@ -242,7 +242,7 @@ def main(table,keyword,topic):
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-    items=craw_all_pl(keyword)
+    items=craw_all(keyword)
     print("获取dao原始数据:{}条".format(len(items)))
 
 
