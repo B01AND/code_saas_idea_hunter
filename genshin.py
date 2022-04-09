@@ -135,7 +135,7 @@ def craw_all(topic):
                 print("网络发生错误", e)
                 continue
 
-            time.sleep(random.randint(3, 15)*(math.ceil(for_count / 30) + 1))
+            time.sleep(random.randint(3, 15)*(math.ceil(for_count / 300) + 1))
     except Exception as e:
         print("请求数量的时候发生错误", e)
     # print(item_list)

@@ -36,45 +36,51 @@ async def worker(id: int, key: str, st: datetime, ed: datetime, proxypool: str, 
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     proxy = await popProxy(id, proxypool, timeout)
     log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
-
+    item_list = []
+    topic='genshin'
     global signalTag
     while not signalTag:
-        realKey = '{} && after="{}" && before="{}"'.format(key, time2str(st), time2str(ed))
-        qbase64 = quote_plus(base64.b64encode(realKey.encode()))
-        url = 'https://api.fofa.so/v1/search?qbase64={}&full=true'.format(qbase64)
         try:
-            async with AsyncClient(proxies="http://{}".format(proxy), verify=False, trust_env=False) as client:
-                # client.get() may get stuck due to unknown reasons
-                # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
+            url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
-                respJson = resp.json()
-                await asyncio.sleep(delay)
-                datas = respJson['data']['assets']
-                log.info('[{}] {} records got. st={} ed={}'.format(id, len(datas), time2str(st), time2str(ed)))
-
-                # Check if bottom hit
-                if len(datas) == 0:
-                    break
-
-                for data in datas:
-                    host = data[toRec]  # Target (str)
-                    mtime = data['mtime']  # Time (str)
-                    if workerRes.get(host) is None:
-                        workerRes[host] = mtime
-                    else:
-                        workerRes[host] = max(workerRes[host], mtime)
-                    log.debug('[{}] {} @ {}'.format(id, host, mtime))
-                ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
-
+            reqtem = requests.get(url).json()
+            total_count = reqtem["total_count"]
+            if total_count<30:
+                for_count=0
+            for_count = math.ceil(total_count / 30) + 1
+            print(total_count)
         except Exception as e:
-            newProxy = await popProxy(id, proxypool, timeout)  # Proxy expired, pop a new one
-            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                  time2str(ed)))
-            log.debug('[{}] Proxy EXP: {}'.format(id, e))
-            proxy = newProxy
+            print("请求数量的时候发生错误", e)
+        reqtem = requests.get(api).json()
+        total_count = reqtem["total_count"]
+        if total_count<30:
+            for_count=0
+        for_count = math.ceil(total_count / 30) + 1
+        print(total_count)
+        for j in range(0, for_count, 1):
+            try:
+                url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                async with AsyncClient(proxies="http://{}".format(proxy), verify=False, trust_env=False) as client:
+                    # client.get() may get stuck due to unknown reasons
+                    # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+                    resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
+                    req = resp.json()
+                    items = req["items"]
+                    item_list.extend(items)
+                    print("第{}轮，爬取{}条".format( j, len(items)))
 
-    return workerRes
+                    await asyncio.sleep(delay)
+
+                    ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
+
+            except Exception as e:
+                newProxy = await popProxy(id, proxypool, timeout)  # Proxy expired, pop a new one
+                log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                    time2str(ed)))
+                log.debug('[{}] Proxy EXP: {}'.format(id, e))
+                proxy = newProxy
+                continue
+    return item_list
 
 
 async def main(opts):
@@ -106,26 +112,21 @@ async def main(opts):
 
     # Run tasks
     workerRes = await asyncio.gather(*coroutines)
-
+    print(workerRes)
     # Update res
-    for it in workerRes:
-        for target, lastTime in it.items():
-            if (res['targets'].get(target) is None):
-                res['targets'][target] = {'lastTime': lastTime}
-            else:
-                res['targets'][target]['lastTime'] = max(res['targets'][target]['lastTime'], lastTime)
+    # for it in workerRes:
 
     # Export hosts
-    saveResJson(res, absResJson)
+    # saveResJson(res, absResJson)
 
 
 def getOpts():
     parser = optparse.OptionParser()
-    parser.add_option('-m', '--module', dest='module', default='', type=str, help='Module name')
+    parser.add_option('-m', '--module', dest='module', default='ruijie_eg', type=str, help='Module name')
     parser.add_option('-p',
                       '--proxypool',
                       dest='proxypool',
-                      default='127.0.0.1:5010',
+                      default='https://proxypool.scrape.center/random',
                       type=str,
                       help='Host and port of ProxyPool (default = 127.0.0.1:5010)')
     parser.add_option('-d',
