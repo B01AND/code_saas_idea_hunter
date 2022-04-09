@@ -14,6 +14,7 @@ from colorlog import ColoredFormatter
 from urllib.parse import quote_plus
 from utils import *
 import requests
+import math
 
 HEADERS = {
     'User-Agent':
@@ -35,7 +36,7 @@ def signalHandler(signal, frame):
 async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
-    proxy = requests.get(proxypool).text()
+    proxy = requests.get("https://{}".format(proxypool)).text()
 
     log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
     item_list = []
@@ -53,7 +54,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             print(total_count)
         except Exception as e:
             print("请求数量的时候发生错误", e)
-        reqtem = requests.get(api).json()
+        reqtem = requests.get(url).json()
         total_count = reqtem["total_count"]
         if total_count<30:
             for_count=0
@@ -73,10 +74,10 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
 
                     await asyncio.sleep(delay)
 
-                    ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
+                    # ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
 
             except Exception as e:
-                newProxy = requests.get(proxypool).text()
+                newProxy = requests.get("https://{}".format(proxypool)).text()
                 log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
                                                                                     time2str(ed)))
                 log.debug('[{}] Proxy EXP: {}'.format(id, e))
