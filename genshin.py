@@ -236,13 +236,13 @@ def db_match_airtable(table,items):
         result.append(item['fields'])
     return result
 
-def main(table,keyword,topic):
+def save(table,keyword,topic,items):
     # 下面是监控用的
     year = datetime.now().year
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-    items=craw_all(keyword)
+    # items=craw_all(keyword)
     print("获取dao原始数据:{}条".format(len(items)))
 
 
@@ -279,20 +279,16 @@ def main(table,keyword,topic):
             write_file(newline,topic)
 
 
-if __name__ == "__main__":
-    keywords=['genshin']
-    topic='genshin'
-    apikey=os.environ['AIRTABLE_API_KEY']
-    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+# if __name__ == "__main__":
+def gitcode(apikey,baseid,tableid,keywords,topic):
+    # keywords=['genshin']
+    # topic='genshin'
+    # apikey=os.environ['AIRTABLE_API_KEY']
+    # baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+    # tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
 
-    api = Api(os.environ['AIRTABLE_API_KEY'])
-
-    # base = Base(apikey, 'test')
+    api = Api(apikey)
     table = Table(apikey, baseid, tableid)
 
-    # table = Table(apikey, 'appWkSf7vEfNE9XTi', 'tblkjzHWZtb1msbQR')
-
-
     for k in keywords:
-        main(table,k,topic)
+        save(table,k,topic)
