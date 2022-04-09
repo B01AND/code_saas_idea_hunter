@@ -83,23 +83,21 @@ def craw_all_pl(topic):
 
     with sync_playwright() as p:
         start = time.time()
-        url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
-
+        url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
         print('user home url',url)
         page = get_playright(p,url,True)
         try:
             res=page.goto(url)
-            total_count = res.json()["total_count"]
+            total_count = int(page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)').split(' repository results').replace(',',''))
             if total_count<30:
                 for_count=0
             for_count = math.ceil(total_count / 30) + 1
         # item_list = reqtem["items"]
             for j in range(0, for_count, 1):
                 try:
-                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                    url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories&p={}".format(topic,j)
                     res=page.goto(url)
 
-                    req = res.json()
                     items = req["items"]
                     item_list.extend(items)
                     print("第{}轮，爬取{}条".format( j, len(items)))
@@ -214,8 +212,12 @@ def db_match_airtable(table,items):
                 description = description.strip()
             url = item["html_url"]
             created_at = item["created_at"]
-            topic=','.join(item["topics"])
+            topics=','.join(item["topics"])
+            if topics == "" or topics == None:
+                topics=topic
             language=item['language']
+            if language == "" or language == None:
+                language='unknown'
             row =[{
                 "name": full_name,
                 "description": description,
