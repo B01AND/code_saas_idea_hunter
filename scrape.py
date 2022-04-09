@@ -48,43 +48,41 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
             reqtem = requests.get(url).json()
-            print('raw json',reqtem)
+            # print('raw json',reqtem)
             total_count = reqtem["total_count"]
             if total_count<30:
                 for_count=0
             for_count = math.ceil(total_count / 30) + 1
+
+            if total_count<30:
+                for_count=0
+            for_count = math.ceil(total_count / 30) + 1
             print(total_count)
-        except Exception as e:
-            print("请求数量的时候发生错误", e)
-        reqtem = requests.get(url).json()
-        total_count = reqtem["total_count"]
-        if total_count<30:
-            for_count=0
-        for_count = math.ceil(total_count / 30) + 1
-        print(total_count)
-        for j in range(0, for_count, 1):
-            try:
-                url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                async with AsyncClient(proxies="http://{}".format(proxy), verify=False, trust_env=False) as client:
-                    # client.get() may get stuck due to unknown reasons
-                    # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                    resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
-                    req = resp.json()
-                    items = req["items"]
-                    item_list.extend(items)
-                    print("第{}轮，爬取{}条".format( j, len(items)))
+            for j in range(0, for_count, 1):
+                try:
+                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                    async with AsyncClient(proxies="http://{}".format(proxy), verify=False, trust_env=False) as client:
+                        # client.get() may get stuck due to unknown reasons
+                        # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+                        resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
+                        req = resp.json()
+                        items = req["items"]
+                        item_list.extend(items)
+                        print("第{}轮，爬取{}条".format( j, len(items)))
 
-                    await asyncio.sleep(delay)
-
+                        await asyncio.sleep(delay)
+                except Exception as e:
+                    print("网络发生错误", e)
+                    continue
                     # ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
 
-            except Exception as e:
-                newProxy = requests.get(proxypool)
-                log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+        except Exception as e:
+            newProxy = requests.get(proxypool)
+            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
                                                                                     time2str(ed)))
-                log.debug('[{}] Proxy EXP: {}'.format(id, e))
-                proxy = newProxy
-                continue
+            log.debug('[{}] Proxy EXP: {}'.format(id, e))
+            proxy = newProxy
+            continue
     return item_list
 
 
