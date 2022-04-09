@@ -87,7 +87,7 @@ def craw_all_pl(topic):
 
         print('user home url',url)
         page = get_playright(p,url,True)
-        try
+        try:
             res=page.goto(url)
             item_list=res.json()['items']
         except:
