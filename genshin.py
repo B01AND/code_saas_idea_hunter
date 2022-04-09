@@ -230,6 +230,7 @@ def db_match_airtable(table,items):
     result=[]
     # print(type(table.all(),len(table.all())))
     for idx,item in enumerate(table.all()):
+        print(idx,item['fields'])
         result.append(item['fields'])
     return result
 
