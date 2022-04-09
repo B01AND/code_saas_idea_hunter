@@ -89,8 +89,25 @@ def craw_all_pl(topic):
         page = get_playright(p,url,True)
         try:
             res=page.goto(url)
-            item_list.extend(res.json()['items'])
-            print(len(item_list))
+            total_count = res.json()["total_count"]
+            if total_count<30:
+                for_count=0
+            for_count = math.ceil(total_count / 30) + 1
+        # item_list = reqtem["items"]
+            for j in range(0, for_count, 1):
+                try:
+                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                    res=page.goto(url)
+
+                    req = res.json()
+                    items = req["items"]
+                    item_list.extend(items)
+                    print("第{}轮，爬取{}条".format( j, len(items)))
+                except Exception as e:
+                    print("网络发生错误", e)
+                    continue
+
+                time.sleep(random.randint(30, 60))            
         except:
             print("请求数量的时候发生错误")
 
@@ -239,6 +256,7 @@ def main(table,keyword,topic):
         newline = ""
 
         for idx,s in enumerate(sorted):
+            print(s,'-')
             line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
                 s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
