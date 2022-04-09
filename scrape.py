@@ -111,6 +111,11 @@ async def main(opts):
     timeSt = '2021-05-01 00:00:00'
     timeEd = '2021-05-01 01:00:00'
     keywords=opts.keywords
+    if ',' in keywords:
+        keywords=keywords.split(',')
+    else:
+        tmp =[].extend(keywords)
+        keywords=tmp
     topic=opts.topic
     for k in keywords:
         # Assign tasks
@@ -301,7 +306,7 @@ def save(table,keyword,topic,items):
 def getOpts():
     parser = optparse.OptionParser()
     parser.add_option('-m', '--module', dest='module', default='ruijie_eg', type=str, help='Module name')
-    parser.add_option('-k', '--keywords', dest='keywords', default=['genshin'], type=[], help='keyword list')
+    parser.add_option('-k', '--keywords', dest='keywords', default='genshin', type=str, help='keyword list')
     parser.add_option('-t', '--topic', dest='topic', default='genshin', type=str, help='topic name')
     parser.add_option('-p',
                       '--proxypool',
