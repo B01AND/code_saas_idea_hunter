@@ -83,7 +83,7 @@ def craw_all_pl(topic):
 
     with sync_playwright() as p:
         start = time.time()
-        url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
+        url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
         print('user home url',url)
         page = get_playright(p,url,True)
         try:
@@ -95,10 +95,10 @@ def craw_all_pl(topic):
         # item_list = reqtem["items"]
             for j in range(0, for_count, 1):
                 try:
-                    url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories&p={}".format(topic,j)
+                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
                     res=page.goto(url)
 
-                    items = req["items"]
+                    items = res.json()["items"]
                     item_list.extend(items)
                     print("第{}轮，爬取{}条".format( j, len(items)))
                 except Exception as e:
@@ -203,7 +203,9 @@ def db_match_airtable(table,items):
     print('waiting to check',len(items))
     r_list = []
     for item in items:
-        if not item["id"]=='':
+        if item['id'] == "" or item['id']  == None:
+            pass
+        else:
             full_name = item["full_name"]
             description = item["description"]
             if description == "" or description == None:
