@@ -121,27 +121,29 @@ async def main(opts):
         proxypool=opts.proxypool
         for j in range(total_count):
             item_list = []
-            proxy = requests.get(proxypool).text
-            print('proxypool',proxypool,proxy)           
-            try:
+            global signalTag
+            while not signalTag:
+                proxy = requests.get(proxypool).text
+                print('proxypool',proxypool,proxy)           
+                try:
 
-                url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                    # client.get() may get stuck due to unknown reasons
-                    # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                resp = requests.get(url,proxies={'http': proxy})
-                req = resp.json()
-                items = req["items"]
-                print("第{}轮，爬取{}条".format( j, len(items)))
+                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                        # client.get() may get stuck due to unknown reasons
+                        # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+                    resp = requests.get(url,proxies={'http': proxy})
+                    req = resp.json()
+                    items = req["items"]
+                    print("第{}轮，爬取{}条".format( j, len(items)))
 
-                save(table,keyword,topic,items)
-                item_list.extend(items)
-            except Exception as e:
-                print("网络发生错误", e,j)
-                newProxy = requests.get(proxypool).text
-                # log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                        # time2str(ed)))
-                # log.debug('[{}] Proxy EXP: {}'.format(id, e))
-                proxy = newProxy
+                    save(table,keyword,topic,items)
+                    item_list.extend(items)
+                except Exception as e:
+                    print("网络发生错误", e,j)
+                    newProxy = requests.get(proxypool).text
+                    # log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                            # time2str(ed)))
+                    # log.debug('[{}] Proxy EXP: {}'.format(id, e))
+                    proxy = newProxy
 
 
 
