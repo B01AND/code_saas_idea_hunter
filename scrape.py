@@ -148,7 +148,7 @@ async def main(opts):
         proxypool=opts.proxypool
         proxylist=[]
         times=list(chunk(range(for_count), 10))
-        while len(proxylist)==10:    
+        while len(proxylist)==20:    
             proxy = requests.get(proxypool).text
             if requests.get('https://api.github.com').status_code==200:
                 proxylist.append(proxy)
@@ -157,12 +157,8 @@ async def main(opts):
             coroutines = []
 
             for i in item:
-                if len(proxylist)>=10:
-                    proxy=random.choice(proxylist)
-                    print('reuse former proxy',proxy)
-                else:
-                    proxy = requests.get(proxypool).text
-                    print('request a new proxy',proxy) 
+                proxy=random.choice(proxylist)
+
                 coroutines.append(
                     worker(id=i,
                         st=timeSt + dt * i,
@@ -174,7 +170,6 @@ async def main(opts):
                         keyword=k,
                         index=i,
                         table=table))
-                proxylist.append(proxy)
             time.sleep(30)
             # Run tasks
             print('run task',item)
