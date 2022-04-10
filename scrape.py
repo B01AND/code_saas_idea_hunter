@@ -66,6 +66,16 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
                 result=True
                 item_list.extend(items)
                 proxylist.append(proxy)
+                result=True
+            else:
+                proxypool='https://proxypool.scrape.center/random',
+
+                newProxy = requests.get(proxypool).text
+                log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                        time2str(ed)))
+                log.debug('[{}] Proxy EXP: {}'.format(id, e))
+                proxy = newProxy                
+                result=False
         except Exception as e:
             print(index,"网络发生错误", e)
             proxypool='https://proxypool.scrape.center/random',
