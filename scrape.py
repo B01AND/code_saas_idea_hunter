@@ -128,9 +128,10 @@ async def main(opts):
         proxypool=opts.proxypool
         times=list(chunk(range(total_count), 10))
         for item in times:
+            print('page ',item)
             for i in item:
                 proxy = requests.get(proxypool).text
-                print('proxypool',proxypool,proxy) 
+                # print('proxypool',proxypool,proxy) 
                 coroutines.append(
                     worker(id=i,
                         st=timeSt + dt * i,
@@ -143,9 +144,11 @@ async def main(opts):
                         index=i,
                         table=table))
 
-        # Run tasks
-        workerRes = await asyncio.gather(*coroutines)
-        # print('======',workerRes)
+            # Run tasks
+            print('run task',item)
+            workerRes = await asyncio.gather(*coroutines)
+
+            print(item,'task result',len(workerRes))
         page(table,topic)
 
 def write_file(new_contents,topic):
