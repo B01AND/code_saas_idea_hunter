@@ -16,6 +16,8 @@ from urllib.parse import quote_plus
 import requests
 import math
 import os
+import random
+import time
 from pyairtable.formulas import match
 from pyairtable import *
 
@@ -29,7 +31,7 @@ log = logging.getLogger('pythonConfig')
 
 signalTag = False
 
-
+proxylist=[]
 
 def signalHandler(signal, frame):
     log.warning('Signal catched...')
@@ -46,7 +48,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
     j=index
     global signalTag
     # while not signalTag:
-       
+    
     try:
 
         url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
@@ -59,13 +61,16 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
 
         save(table,keyword,topic,items)
         item_list.extend(items)
+        proxylist.append(proxy)
     except Exception as e:
-        print("网络发生错误", e)
-            # newProxy = requests.get(proxypool).text
-            # log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-            #                                                                         time2str(ed)))
-            # log.debug('[{}] Proxy EXP: {}'.format(id, e))
-            # proxy = newProxy
+        print(index,"网络发生错误", e)
+        proxypool='https://proxypool.scrape.center/random',
+
+        newProxy = requests.get(proxypool).text
+        log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                time2str(ed)))
+        log.debug('[{}] Proxy EXP: {}'.format(id, e))
+        proxy = newProxy
     return item_list
 
 def str2time(x: str) -> datetime:
@@ -125,14 +130,17 @@ async def main(opts):
         except:
             print('here=========')
         proxypool=opts.proxypool
+        proxylist=[]
         times=list(chunk(range(for_count), 10))
         for item in times:
             print('page ',item)
             coroutines = []
 
             for i in item:
-
-                proxy = requests.get(proxypool).text
+                if len(proxylist)>10:
+                    proxy=random.choice(proxylist)
+                else:
+                    proxy = requests.get(proxypool).text
                 # print('proxypool',proxypool,proxy) 
                 coroutines.append(
                     worker(id=i,
@@ -145,7 +153,7 @@ async def main(opts):
                         keyword=k,
                         index=i,
                         table=table))
-
+            time.sleep(30)
             # Run tasks
             print('run task',item)
             workerRes = await asyncio.gather(*coroutines)
