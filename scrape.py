@@ -60,13 +60,13 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
 
             save(table,keyword,topic,items)
             item_list.extend(items)
-            break
+            signalTag=1
         except Exception as e:
             print("网络发生错误", e,index)
             newProxy = requests.get(proxypool).text
-            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                    time2str(ed)))
-            log.debug('[{}] Proxy EXP: {}'.format(id, e))
+            # log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                    # time2str(ed)))
+            # log.debug('[{}] Proxy EXP: {}'.format(id, e))
             proxy = newProxy
 
 
