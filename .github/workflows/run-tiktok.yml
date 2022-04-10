@@ -10,6 +10,10 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+env:
+  AIRTABLE_API_KEY: ${{secrets.AIRTABLE_API_KEY}}
+  GENSHIN_AIRTABLE_BASE_KEY: ${{secrets.GENSHIN_AIRTABLE_BASE_KEY}}
+  GENSHIN_AIRTABLE_TABLE_KEY: ${{secrets.GENSHIN_AIRTABLE_TABLE_KEY}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -30,11 +34,12 @@ jobs:
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.7        
       - name: install python packages
-        run: pip install peewee requests mkdocs mkdocs-bootstrap386
+        run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable
       - name: run script
-        run: python  tiktok.py
+        run: python  scrape.py -k "tiktok" -n tiktok
+
       - name: commit
         run: |
           git config --global user.email action@github.com
@@ -42,7 +47,6 @@ jobs:
           git add .
           git commit -m "update db" -a
           git pull
-
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:

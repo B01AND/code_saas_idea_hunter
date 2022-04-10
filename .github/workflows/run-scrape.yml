@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: run-genshin-proxypool
+name: run-scrape-proxypool
 
 # Controls when the action will run.
 on:

@@ -37,57 +37,42 @@ def signalHandler(signal, frame):
     signalTag = True
 
 
-async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str,index:int) -> dict:
+async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str,index:int,table:Table) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
 
     
     item_list = []
     j=index
-    proxy = requests.get(proxypool).text
-    print('proxypool',proxypool,proxy)   
-    try:
+    global signalTag
+    while not signalTag:
+        proxy = requests.get(proxypool).text
+        print('proxypool',proxypool,proxy)           
+        try:
 
-        url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-            # client.get() may get stuck due to unknown reasons
-            # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-        resp = requests.get(url,proxies={'http': proxy})
-        req = resp.json()
-        items = req["items"]
-        print("第{}轮，爬取{}条".format( j, len(items)))
-        apikey=os.environ['AIRTABLE_API_KEY']
-        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-        api = Api(apikey)
-        table = Table(apikey, baseid, tableid)
+            url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                # client.get() may get stuck due to unknown reasons
+                # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+            resp = requests.get(url,proxies={'http': proxy})
+            req = resp.json()
+            items = req["items"]
+            print("第{}轮，爬取{}条".format( j, len(items)))
 
-        save(table,keyword,topic,items)
-        item_list.extend(items)
-    except Exception as e:
-        print("网络发生错误", e)
-        newProxy = requests.get(proxypool).text
-        log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                time2str(ed)))
-        log.debug('[{}] Proxy EXP: {}'.format(id, e))
-        proxy = newProxy
-
-
-
-
+            save(table,keyword,topic,items)
+            item_list.extend(items)
+        except Exception as e:
+            print("网络发生错误", e)
+            newProxy = requests.get(proxypool).text
+            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                    time2str(ed)))
+            log.debug('[{}] Proxy EXP: {}'.format(id, e))
+            proxy = newProxy
     return item_list
 
 
 async def main(opts):
     # Catch signal to exit gracefully
     signal.signal(signal.SIGINT, signalHandler)
-
-    # Load module
-    # params, pocs = loadModule(opts.module)
-
-    # Load original res.json
-    # absResJson = 'module/{}/{}'.format(opts.module, params.resJson)
-    # res = loadResJson(absResJson)
-
     timeSt = '2021-05-01 00:00:00'
     timeEd = '2021-05-01 01:00:00'
     keywords=[]
@@ -99,6 +84,12 @@ async def main(opts):
         keywords.append(opts.keywords)
     topic=opts.topic
     print('keywords list ',keywords)
+    apikey=os.environ['AIRTABLE_API_KEY']
+    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+    api = Api(apikey)
+    table = Table(apikey, baseid, tableid)
+
     for k in keywords:
         # Assign tasks
         coroutines = []
@@ -132,12 +123,13 @@ async def main(opts):
                     timeout=opts.timeout,
                     topic=topic,
                     keyword=k,
-                    index=i))
+                    index=i,
+                    table=table))
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
         print('======',workerRes)
-
+        page(table,topic)
 
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
@@ -257,12 +249,8 @@ def db_match_airtable(table,items,keyword):
                 "created_at": created_at
             }]
             updaterow(table,row)
-    result=[]
-    # print(type(table.all(),len(table.all())))
-    for idx,item in enumerate(table.all()):
-        print(idx,item['fields'])
-        result.append(item['fields'])
-    return result
+
+    return ''
 
 def save(table,keyword,topic,items):
     # 下面是监控用的
@@ -280,31 +268,33 @@ def save(table,keyword,topic,items):
         sorted = db_match_airtable(table,items,keyword)
         print("record in db:{}条".format(len(sorted)))
 
-        if len(sorted) != 0:
-            print("更新{}条".format(len(sorted)))
-            sorted_list.extend(sorted)
-        # print(sorted_list)
-        DateToday = datetime.today()
-        day = str(DateToday)    
-        newline = ""
+def page(table,topic):
+    result=[]
+    for idx,item in enumerate(table.all()):
+        print(idx,item['fields'])
+        result.append(item['fields'])    
+    # print(sorted_list)
+    DateToday = datetime.today()
+    day = str(DateToday)    
+    newline = ""
 
-        for idx,s in enumerate(sorted):
-            print(s,'-')
-            line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
-                s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
+    for idx,s in enumerate(sorted):
+        print(s,'-')
+        line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
+            s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
-            newline = newline+line
-        # print(newline)
-        if newline != "":
-            old=f"## {day}\n"
-            old=old+"|id|name|description|update_at|url|topic|language|\n" + "|---|---|---|---|---|---|---|\n"                   
-            newline = "# Automatic monitor github {} using Github Actions \n\n > update time: {}  total: {} \n\n \n ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_hunter)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_hunter/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=code_saas_idea_hunter) \n\n{}".format(
-                topic,
-                datetime.now(),
-                len(sorted)
-                ,old) + newline
+        newline = newline+line
+    # print(newline)
+    if newline != "":
+        old=f"## {day}\n"
+        old=old+"|id|name|description|update_at|url|topic|language|\n" + "|---|---|---|---|---|---|---|\n"                   
+        newline = "# Automatic monitor github {} using Github Actions \n\n > update time: {}  total: {} \n\n \n ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_hunter)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_hunter/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=code_saas_idea_hunter) \n\n{}".format(
+            topic,
+            datetime.now(),
+            len(sorted)
+            ,old) + newline
 
-            write_file(newline,topic)
+        write_file(newline,topic)
 
 
 def getOpts():

@@ -36,12 +36,9 @@ jobs:
         with:
           python-version: 3.7        
       - name: install python packages
-        run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable playwright
-      - name: Install dependencies
-        run: |      
-          python -m playwright install firefox  
+        run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable
       - name: run script
-        run: python  genshin.py
+        run: python  scrape.py -k genshin -n genshin
 
       - name: commit
         run: |
