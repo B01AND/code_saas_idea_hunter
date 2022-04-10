@@ -17,6 +17,7 @@ import requests
 import math
 from pyairtable.formulas import match
 from pyairtable import *
+
 HEADERS = {
     'User-Agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
@@ -26,6 +27,7 @@ LOG_LEVEL = logging.INFO
 log = logging.getLogger('pythonConfig')
 
 signalTag = False
+
 
 
 def signalHandler(signal, frame):
@@ -58,12 +60,10 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             try:
                 proxy = requests.get(proxypool).text
                 print('proxypool',proxypool,proxy)     
-                log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
-
                 url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
                     # client.get() may get stuck due to unknown reasons
                     # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                resp = requests.get(url,proxies={'https': proxy})
+                resp = requests.get(url,proxies={'http': proxy})
                 req = resp.json()
                 items = req["items"]
                 print("第{}轮，爬取{}条".format( j, len(items)))
