@@ -306,8 +306,8 @@ def save(table,keyword,topic,items):
 def getOpts():
     parser = optparse.OptionParser()
     parser.add_option('-m', '--module', dest='module', default='ruijie_eg', type=str, help='Module name')
-    parser.add_option('-key', '--keywords', dest='keywords', default='genshin', type=str, help='keyword list')
-    parser.add_option('-topic', '--topic', dest='topic', default='genshin', type=str, help='topic name')
+    parser.add_option('-k', '--keywords', dest='keywords', default='genshin', type=str, help='keyword list')
+    parser.add_option('-n', '--topic', dest='topic', default='genshin', type=str, help='topic name')
     parser.add_option('-p',
                       '--proxypool',
                       dest='proxypool',
