@@ -118,19 +118,48 @@ async def main(opts):
             print(total_count)
         except:
             print('here=========')
+        proxypool=opts.proxypool
+        for j in range(total_count):
+            item_list = []
+            global signalTag
+            while not signalTag:
+                proxy = requests.get(proxypool).text
+                print('proxypool',proxypool,proxy)           
+                try:
 
-        for i in range(total_count):
-            coroutines.append(
-                worker(id=i,
-                    st=timeSt + dt * i,
-                    ed=timeSt + dt * (i + 1),
-                    proxypool=opts.proxypool,
-                    delay=opts.delay,
-                    timeout=opts.timeout,
-                    topic=topic,
-                    keyword=k,
-                    index=i,
-                    table=table))
+                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                        # client.get() may get stuck due to unknown reasons
+                        # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+                    resp = requests.get(url,proxies={'http': proxy})
+                    req = resp.json()
+                    items = req["items"]
+                    print("第{}轮，爬取{}条".format( j, len(items)))
+
+                    save(table,keyword,topic,items)
+                    item_list.extend(items)
+                except Exception as e:
+                    print("网络发生错误", e,j)
+                    newProxy = requests.get(proxypool).text
+                    # log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                            # time2str(ed)))
+                    # log.debug('[{}] Proxy EXP: {}'.format(id, e))
+                    proxy = newProxy
+
+
+
+
+
+            # coroutines.append(
+                # worker(id=i,
+                #     st=timeSt + dt * i,
+                #     ed=timeSt + dt * (i + 1),
+                #     proxypool=opts.proxypool,
+                #     delay=opts.delay,
+                #     timeout=opts.timeout,
+                #     topic=topic,
+                #     keyword=k,
+                #     index=i,
+                #     table=table))
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
