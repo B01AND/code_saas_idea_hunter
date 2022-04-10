@@ -48,29 +48,32 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
     j=index
     global signalTag
     # while not signalTag:
-    
-    try:
+    result=False
+    while not result:
+        try:
 
-        url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=100&page={}".format(topic,j)
-            # client.get() may get stuck due to unknown reasons
-            # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-        resp = requests.get(url,proxies={'http': proxy})
-        req = resp.json()
-        items = req["items"]
-        print("第{}轮，爬取{}条".format( j, len(items)))
+            url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=100&page={}".format(topic,j)
+                # client.get() may get stuck due to unknown reasons
+                # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+            resp = requests.get(url,proxies={'http': proxy})
+            req = resp.json()
+            items = req["items"]
+            print("第{}轮，爬取{}条".format( j, len(items)))
 
-        save(table,keyword,topic,items)
-        item_list.extend(items)
-        proxylist.append(proxy)
-    except Exception as e:
-        print(index,"网络发生错误", e)
-        proxypool='https://proxypool.scrape.center/random',
+            save(table,keyword,topic,items)
+            if(len(items))>0:
+                result=True
+            item_list.extend(items)
+            proxylist.append(proxy)
+        except Exception as e:
+            print(index,"网络发生错误", e)
+            proxypool='https://proxypool.scrape.center/random',
 
-        newProxy = requests.get(proxypool).text
-        log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                time2str(ed)))
-        log.debug('[{}] Proxy EXP: {}'.format(id, e))
-        proxy = newProxy
+            newProxy = requests.get(proxypool).text
+            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                    time2str(ed)))
+            log.debug('[{}] Proxy EXP: {}'.format(id, e))
+            proxy = newProxy
     return item_list
 
 def str2time(x: str) -> datetime:
@@ -137,11 +140,12 @@ async def main(opts):
             coroutines = []
 
             for i in item:
-                if len(proxylist)>10:
+                if len(proxylist)>=10:
                     proxy=random.choice(proxylist)
+                    print('reuse former proxy',proxy)
                 else:
                     proxy = requests.get(proxypool).text
-                # print('proxypool',proxypool,proxy) 
+                    print('request a new proxy',proxy) 
                 coroutines.append(
                     worker(id=i,
                         st=timeSt + dt * i,
