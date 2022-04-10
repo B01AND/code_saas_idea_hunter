@@ -225,6 +225,8 @@ def db_match_airtable(table,items):
         if item['id'] == "" or item['id']  == None:
             pass
         else:
+            print('valid  to save',len(item))
+
             full_name = item["full_name"]
             description = item["description"]
             if description == "" or description == None:
