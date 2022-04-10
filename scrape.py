@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 # Author: RogerRordo
 
+from ast import keyword
 import logging
 import optparse
 import asyncio
@@ -222,7 +223,7 @@ def updaterow(table,rows):
             else:
                 table.update(id,[row])      
 
-def db_match_airtable(table,items):
+def db_match_airtable(table,items,keyword):
     print('waiting to check',len(items))
     r_list = []
     for item in items:
@@ -241,7 +242,7 @@ def db_match_airtable(table,items):
             created_at = item["created_at"]
             topics=''
             if item["topics"] == "" or item["topics"] == None:
-                pass
+                topics=keyword
             else:
                 topics=','.join(item["topics"])
             language=item['language']
@@ -276,7 +277,7 @@ def save(table,keyword,topic,items):
     if total_count is None or len(items) == total_count:
         pass
     else:
-        sorted = db_match_airtable(table,items)
+        sorted = db_match_airtable(table,items,keyword)
         print("record in db:{}条".format(len(sorted)))
 
         if len(sorted) != 0:
