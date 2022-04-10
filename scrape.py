@@ -60,6 +60,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
 
             save(table,keyword,topic,items)
             item_list.extend(items)
+            break
         except Exception as e:
             print("网络发生错误", e)
             newProxy = requests.get(proxypool).text
