@@ -67,8 +67,6 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                                                                                     time2str(ed)))
             log.debug('[{}] Proxy EXP: {}'.format(id, e))
             proxy = newProxy
-    return item_list
-
 
 async def main(opts):
     # Catch signal to exit gracefully
