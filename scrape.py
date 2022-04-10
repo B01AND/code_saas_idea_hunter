@@ -76,7 +76,15 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                     print("网络发生错误", e)
                     continue
                     # ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
-            
+            apikey=os.environ['AIRTABLE_API_KEY']
+            baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+            tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+            api = Api(apikey)
+            table = Table(apikey, baseid, tableid)
+
+            save(table,keyword,topic,workerRes)
+            if len(item_list)==total_count:
+                signalTag=0            
         except Exception as e:
             newProxy = requests.get(proxypool)
             log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
@@ -85,15 +93,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             proxy = newProxy
             continue
 
-        apikey=os.environ['AIRTABLE_API_KEY']
-        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-        api = Api(apikey)
-        table = Table(apikey, baseid, tableid)
 
-        save(table,keyword,topic,workerRes)
-        if len(item_list)==total_count:
-            signalTag=1
     return item_list
 
 
