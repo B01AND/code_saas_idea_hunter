@@ -123,11 +123,15 @@ def craw_all(topic):
         for_count = math.ceil(total_count / 30) + 1
         print(total_count)
         # item_list = reqtem["items"]
+        proxypool='https://proxypool.scrape.center/random'
+
         for j in range(0, for_count, 1):
+            proxy = requests.get(proxypool).text
+            print('proxypool',proxypool,proxy)   
             try:
                 api = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
 
-                req = requests.get(api).json()
+                req = requests.get(api,proxies={'http': proxy}).json()
                 items = req["items"]
                 item_list.extend(items)
                 print("第{}轮，爬取{}条".format( j, len(items)))
@@ -199,7 +203,7 @@ def updaterow(table,rows):
             else:
                 table.update(id,[row])      
 
-def db_match_airtable(table,items):
+def db_match_airtable(table,items,topic):
     print('waiting to check',len(items))
     r_list = []
     for item in items:
@@ -242,14 +246,14 @@ def save(table,keyword,topic,items):
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-    # items=craw_all(keyword)
+    items=craw_all(keyword)
     print("获取dao原始数据:{}条".format(len(items)))
 
 
     if total_count is None or len(items) == total_count:
         pass
     else:
-        sorted = db_match_airtable(table,items)
+        sorted = db_match_airtable(table,items,topic)
         print("record in db:{}条".format(len(sorted)))
 
         if len(sorted) != 0:
@@ -279,16 +283,17 @@ def save(table,keyword,topic,items):
             write_file(newline,topic)
 
 
-# if __name__ == "__main__":
-def gitcode(apikey,baseid,tableid,keywords,topic):
+if __name__ == "__main__":
+# def gitcode(apikey,baseid,tableid,keywords,topic):
     # keywords=['genshin']
-    # topic='genshin'
-    # apikey=os.environ['AIRTABLE_API_KEY']
-    # baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-    # tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+    topic='genshin'
+    apikey=os.environ['AIRTABLE_API_KEY']
+    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
 
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
 
     for k in keywords:
+
         save(table,k,topic)

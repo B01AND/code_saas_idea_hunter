@@ -13,9 +13,9 @@ from datetime import timedelta
 from httpx import AsyncClient
 from colorlog import ColoredFormatter
 from urllib.parse import quote_plus
+from utils import *
 import requests
 import math
-import os
 from pyairtable.formulas import match
 from pyairtable import *
 
@@ -37,48 +37,57 @@ def signalHandler(signal, frame):
     signalTag = True
 
 
-async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str,index:int,table:Table) -> dict:
+async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str,index:int) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
 
     
     item_list = []
     j=index
-    global signalTag
-    while not signalTag:
-        proxy = requests.get(proxypool).text
-        print('proxypool',proxypool,proxy)           
-        try:
+    proxy = requests.get(proxypool).text
+    print('proxypool',proxypool,proxy)   
+    try:
 
-            url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                # client.get() may get stuck due to unknown reasons
-                # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-            resp = requests.get(url,proxies={'http': proxy})
-            req = resp.json()
-            items = req["items"]
-            print("第{}轮，爬取{}条".format( j, len(items)))
+        url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+            # client.get() may get stuck due to unknown reasons
+            # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+        resp = requests.get(url,proxies={'http': proxy})
+        req = resp.json()
+        items = req["items"]
+        print("第{}轮，爬取{}条".format( j, len(items)))
+        apikey=os.environ['AIRTABLE_API_KEY']
+        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+        api = Api(apikey)
+        table = Table(apikey, baseid, tableid)
 
-            save(table,keyword,topic,items)
-            item_list.extend(items)
-        except Exception as e:
-            print("网络发生错误", e)
-            newProxy = requests.get(proxypool).text
-            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                    time2str(ed)))
-            log.debug('[{}] Proxy EXP: {}'.format(id, e))
-            proxy = newProxy
+        save(table,keyword,topic,items)
+        item_list.extend(items)
+    except Exception as e:
+        print("网络发生错误", e)
+        newProxy = requests.get(proxypool).text
+        log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                time2str(ed)))
+        log.debug('[{}] Proxy EXP: {}'.format(id, e))
+        proxy = newProxy
 
 
-def str2time(x: str) -> datetime:
-    return datetime.strptime(x, "%Y-%m-%d %H:%M:%S")
 
 
-def time2str(x: datetime) -> str:
-    return x.strftime("%Y-%m-%d %H:%M:%S")
+    return item_list
+
 
 async def main(opts):
     # Catch signal to exit gracefully
     signal.signal(signal.SIGINT, signalHandler)
+
+    # Load module
+    # params, pocs = loadModule(opts.module)
+
+    # Load original res.json
+    # absResJson = 'module/{}/{}'.format(opts.module, params.resJson)
+    # res = loadResJson(absResJson)
+
     timeSt = '2021-05-01 00:00:00'
     timeEd = '2021-05-01 01:00:00'
     keywords=[]
@@ -90,12 +99,6 @@ async def main(opts):
         keywords.append(opts.keywords)
     topic=opts.topic
     print('keywords list ',keywords)
-    apikey=os.environ['AIRTABLE_API_KEY']
-    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-    api = Api(apikey)
-    table = Table(apikey, baseid, tableid)
-
     for k in keywords:
         # Assign tasks
         coroutines = []
@@ -129,13 +132,12 @@ async def main(opts):
                     timeout=opts.timeout,
                     topic=topic,
                     keyword=k,
-                    index=i,
-                    table=table))
+                    index=i))
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
         print('======',workerRes)
-        page(table,topic)
+        page(table)
 
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
@@ -228,7 +230,7 @@ def db_match_airtable(table,items,keyword):
         if item['id'] == "" or item['id']  == None:
             pass
         else:
-            # print('valid  to save',item)
+            print('valid  to save',item)
 
             full_name = item["full_name"]
             description = item["description"]
@@ -268,9 +270,11 @@ def save(table,keyword,topic,items):
     print("获取dao原始数据:{}条".format(len(items)))
 
 
-
-    sorted = db_match_airtable(table,items,keyword)
-    print("record in db:{}条".format(len(sorted)))
+    if total_count is None or len(items) == total_count:
+        pass
+    else:
+        sorted = db_match_airtable(table,items,keyword)
+        print("record in db:{}条".format(len(sorted)))
 
 def page(table,topic):
     result=[]
