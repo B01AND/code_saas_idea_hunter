@@ -4,7 +4,7 @@ import time
 import requests
 import json
 from datetime import timedelta
-
+import os
 
 def get_daily_code(DateToday,cats,filters):
     """
@@ -49,6 +49,8 @@ def get_daily_code(DateToday,cats,filters):
     return data
 
 def update_daily_json(filename,data_all):
+    if not os.path.exists(filename):
+        open(filename,'w').write('')
     with open(filename,"r") as f:
         content = f.read()
         if not content:
