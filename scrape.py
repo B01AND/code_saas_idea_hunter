@@ -61,25 +61,23 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                 log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
 
                 url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                async with AsyncClient(proxies="https://{}".format(proxy), verify=True, trust_env=False) as client:
                     # client.get() may get stuck due to unknown reasons
                     # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                    resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
-                    req = resp.json()
-                    items = req["items"]
-                    print("第{}轮，爬取{}条".format( j, len(items)))
-                    apikey=os.environ['AIRTABLE_API_KEY']
-                    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-                    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-                    api = Api(apikey)
-                    table = Table(apikey, baseid, tableid)
+                resp = requests.get(url,proxies={'https': proxy})
+                req = resp.json()
+                items = req["items"]
+                print("第{}轮，爬取{}条".format( j, len(items)))
+                apikey=os.environ['AIRTABLE_API_KEY']
+                baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+                tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+                api = Api(apikey)
+                table = Table(apikey, baseid, tableid)
 
-                    save(table,keyword,topic,items)
-                    item_list.extend(items)
-                    await asyncio.sleep(delay)
+                save(table,keyword,topic,items)
+                item_list.extend(items)
             except Exception as e:
                 print("网络发生错误", e)
-                newProxy = requests.get(proxypool)
+                newProxy = requests.get(proxypool).text
                 log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
                                                                                         time2str(ed)))
                 log.debug('[{}] Proxy EXP: {}'.format(id, e))
