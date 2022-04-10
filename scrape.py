@@ -126,7 +126,7 @@ async def main(opts):
         except:
             print('here=========')
         proxypool=opts.proxypool
-        times=list(chunk(range(total_count), 10))
+        times=list(chunk(range(for_count), 10))
         for item in times:
             print('page ',item)
             for i in item:
