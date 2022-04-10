@@ -60,7 +60,6 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
 
             save(table,keyword,topic,items)
             item_list.extend(items)
-            signalTag=True
         except Exception as e:
             print("网络发生错误", e,index)
             newProxy = requests.get(proxypool).text
@@ -68,7 +67,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                                                                                     # time2str(ed)))
             # log.debug('[{}] Proxy EXP: {}'.format(id, e))
             proxy = newProxy
-
+    return item_list
 
 def str2time(x: str) -> datetime:
     return datetime.strptime(x, "%Y-%m-%d %H:%M:%S")
@@ -135,7 +134,7 @@ async def main(opts):
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
-        print('======',workerRes)
+        # print('======',workerRes)
         page(table,topic)
 
 def write_file(new_contents,topic):
@@ -271,7 +270,7 @@ def save(table,keyword,topic,items):
 def page(table,topic):
     result=[]
     for idx,item in enumerate(table.all()):
-        print(idx,item['fields'])
+        # print(idx,item['fields'])
         result.append(item['fields'])    
     # print(sorted_list)
     DateToday = datetime.today()
