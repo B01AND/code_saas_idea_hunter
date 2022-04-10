@@ -61,7 +61,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                 log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
 
                 url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                async with AsyncClient(proxies="http://{}".format(proxy), verify=True, trust_env=False) as client:
+                async with AsyncClient(proxies="https://{}".format(proxy), verify=True, trust_env=False) as client:
                     # client.get() may get stuck due to unknown reasons
                     # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
                     resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
