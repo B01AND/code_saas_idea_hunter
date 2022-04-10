@@ -61,13 +61,13 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             save(table,keyword,topic,items)
             item_list.extend(items)
         except Exception as e:
-            print("网络发生错误", e,index)
+            print("网络发生错误", e)
             newProxy = requests.get(proxypool).text
-            # log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                    # time2str(ed)))
-            # log.debug('[{}] Proxy EXP: {}'.format(id, e))
+            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                    time2str(ed)))
+            log.debug('[{}] Proxy EXP: {}'.format(id, e))
             proxy = newProxy
-    return item_list
+
 
 def str2time(x: str) -> datetime:
     return datetime.strptime(x, "%Y-%m-%d %H:%M:%S")
@@ -118,50 +118,23 @@ async def main(opts):
             print(total_count)
         except:
             print('here=========')
-        proxypool=opts.proxypool
-        for j in range(total_count):
-            item_list = []
-            proxy = requests.get(proxypool).text
-            print('proxypool',proxypool,proxy)           
-            try:
 
-                url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                    # client.get() may get stuck due to unknown reasons
-                    # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                resp = requests.get(url,proxies={'http': proxy})
-                req = resp.json()
-                items = req["items"]
-                print("第{}轮，爬取{}条".format( j, len(items)))
-
-                save(table,keyword,topic,items)
-                item_list.extend(items)
-            except Exception as e:
-                print("网络发生错误", e,j)
-                newProxy = requests.get(proxypool).text
-                # log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                        # time2str(ed)))
-                # log.debug('[{}] Proxy EXP: {}'.format(id, e))
-                proxy = newProxy
-
-
-
-
-
-            # coroutines.append(
-                # worker(id=i,
-                #     st=timeSt + dt * i,
-                #     ed=timeSt + dt * (i + 1),
-                #     proxypool=opts.proxypool,
-                #     delay=opts.delay,
-                #     timeout=opts.timeout,
-                #     topic=topic,
-                #     keyword=k,
-                #     index=i,
-                #     table=table))
+        for i in range(total_count):
+            coroutines.append(
+                worker(id=i,
+                    st=timeSt + dt * i,
+                    ed=timeSt + dt * (i + 1),
+                    proxypool=opts.proxypool,
+                    delay=opts.delay,
+                    timeout=opts.timeout,
+                    topic=topic,
+                    keyword=k,
+                    index=i,
+                    table=table))
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
-        # print('======',workerRes)
+        print('======',workerRes)
         page(table,topic)
 
 def write_file(new_contents,topic):
@@ -255,7 +228,7 @@ def db_match_airtable(table,items,keyword):
         if item['id'] == "" or item['id']  == None:
             pass
         else:
-            # print('valid  to save',item)
+            print('valid  to save',item)
 
             full_name = item["full_name"]
             description = item["description"]
@@ -289,23 +262,30 @@ def save(table,keyword,topic,items):
     # 下面是监控用的
     year = datetime.now().year
     sorted_list = []
+    total_count = get_info(keyword)
+    print("获取原始数据:{}条".format(total_count))
     # items=craw_all(keyword)
-    print("waiting for add :{}条".format(len(items)))
+    print("获取dao原始数据:{}条".format(len(items)))
 
-    sorted = db_match_airtable(table,items,keyword)
+
+    if total_count is None or len(items) == total_count:
+        pass
+    else:
+        sorted = db_match_airtable(table,items,keyword)
+        print("record in db:{}条".format(len(sorted)))
 
 def page(table,topic):
     result=[]
     for idx,item in enumerate(table.all()):
-        # print(idx,item['fields'])
+        print(idx,item['fields'])
         result.append(item['fields'])    
     # print(sorted_list)
     DateToday = datetime.today()
     day = str(DateToday)    
     newline = ""
 
-    for idx,s in enumerate(result):
-        # print(s,'-')
+    for idx,s in enumerate(sorted):
+        print(s,'-')
         line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
             s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
