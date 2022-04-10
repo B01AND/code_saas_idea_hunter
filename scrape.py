@@ -228,7 +228,7 @@ def db_match_airtable(table,items,keyword):
         if item['id'] == "" or item['id']  == None:
             pass
         else:
-            print('valid  to save',item)
+            # print('valid  to save',item)
 
             full_name = item["full_name"]
             description = item["description"]
@@ -268,11 +268,9 @@ def save(table,keyword,topic,items):
     print("获取dao原始数据:{}条".format(len(items)))
 
 
-    if total_count is None or len(items) == total_count:
-        pass
-    else:
-        sorted = db_match_airtable(table,items,keyword)
-        print("record in db:{}条".format(len(sorted)))
+
+    sorted = db_match_airtable(table,items,keyword)
+    print("record in db:{}条".format(len(sorted)))
 
 def page(table,topic):
     result=[]
