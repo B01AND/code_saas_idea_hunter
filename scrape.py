@@ -36,55 +36,40 @@ def signalHandler(signal, frame):
     signalTag = True
 
 
-async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str) -> dict:
+async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str,index:int) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
 
     
     item_list = []
+    j=index
+    proxy = requests.get(proxypool).text
+    print('proxypool',proxypool,proxy)   
     try:
-        url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
-        reqtem = requests.get(url).json()
-        # print('raw json',reqtem)
-        total_count = reqtem["total_count"]
-        if total_count<30:
-            for_count=0
-        for_count = math.ceil(total_count / 30) + 1
+        url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+            # client.get() may get stuck due to unknown reasons
+            # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+        resp = requests.get(url,proxies={'http': proxy})
+        req = resp.json()
+        items = req["items"]
+        print("第{}轮，爬取{}条".format( j, len(items)))
+        apikey=os.environ['AIRTABLE_API_KEY']
+        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+        api = Api(apikey)
+        table = Table(apikey, baseid, tableid)
 
-        if total_count<30:
-            for_count=0
-        for_count = math.ceil(total_count / 30) + 1
-        print(total_count)
-        for j in range(0, for_count, 1):
-            proxy = requests.get(proxypool).text
-            print('proxypool',proxypool,proxy)   
-            try:
-  
-                url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                    # client.get() may get stuck due to unknown reasons
-                    # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                resp = requests.get(url,proxies={'http': proxy})
-                req = resp.json()
-                items = req["items"]
-                print("第{}轮，爬取{}条".format( j, len(items)))
-                apikey=os.environ['AIRTABLE_API_KEY']
-                baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-                tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-                api = Api(apikey)
-                table = Table(apikey, baseid, tableid)
-
-                save(table,keyword,topic,items)
-                item_list.extend(items)
-            except Exception as e:
-                print("网络发生错误", e)
-                newProxy = requests.get(proxypool).text
-                log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                        time2str(ed)))
-                log.debug('[{}] Proxy EXP: {}'.format(id, e))
-                proxy = newProxy
+        save(table,keyword,topic,items)
+        item_list.extend(items)
     except Exception as e:
         print("网络发生错误", e)
+        newProxy = requests.get(proxypool).text
+        log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                time2str(ed)))
+        log.debug('[{}] Proxy EXP: {}'.format(id, e))
+        proxy = newProxy
+
 
 
 
@@ -119,7 +104,24 @@ async def main(opts):
         timeSt = str2time(timeSt)
         timeEd = str2time(timeEd)
         dt = (timeEd - timeSt) / opts.threads
-        for i in range(opts.threads):
+        try:
+            url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
+
+            reqtem = requests.get(url).json()
+            # print('raw json',reqtem)
+            total_count = reqtem["total_count"]
+            if total_count<30:
+                for_count=0
+            for_count = math.ceil(total_count / 30) + 1
+
+            if total_count<30:
+                for_count=0
+            for_count = math.ceil(total_count / 30) + 1
+            print(total_count)
+        except:
+            print('here=========')
+
+        for i in range(total_count):
             coroutines.append(
                 worker(id=i,
                     st=timeSt + dt * i,
@@ -128,7 +130,8 @@ async def main(opts):
                     delay=opts.delay,
                     timeout=opts.timeout,
                     topic=topic,
-                    keyword=k))
+                    keyword=k,
+                    index=i))
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
@@ -226,7 +229,7 @@ def db_match_airtable(table,items):
         if item['id'] == "" or item['id']  == None:
             pass
         else:
-            print('valid  to save',len(item))
+            print('valid  to save',item)
 
             full_name = item["full_name"]
             description = item["description"]
@@ -236,9 +239,11 @@ def db_match_airtable(table,items):
                 description = description.strip()
             url = item["html_url"]
             created_at = item["created_at"]
-            topics=','.join(item["topics"])
-            if topics == "" or topics == None:
-                topics=topics
+            topics=''
+            if item["topics"] == "" or item["topics"] == None:
+                pass
+            else:
+                topics=','.join(item["topics"])
             language=item['language']
             if language == "" or language == None:
                 language='unknown'
