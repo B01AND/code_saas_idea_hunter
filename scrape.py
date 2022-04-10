@@ -117,6 +117,7 @@ async def main(opts):
         tmp =[].extend(keywords)
         keywords=tmp
     topic=opts.topic
+    print('keywords list ',keywords)
     for k in keywords:
         # Assign tasks
         coroutines = []
