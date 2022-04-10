@@ -13,9 +13,9 @@ from datetime import timedelta
 from httpx import AsyncClient
 from colorlog import ColoredFormatter
 from urllib.parse import quote_plus
-from utils import *
 import requests
 import math
+import os
 from pyairtable.formulas import match
 from pyairtable import *
 
