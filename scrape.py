@@ -105,7 +105,6 @@ async def main(opts):
 
     for k in keywords:
         # Assign tasks
-        coroutines = []
         timeSt = str2time(timeSt)
         timeEd = str2time(timeEd)
         dt = (timeEd - timeSt) / opts.threads
@@ -129,7 +128,10 @@ async def main(opts):
         times=list(chunk(range(for_count), 10))
         for item in times:
             print('page ',item)
+            coroutines = []
+
             for i in item:
+
                 proxy = requests.get(proxypool).text
                 # print('proxypool',proxypool,proxy) 
                 coroutines.append(
