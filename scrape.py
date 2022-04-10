@@ -60,7 +60,6 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
 
             save(table,keyword,topic,items)
             item_list.extend(items)
-            signalTag=1
         except Exception as e:
             print("网络发生错误", e,index)
             newProxy = requests.get(proxypool).text
@@ -278,8 +277,8 @@ def page(table,topic):
     day = str(DateToday)    
     newline = ""
 
-    for idx,s in enumerate(sorted):
-        print(s,'-')
+    for idx,s in enumerate(result):
+        # print(s,'-')
         line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
             s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
