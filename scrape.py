@@ -148,6 +148,10 @@ async def main(opts):
         proxypool=opts.proxypool
         proxylist=[]
         times=list(chunk(range(for_count), 10))
+        while len(proxylist)==10:    
+            proxy = requests.get(proxypool).text
+            if requests.get('https://api.github.com').status_code==200:
+                proxylist.append(proxy)
         for item in times:
             print('page ',item)
             coroutines = []
@@ -170,6 +174,7 @@ async def main(opts):
                         keyword=k,
                         index=i,
                         table=table))
+                proxylist.append(proxy)
             time.sleep(30)
             # Run tasks
             print('run task',item)
