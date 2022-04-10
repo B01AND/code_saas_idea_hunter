@@ -1,10 +1,20 @@
 # Automatic monitor github Jamstack using Github Actions 
 
- > update time: 2022-04-09 12:03:05.328495  total: 1004 
+ > update time: 2022-04-10 12:04:01.189955  total: 1011 
 
  
  ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_monitor-)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_monitor-/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=cve_monitor) 
 
+## 2022-04-10 12:04:01.189782
+|id|name|url|update_at|description|
+|---|---|---|---|---|
+|0|WilliamOfSweden/silkroadlogistic.com|https://github.com/WilliamOfSweden/silkroadlogistic.com|2021-07-26T21:24:12Z|Company website, built on the 𝐉𝐚𝐦𝐬𝐭𝐚𝐜𝐤 architecture with 𝐆𝐚𝐭𝐬𝐛𝐲, 𝐓𝐲𝐩𝐞𝐒𝐜𝐫𝐢𝐩𝐭, 𝐌𝐚𝐭𝐞𝐫𝐢𝐚𝐥-𝐔𝐈 and 𝐆𝐫𝐚𝐩𝐡𝐂𝐌𝐒.|
+|1|WilliamOfSweden/usleathercraft.com|https://github.com/WilliamOfSweden/usleathercraft.com|2021-08-17T20:39:52Z|Company website, built on the 𝐉𝐚𝐦𝐬𝐭𝐚𝐜𝐤 architecture with 𝐆𝐚𝐭𝐬𝐛𝐲, 𝐓𝐲𝐩𝐞𝐒𝐜𝐫𝐢𝐩𝐭, 𝐌𝐚𝐭𝐞𝐫𝐢𝐚𝐥-𝐔𝐈 and 𝐆𝐫𝐚𝐩𝐡𝐂𝐌𝐒.|
+|2|Blazity/next-saas-starter|https://github.com/Blazity/next-saas-starter|2021-09-03T20:00:32Z|⚡️ Free Next.js responsive landing page template for SaaS products made using JAMStack architecture.|
+|3|emlez/emlez.dev|https://github.com/emlez/emlez.dev|2021-10-31T01:31:54Z|Jamstack site created with Stackbit|
+|4|carson-wright/ponderosaprinting|https://github.com/carson-wright/ponderosaprinting|2021-11-02T03:02:11Z|Ponderosa printing website based on a template from Stackbit.|
+|5|benchristel/react-flow-snowpack-taste|https://github.com/benchristel/react-flow-snowpack-taste|2022-04-09T16:45:16Z|Jamstack app development with a 400ms feedback loop|
+|6|m-tomoya/microcms-next-jamstack-blog|https://github.com/m-tomoya/microcms-next-jamstack-blog|2022-04-10T04:08:23Z|no description|
 ## 2022-04-09 12:03:05.328433
 |id|name|url|update_at|description|
 |---|---|---|---|---|
