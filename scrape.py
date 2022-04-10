@@ -66,7 +66,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
             #                                                                         time2str(ed)))
             # log.debug('[{}] Proxy EXP: {}'.format(id, e))
             # proxy = newProxy
-
+    return item_list
 
 def str2time(x: str) -> datetime:
     return datetime.strptime(x, "%Y-%m-%d %H:%M:%S")
@@ -74,6 +74,14 @@ def str2time(x: str) -> datetime:
 
 def time2str(x: datetime) -> str:
     return x.strftime("%Y-%m-%d %H:%M:%S")
+
+
+from itertools import islice
+
+def chunk(it, size):
+    it = iter(it)
+    while slice := tuple(islice(it, size)):
+        yield slice
 
 async def main(opts):
     # Catch signal to exit gracefully
@@ -118,25 +126,26 @@ async def main(opts):
         except:
             print('here=========')
         proxypool=opts.proxypool
-   
-        for i in range(total_count):
-            proxy = requests.get(proxypool).text
-            print('proxypool',proxypool,proxy) 
-            coroutines.append(
-                worker(id=i,
-                    st=timeSt + dt * i,
-                    ed=timeSt + dt * (i + 1),
-                    proxy=proxy,
-                    delay=opts.delay,
-                    timeout=opts.timeout,
-                    topic=topic,
-                    keyword=k,
-                    index=i,
-                    table=table))
+        times=list(chunk(range(total_count), 10))
+        for item in times:
+            for i in item:
+                proxy = requests.get(proxypool).text
+                print('proxypool',proxypool,proxy) 
+                coroutines.append(
+                    worker(id=i,
+                        st=timeSt + dt * i,
+                        ed=timeSt + dt * (i + 1),
+                        proxy=proxy,
+                        delay=opts.delay,
+                        timeout=opts.timeout,
+                        topic=topic,
+                        keyword=k,
+                        index=i,
+                        table=table))
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
-        print('======',workerRes)
+        # print('======',workerRes)
         page(table,topic)
 
 def write_file(new_contents,topic):
@@ -283,13 +292,15 @@ def page(table,topic):
     DateToday = datetime.today()
     day = str(DateToday)    
     newline = ""
-
+    urls=[]
     for idx,s in enumerate(sorted):
         print(s,'-')
-        line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
+        if not s['url'] in urls:
+            line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
             s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
 
-        newline = newline+line
+            newline = newline+line
+            urls.append(s['url'])
     # print(newline)
     if newline != "":
         old=f"## {day}\n"
