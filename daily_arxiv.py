@@ -6,7 +6,7 @@ import json
 from datetime import timedelta
 
 
-def get_daily_code(DateToday,cats):
+def get_daily_code(DateToday,cats,filters):
     """
     @param DateToday: str
     @param cats: dict
