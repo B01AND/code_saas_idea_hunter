@@ -57,14 +57,15 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
                 # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
             resp = requests.get(url,proxies={'http': proxy})
             req = resp.json()
-            items = req["items"]
+            items=[]
+            if 'items' in req:
+                items = req["items"]
             print("第{}轮，爬取{}条".format( j, len(items)))
-
-            save(table,keyword,topic,items)
             if(len(items))>0:
+                save(table,keyword,topic,items)
                 result=True
-            item_list.extend(items)
-            proxylist.append(proxy)
+                item_list.extend(items)
+                proxylist.append(proxy)
         except Exception as e:
             print(index,"网络发生错误", e)
             proxypool='https://proxypool.scrape.center/random',
