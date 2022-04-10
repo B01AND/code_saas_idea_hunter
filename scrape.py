@@ -68,21 +68,21 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
                         resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
                         req = resp.json()
                         items = req["items"]
-                        item_list.extend(items)
+#                         item_list.extend(items)
                         print("第{}轮，爬取{}条".format( j, len(items)))
+                        apikey=os.environ['AIRTABLE_API_KEY']
+                        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+                        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+                        api = Api(apikey)
+                        table = Table(apikey, baseid, tableid)
 
+                        save(table,keyword,topic,items)
                         await asyncio.sleep(delay)
                 except Exception as e:
                     print("网络发生错误", e)
                     continue
                     # ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
-            apikey=os.environ['AIRTABLE_API_KEY']
-            baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-            tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-            api = Api(apikey)
-            table = Table(apikey, baseid, tableid)
 
-            save(table,keyword,topic,workerRes)
             if len(item_list)==total_count:
                 signalTag=0            
         except Exception as e:
