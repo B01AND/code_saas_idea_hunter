@@ -37,61 +37,56 @@ def signalHandler(signal, frame):
 async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: float, timeout: float,topic:str,keyword:str) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
-    proxy = requests.get(proxypool)
-    print('proxypool',proxypool,proxy)
+
     
-    log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
     item_list = []
-    topic='genshin'
-    global signalTag
-    while not signalTag:
-        try:
-            url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
+    try:
+        url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
-            reqtem = requests.get(url).json()
-            # print('raw json',reqtem)
-            total_count = reqtem["total_count"]
-            if total_count<30:
-                for_count=0
-            for_count = math.ceil(total_count / 30) + 1
+        reqtem = requests.get(url).json()
+        # print('raw json',reqtem)
+        total_count = reqtem["total_count"]
+        if total_count<30:
+            for_count=0
+        for_count = math.ceil(total_count / 30) + 1
 
-            if total_count<30:
-                for_count=0
-            for_count = math.ceil(total_count / 30) + 1
-            print(total_count)
-            for j in range(0, for_count, 1):
-                try:
-                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                    async with AsyncClient(proxies="http://{}".format(proxy), verify=True, trust_env=False) as client:
-                        # client.get() may get stuck due to unknown reasons
-                        # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-                        resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
-                        req = resp.json()
-                        items = req["items"]
-#                         item_list.extend(items)
-                        print("第{}轮，爬取{}条".format( j, len(items)))
-                        apikey=os.environ['AIRTABLE_API_KEY']
-                        baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-                        tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-                        api = Api(apikey)
-                        table = Table(apikey, baseid, tableid)
+        if total_count<30:
+            for_count=0
+        for_count = math.ceil(total_count / 30) + 1
+        print(total_count)
+        for j in range(0, for_count, 1):
+            try:
+                proxy = requests.get(proxypool).text
+                print('proxypool',proxypool,proxy)     
+                log.info('[{}] Thread starts: proxy={} st={} ed={}'.format(id, proxy, st, ed))
 
-                        save(table,keyword,topic,items)
-                        await asyncio.sleep(delay)
-                except Exception as e:
-                    print("网络发生错误", e)
-                    continue
-                    # ed = str2time(mtime) - timedelta(seconds=1)  # Update ed time
+                url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                async with AsyncClient(proxies="http://{}".format(proxy), verify=True, trust_env=False) as client:
+                    # client.get() may get stuck due to unknown reasons
+                    # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
+                    resp = await asyncio.wait_for(client.get(url=url, headers=HEADERS), timeout=timeout)
+                    req = resp.json()
+                    items = req["items"]
+                    print("第{}轮，爬取{}条".format( j, len(items)))
+                    apikey=os.environ['AIRTABLE_API_KEY']
+                    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+                    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+                    api = Api(apikey)
+                    table = Table(apikey, baseid, tableid)
 
-            if len(item_list)==total_count:
-                signalTag=0            
-        except Exception as e:
-            newProxy = requests.get(proxypool)
-            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                    time2str(ed)))
-            log.debug('[{}] Proxy EXP: {}'.format(id, e))
-            proxy = newProxy
-            continue
+                    save(table,keyword,topic,items)
+                    item_list.extend(items)
+                    await asyncio.sleep(delay)
+            except Exception as e:
+                print("网络发生错误", e)
+                newProxy = requests.get(proxypool)
+                log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
+                                                                                        time2str(ed)))
+                log.debug('[{}] Proxy EXP: {}'.format(id, e))
+                proxy = newProxy
+    except Exception as e:
+        print("网络发生错误", e)
+
 
 
     return item_list
@@ -138,7 +133,7 @@ async def main(opts):
 
         # Run tasks
         workerRes = await asyncio.gather(*coroutines)
-        # print(workerRes)
+        print('======',workerRes)
 
 
 def write_file(new_contents,topic):
