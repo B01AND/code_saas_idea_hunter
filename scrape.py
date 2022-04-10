@@ -39,10 +39,10 @@ def signalHandler(signal, frame):
     signalTag = True
 
 
-async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, timeout: float,topic:str,keyword:str,index:int,table:Table) -> dict:
+async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: float, timeout: float,topic:str,keyword:str,index:int,table:Table) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
-
+    proxy =random.choice(proxylist)
     
     item_list = []
     j=index
@@ -78,14 +78,11 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
                 result=False
         except Exception as e:
             print(index,"网络发生错误", e,proxy)
-            proxypool='https://proxypool.scrape.center/random',
-
-            newProxy = requests.get(proxypool).text
-            log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
-                                                                                    time2str(ed)))
-            log.debug('[{}] Proxy EXP: {}'.format(id, e))
-            proxy = newProxy
+            proxylist.pop(proxy)
+            newproxy =random.choice(proxylist)
+            proxy=newproxy
             result=False
+            print('another try',index)
             
     return item_list
 
@@ -163,7 +160,7 @@ async def main(opts):
                     worker(id=i,
                         st=timeSt + dt * i,
                         ed=timeSt + dt * (i + 1),
-                        proxy=proxy,
+                        proxylist=proxylist,
                         delay=opts.delay,
                         timeout=opts.timeout,
                         topic=topic,
