@@ -68,6 +68,14 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             log.debug('[{}] Proxy EXP: {}'.format(id, e))
             proxy = newProxy
 
+
+def str2time(x: str) -> datetime:
+    return datetime.strptime(x, "%Y-%m-%d %H:%M:%S")
+
+
+def time2str(x: datetime) -> str:
+    return x.strftime("%Y-%m-%d %H:%M:%S")
+
 async def main(opts):
     # Catch signal to exit gracefully
     signal.signal(signal.SIGINT, signalHandler)
