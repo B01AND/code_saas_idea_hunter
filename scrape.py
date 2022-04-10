@@ -77,7 +77,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
                 proxy = newProxy                
                 result=False
         except Exception as e:
-            print(index,"网络发生错误", e)
+            print(index,"网络发生错误", e,proxy)
             proxypool='https://proxypool.scrape.center/random',
 
             newProxy = requests.get(proxypool).text
@@ -85,6 +85,8 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
                                                                                     time2str(ed)))
             log.debug('[{}] Proxy EXP: {}'.format(id, e))
             proxy = newProxy
+            result=False
+            
     return item_list
 
 def str2time(x: str) -> datetime:
