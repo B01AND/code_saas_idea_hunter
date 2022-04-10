@@ -51,7 +51,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxy: str, delay: float, 
     
     try:
 
-        url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+        url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=100&page={}".format(topic,j)
             # client.get() may get stuck due to unknown reasons
             # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
         resp = requests.get(url,proxies={'http': proxy})
@@ -119,13 +119,13 @@ async def main(opts):
             reqtem = requests.get(url).json()
             # print('raw json',reqtem)
             total_count = reqtem["total_count"]
-            if total_count<30:
+            if total_count<100:
                 for_count=0
-            for_count = math.ceil(total_count / 30) + 1
+            for_count = math.ceil(total_count / 100) + 1
 
-            if total_count<30:
+            if total_count<100:
                 for_count=0
-            for_count = math.ceil(total_count / 30) + 1
+            for_count = math.ceil(total_count / 100) + 1
             print(total_count)
         except:
             print('here=========')
