@@ -111,10 +111,13 @@ async def main(opts):
     timeSt = '2021-05-01 00:00:00'
     timeEd = '2021-05-01 01:00:00'
     keywords=opts.keywords
+    print('keywords list ',keywords)
+    
     if ',' in keywords:
         keywords=keywords.split(',')
     else:
-        tmp =[].extend(keywords)
+        tmp =[]
+        tmp=tmp.append(keywords)
         keywords=tmp
     topic=opts.topic
     print('keywords list ',keywords)
