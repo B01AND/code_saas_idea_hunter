@@ -57,9 +57,10 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
         for_count = math.ceil(total_count / 30) + 1
         print(total_count)
         for j in range(0, for_count, 1):
+            proxy = requests.get(proxypool).text
+            print('proxypool',proxypool,proxy)   
             try:
-                proxy = requests.get(proxypool).text
-                print('proxypool',proxypool,proxy)     
+  
                 url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
                     # client.get() may get stuck due to unknown reasons
                     # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
