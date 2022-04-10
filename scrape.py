@@ -62,7 +62,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxypool: str, delay: flo
             item_list.extend(items)
             break
         except Exception as e:
-            print("网络发生错误", e)
+            print("网络发生错误", e,index)
             newProxy = requests.get(proxypool).text
             log.warning('[{}] Proxy EXP: proxy={} newProxy={} st={} ed={}'.format(id, proxy, newProxy, time2str(st),
                                                                                     time2str(ed)))
