@@ -149,6 +149,7 @@ async def main(opts):
             proxy = requests.get(proxypool).text
             if requests.get('https://api.github.com').status_code==200:
                 proxylist.append(proxy)
+                print('add one',proxy)
         for item in times:
             print('page ',item)
             coroutines = []
