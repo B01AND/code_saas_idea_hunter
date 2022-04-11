@@ -169,13 +169,13 @@ async def main(opts):
                         keyword=k,
                         index=i,
                         table=table))
-            time.sleep(60)
             # Run tasks
             print('run task',item)
             workerRes = await asyncio.gather(*coroutines)
             proxylist=[]
-
             print(item,'task result',len(workerRes))
+
+            time.sleep(60)
         page(table,topic)
 
 def write_file(new_contents,topic):
