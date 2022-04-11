@@ -78,7 +78,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: fl
                 result=False
         except Exception as e:
             print(index,"网络发生错误", e,proxy)
-            proxylist.pop(proxy)
+            proxylist.remove(proxy)
             newproxy =random.choice(proxylist)
             proxy=newproxy
             result=False
@@ -149,7 +149,7 @@ async def main(opts):
 
             while len(proxylist)<20:    
                 proxy = requests.get(proxypool).text
-                if requests.get('https://api.github.com').status_code==200:
+                if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
                     proxylist.append(proxy)
                     print('add one',proxy)
             print('page ',item)
