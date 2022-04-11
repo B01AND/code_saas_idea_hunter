@@ -42,7 +42,6 @@ def signalHandler(signal, frame):
 async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: float, timeout: float,topic:str,keyword:str,index:int,table:Table) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
-    proxy =random.choice(proxylist)
     
     item_list = []
     j=index
@@ -51,6 +50,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: fl
     result=False
     while not result:
         try:
+            proxy =random.choice(proxylist)
 
             url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=100&page={}".format(topic,j)
                 # client.get() may get stuck due to unknown reasons
