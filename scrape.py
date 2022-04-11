@@ -169,7 +169,7 @@ async def main(opts):
                         keyword=k,
                         index=i,
                         table=table))
-            time.sleep(30)
+            time.sleep(60)
             # Run tasks
             print('run task',item)
             workerRes = await asyncio.gather(*coroutines)
