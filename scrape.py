@@ -145,7 +145,7 @@ async def main(opts):
         proxypool=opts.proxypool
         proxylist=[]
         times=list(chunk(range(for_count), 10))
-        while len(proxylist)==20:    
+        while len(proxylist)<20:    
             proxy = requests.get(proxypool).text
             if requests.get('https://api.github.com').status_code==200:
                 proxylist.append(proxy)
