@@ -143,9 +143,9 @@ async def main(opts):
         except:
             print('here=========')
         proxypool=opts.proxypool
-        proxylist=[]
         times=list(chunk(range(for_count), 10))
         for item in times:
+            proxylist=[]
 
             while len(proxylist)<20:    
                 proxy = requests.get(proxypool).text
