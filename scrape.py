@@ -37,12 +37,100 @@ def signalHandler(signal, frame):
     log.warning('Signal catched...')
     global signalTag
     signalTag = True
+# from .util import *
+def get_playright(playwright,url,headless:bool=True):
+    #     browser = p.chromium.launch()
+    #     browser = p.firefox.launch(headless=False)
+    if headless=='':
+        headless=True
+    PROXY_SOCKS5 = "socks5://127.0.0.1:1080"
+    browser=''
+    if url_ok(url):
+        try:
+            browser = playwright.firefox.launch(headless=headless)
+            print('start is ok')
+        except:
+            print('pl start failed')
+
+    else: 
+        browserLaunchOptionDict = {
+        "headless": headless,
+        "proxy": {
+                "server": PROXY_SOCKS5,
+        }
+        } 
+        browser = playwright.firefox.launch(**browserLaunchOptionDict)
+        # Open new page    
+    page = browser.new_page()
+
+    return page
+
+def write_file(new_contents,topic):
+    if not os.path.exists("web/README-{}.md".format(topic)):
+        open("web/README-{}.md".format(topic),'w').write('')
+    with open("web/README-{}.md".format(topic),'r',encoding='utf8') as f:
+        #去除标题
+        for _ in range(7):
+            f.readline()
+
+        old = f.read()
+    new = new_contents + old
+    with open("web/README-{}.md".format(topic), "w") as f:
+        f.write(new)
+def url_ok(url):
+    try:
+        response = requests.head(url)
+    except Exception as e:
+        # print(f"NOT OK: {str(e)}")
+        return False
+    else:
+        if response.status_code == 400 or response.status_code==404:
+            # print("OK")
+            print(f"NOT OK: HTTP response code {response.status_code}")
+
+            return False
+        else:
+
+            return True   
+def coldstart(topic):
+    item_list = []
+
+    with sync_playwright() as p:
+        start = time.time()
+        url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
+        print('user home url',url)
+        page = get_playright(p,url,True)
+        try:
+            res=page.goto(url)
+            total_count = int(page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)').split(' repository results').replace(',',''))
+            if total_count<30:
+                for_count=0
+            for_count = math.ceil(total_count / 30) + 1
+        # item_list = reqtem["items"]
+            for j in range(0, for_count, 1):
+                try:
+                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
+                    res=page.goto(url)
+
+                    items = res.json()["items"]
+                    item_list.extend(items)
+                    print("第{}轮，爬取{}条".format( j, len(items)))
+                except Exception as e:
+                    print("网络发生错误", e)
+                    continue
+
+                time.sleep(random.randint(30, 60))            
+        except:
+            print("请求数量的时候发生错误")
+
+    return item_list
 
 
 async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: float, timeout: float,topic:str,keyword:str,index:int,table:Table) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
     # proxy = await popProxy(id, proxypool, timeout)
-    
+    # get latest 1000 results
+
     item_list = []
     j=index
     global signalTag
@@ -138,7 +226,9 @@ async def main(opts):
 
             if total_count<100:
                 for_count=0
-            for_count = math.ceil(total_count / 100) + 1
+            for_count = math.ceil(1000 / 100) + 1
+            # https://docs.github.com/en/rest/reference/search
+            # The Search API helps you search for the specific item you want to find. For example, you can find a user or a specific file in a repository. Think of it the way you think of performing a search on Google. It's designed to help you find the one result you're looking for (or maybe the few results you're looking for). Just like searching on Google, you sometimes want to see a few pages of search results so that you can find the item that best meets your needs. To satisfy that need, the GitHub Search API provides up to 1,000 results for each search.
             print(total_count)
         except:
             print('here=========')

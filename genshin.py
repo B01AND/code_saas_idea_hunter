@@ -83,29 +83,64 @@ def craw_all_pl(topic):
 
     with sync_playwright() as p:
         start = time.time()
-        url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
-        print('user home url',url)
+        url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
         page = get_playright(p,url,True)
         try:
             res=page.goto(url)
+            print('user home url',url)
+
             total_count = int(page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)').split(' repository results').replace(',',''))
             if total_count<30:
                 for_count=0
             for_count = math.ceil(total_count / 30) + 1
+
+            print('total count',total_count)
+
+            page.locator('.filter-list > li:nth-child(1) > a:nth-child(2)')
+            filter_list = [
+            ("https:github.com"+video_element.get_attribute("href") + "\n",video_element.locator('span').text_content())
+            # "//*[@class='ARNw21RN']/li"
+            for video_element in page.query_selector_all(
+                "//*[@class='filter-item']"
+                
+            )]
+            print('filter',filter_list)
+            for filter in filter_list:
+                prefix=filter[0]
+                topic=prefix.split('?1=')[-1].split('&')[0]
+                total_count=filter[1]
+
         # item_list = reqtem["items"]
-            for j in range(0, for_count, 1):
-                try:
-                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                    res=page.goto(url)
+                for j in range(0, total_count, 1):
+                    try:
+                        url = "https://github.com/search?l={}&o=desc&p={}&q=genshin&s=updated&type=Repositories".format(topic,j)
+                        res=page.goto(url)
 
-                    items = res.json()["items"]
-                    item_list.extend(items)
-                    print("第{}轮，爬取{}条".format( j, len(items)))
-                except Exception as e:
-                    print("网络发生错误", e)
-                    continue
+                        items = page.locator('li.repo-list-item')
+                        for i in range(items.count()):
+                            full_name =items.nth(i).locator('.v-align-middle').text_content()
+                            description=items.nth(i).locaotr('.mb1').text_content()
+                            url ="https:github.com"+items.nth(i).locator('v-align-middle').get_attribute("href")
+                            topics=items.nth(i).locaotr("//*[@class='topic-tag']").text_content()
+                            language=items.nth(i).locaotr('.programmingLanguage').text_content()
 
-                time.sleep(random.randint(30, 60))            
+                            row =[{
+                                "name": full_name,
+                                "description": description,
+                                "url": url,
+                                "topic":topics,
+                                "language":language,
+                                "created_at": ''
+                            }]
+                            print(row,'============')
+                            updaterow(table,row)
+
+                    
+                    except Exception as e:
+                        print("网络发生错误", e)
+                        continue
+
+                    time.sleep(random.randint(30, 60))            
         except:
             print("请求数量的时候发生错误")
 
@@ -246,7 +281,7 @@ def save(table,keyword,topic,items):
     sorted_list = []
     total_count = get_info(keyword)
     print("获取原始数据:{}条".format(total_count))
-    items=craw_all(keyword)
+    items=craw_all_pl(keyword)
     print("获取dao原始数据:{}条".format(len(items)))
 
 
@@ -286,14 +321,15 @@ def save(table,keyword,topic,items):
 if __name__ == "__main__":
 # def gitcode(apikey,baseid,tableid,keywords,topic):
     # keywords=['genshin']
-    topic='genshin'
-    apikey=os.environ['AIRTABLE_API_KEY']
-    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+    # topic='genshin'
+    # apikey=os.environ['AIRTABLE_API_KEY']
+    # baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+    # tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
 
-    api = Api(apikey)
-    table = Table(apikey, baseid, tableid)
+    # api = Api(apikey)
+    # table = Table(apikey, baseid, tableid)
 
-    for k in keywords:
+    # for k in keywords:
 
-        save(table,k,topic)
+    #     save(table,k,topic)
+    craw_all_pl('genshin')

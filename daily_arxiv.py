@@ -134,5 +134,5 @@ if __name__ == "__main__":
         healthcare_papar_code={'abstract':['healthcare','medical','hospital']}
         data = get_daily_code(day,cats,healthcare_papar_code)
         data_all.append(data)
-    update_daily_json("{}.json".format('healthcare_papar_code'),data_all)
-    json_to_md("{}.json".format('healthcare_papar_code'))
+    update_daily_json("web/{}.json".format('healthcare_papar_code'),data_all)
+    json_to_md("web/{}.json".format('healthcare_papar_code'))
