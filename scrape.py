@@ -173,6 +173,7 @@ async def main(opts):
             # Run tasks
             print('run task',item)
             workerRes = await asyncio.gather(*coroutines)
+            proxylist=[]
 
             print(item,'task result',len(workerRes))
         page(table,topic)
