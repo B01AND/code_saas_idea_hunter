@@ -300,7 +300,7 @@ async def main(opts):
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
     if not os.path.exists('data/'+topic+'.json'):
-        with open('data/'+topic+'.json',encodings='utf8') as f:
+        with open('data/'+topic+'.json',encoding='utf8') as f:
             if len(json.load(f.read()))==0:
                 await coldstart(topic,table)
     
