@@ -70,23 +70,23 @@ def update_daily_json(filename,data_all):
 
 
 
-def json_to_md(filename):
+def json_to_md(jsonfilename,mdfilename):
     """
     @param filename: str
     @return None
     """
 
-    with open(filename,"r") as f:
+    with open(jsonfilename,"r") as f:
         content = f.read()
         if not content:
             data = {}
         else:
             data = json.loads(content)
     # clean README.md if daily already exist else creat it
-    with open("web/README{}.md".format(filename.split('.')[0]),"w+") as f:
+    with open("web/README{}.md".format(mdfilename.split('.')[0]),"w+") as f:
         pass
     # write data into README.md
-    with open("web/README{}.md".format(filename.split('.')[0]),"a+") as f:
+    with open("web/README{}.md".format(mdfilename.split('.')[0]),"a+") as f:
         # 对data数据排序
         for day in sorted(data.keys(),reverse=True):
             day_content = data[day]
@@ -135,4 +135,4 @@ if __name__ == "__main__":
         data = get_daily_code(day,cats,healthcare_papar_code)
         data_all.append(data)
     update_daily_json("data/{}.json".format('healthcare_papar_code'),data_all)
-    json_to_md("data/{}.json".format('healthcare_papar_code'))
+    json_to_md("data/{}.json".format('healthcare_papar_code'),'healthcare_papar_code')
