@@ -93,7 +93,7 @@ async def craw_all_pl(topic):
     start = time.time()
     url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
     try:
-        browser = await get_playright(url,True,True)
+        browser = await get_playright(url,False,True)
         context = await browser.new_context()
         page = await browser.new_page()
         res=await page.goto(url)
