@@ -20,6 +20,7 @@ import random
 import time
 from pyairtable.formulas import match
 from pyairtable import *
+from playwright.sync_api import sync_playwright,Mouse
 
 HEADERS = {
     'User-Agent':
@@ -92,39 +93,73 @@ def url_ok(url):
         else:
 
             return True   
-def coldstart(topic):
+def coldstart(topic,table):
     item_list = []
 
     with sync_playwright() as p:
         start = time.time()
         url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
-        print('user home url',url)
         page = get_playright(p,url,True)
         try:
             res=page.goto(url)
+            print('user home url',url)
+
             total_count = int(page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)').split(' repository results').replace(',',''))
             if total_count<30:
                 for_count=0
             for_count = math.ceil(total_count / 30) + 1
+
+            print('total count',total_count)
+
+            page.locator('.filter-list > li:nth-child(1) > a:nth-child(2)')
+            filter_list = [
+            ("https:github.com"+video_element.get_attribute("href") + "\n",video_element.locator('span').text_content())
+            # "//*[@class='ARNw21RN']/li"
+            for video_element in page.query_selector_all(
+                "//*[@class='filter-item']"
+                
+            )]
+            print('filter',filter_list)
+            for filter in filter_list:
+                prefix=filter[0]
+                topic=prefix.split('?1=')[-1].split('&')[0]
+                total_count=filter[1]
+
         # item_list = reqtem["items"]
-            for j in range(0, for_count, 1):
-                try:
-                    url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=30&page={}".format(topic,j)
-                    res=page.goto(url)
+                for j in range(0, total_count, 1):
+                    try:
+                        url = "https://github.com/search?l={}&o=desc&p={}&q=genshin&s=updated&type=Repositories".format(topic,j)
+                        res=page.goto(url)
 
-                    items = res.json()["items"]
-                    item_list.extend(items)
-                    print("第{}轮，爬取{}条".format( j, len(items)))
-                except Exception as e:
-                    print("网络发生错误", e)
-                    continue
+                        items = page.locator('li.repo-list-item')
+                        for i in range(items.count()):
+                            full_name =items.nth(i).locator('.v-align-middle').text_content()
+                            description=items.nth(i).locaotr('.mb1').text_content()
+                            url ="https:github.com"+items.nth(i).locator('v-align-middle').get_attribute("href")
+                            topics=items.nth(i).locaotr("//*[@class='topic-tag']").text_content()
+                            language=items.nth(i).locaotr('.programmingLanguage').text_content()
 
-                time.sleep(random.randint(30, 60))            
+                            row =[{
+                                "name": full_name,
+                                "description": description,
+                                "url": url,
+                                "topic":topics,
+                                "language":language,
+                                "created_at": ''
+                            }]
+                            print(row,'============')
+                            updaterow(table,row)
+
+                    
+                    except Exception as e:
+                        print("网络发生错误", e)
+                        continue
+
+                    time.sleep(random.randint(30, 60))            
         except:
             print("请求数量的时候发生错误")
 
     return item_list
-
 
 async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: float, timeout: float,topic:str,keyword:str,index:int,table:Table) -> dict:
     workerRes = {}  # e.g. {'22.3.4.5': '2021-04-26 03:53:41'}
@@ -203,9 +238,9 @@ async def main(opts):
         keywords.append(opts.keywords)
     topic=opts.topic
     print('keywords list ',keywords)
-    apikey=os.environ['AIRTABLE_API_KEY']
-    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+    apikey=os.environ.get('AIRTABLE_API_KEY')
+    baseid=os.environ.get(topic.upper()+'_AIRTABLE_BASE_KEY')
+    tableid=os.environ.get(topic.upper()+'_AIRTABLE_TABLE_KEY')
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
 
@@ -220,6 +255,8 @@ async def main(opts):
             reqtem = requests.get(url).json()
             # print('raw json',reqtem)
             total_count = reqtem["total_count"]
+            total_count=1000
+            # github api limit 1000
             if total_count<100:
                 for_count=0
             for_count = math.ceil(total_count / 100) + 1
@@ -470,7 +507,6 @@ def initLog():
 
     log.setLevel(LOG_LEVEL)
     log.addHandler(stream)
-
 
 if __name__ == '__main__':
     initLog()

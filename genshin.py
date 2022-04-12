@@ -18,38 +18,47 @@ import os
 from pyairtable.formulas import match
 from pyairtable import *
 import platform
-from playwright.sync_api import sync_playwright,Mouse
-
+import asyncio
+from playwright.async_api import async_playwright
 
 
 keywords=''
 # from .util import *
-def get_playright(playwright,url,headless:bool=True):
-    #     browser = p.chromium.launch()
-    #     browser = p.firefox.launch(headless=False)
-    if headless=='':
-        headless=True
+async def get_playright(url,proxy,headless:bool=True):
+    print('proxy',proxy,'headless',headless)
+    browser=''
+    playwright =await  async_playwright().start()
     PROXY_SOCKS5 = "socks5://127.0.0.1:1080"
     browser=''
-    if url_ok(url):
+    if proxy==False:
         try:
-            browser = playwright.firefox.launch(headless=headless)
+            browser = await  playwright.firefox.launch(headless=headless)
             print('start is ok')
-        except:
-            print('pl start failed')
+            return browser
 
+        except:
+            print('pl no proxy start failed')
+            browserLaunchOptionDict = {
+            "headless": headless,
+            "proxy": {
+                    "server": PROXY_SOCKS5,
+            }
+            } 
+            browser = await playwright.firefox.launch(**browserLaunchOptionDict)
+            # Open new page    
+            return browser
     else: 
+        print('proxy===',headless)
         browserLaunchOptionDict = {
         "headless": headless,
         "proxy": {
                 "server": PROXY_SOCKS5,
         }
         } 
-        browser = playwright.firefox.launch(**browserLaunchOptionDict)
+        browser = await playwright.firefox.launch(**browserLaunchOptionDict)
         # Open new page    
-    page = browser.new_page()
 
-    return page
+        return browser
 
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
@@ -78,52 +87,60 @@ def url_ok(url):
         else:
 
             return True   
-def craw_all_pl(topic):
+async def craw_all_pl(topic):
     item_list = []
 
-    with sync_playwright() as p:
-        start = time.time()
-        url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
-        page = get_playright(p,url,True)
-        try:
-            res=page.goto(url)
-            print('user home url',url)
+    start = time.time()
+    url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
+    try:
+        browser = await get_playright(url,True,True)
+        context = await browser.new_context()
+        page = await browser.new_page()
+        res=await page.goto(url)
+        print('user home url',url)
+        count =  page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)')
+        count = await count.text_content()
+        print(count.strip())
+        count=count.strip().split(' ')[0].replace(',','')
+        print(count)
+        total_count = int(count)
+        if total_count<30:
+            for_count=0
+        for_count = math.ceil(total_count / 30) + 1
 
-            total_count = int(page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)').split(' repository results').replace(',',''))
-            if total_count<30:
-                for_count=0
-            for_count = math.ceil(total_count / 30) + 1
+        print('total count',total_count)
+        filters=page.locator("a.filter-item")
+        
+        filterscount=await filters.count()
+        print(filterscount,type(filterscount))
 
-            print('total count',total_count)
-
-            page.locator('.filter-list > li:nth-child(1) > a:nth-child(2)')
-            filter_list = [
-            ("https:github.com"+video_element.get_attribute("href") + "\n",video_element.locator('span').text_content())
-            # "//*[@class='ARNw21RN']/li"
-            for video_element in page.query_selector_all(
-                "//*[@class='filter-item']"
-                
-            )]
-            print('filter',filter_list)
-            for filter in filter_list:
-                prefix=filter[0]
-                topic=prefix.split('?1=')[-1].split('&')[0]
-                total_count=filter[1]
-
-        # item_list = reqtem["items"]
-                for j in range(0, total_count, 1):
+        if filterscount>0:
+            for i in range(filterscount):
+                element =filters.nth(i)
+                href="https:github.com"+await element.get_attribute("href")
+                keyword=href.split('=')[1]
+                count = await element.locator('span').text_content()
+                print(keyword,count)
+                total_count=int(count)
+                pages=int(total_count/10)+1
+                urls=[]
+                for i in range(pages):
+                    url=href+'&p='+str(i)
+                    print('keyword',keyword,'page-',url)
                     try:
-                        url = "https://github.com/search?l={}&o=desc&p={}&q=genshin&s=updated&type=Repositories".format(topic,j)
-                        res=page.goto(url)
-
+                        res=await page.goto(url)
                         items = page.locator('li.repo-list-item')
-                        for i in range(items.count()):
-                            full_name =items.nth(i).locator('.v-align-middle').text_content()
-                            description=items.nth(i).locaotr('.mb1').text_content()
-                            url ="https:github.com"+items.nth(i).locator('v-align-middle').get_attribute("href")
-                            topics=items.nth(i).locaotr("//*[@class='topic-tag']").text_content()
-                            language=items.nth(i).locaotr('.programmingLanguage').text_content()
-
+                        for i in range(await items.count()):
+                            full_name =await items.nth(i).locator('a.v-align-middle').text_content()
+                            print('fullname',full_name)
+                            description=await items.nth(i).locator('p.mb-1').text_content()
+                            url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
+                            ife=items.nth(i).locator("a.topic-tag")
+                            if await ife.count()>0:
+                                topics=await items.nth(i).locator("a.topic-tag").text_content()
+                            else:
+                                topics =topic
+                            language=keyword.split('&')[0]
                             row =[{
                                 "name": full_name,
                                 "description": description,
@@ -141,8 +158,8 @@ def craw_all_pl(topic):
                         continue
 
                     time.sleep(random.randint(30, 60))            
-        except:
-            print("请求数量的时候发生错误")
+    except:
+        print("请求数量的时候发生错误")
 
     return item_list
 
@@ -322,16 +339,17 @@ def save(table,keyword,topic,items):
 
 if __name__ == "__main__":
 # def gitcode(apikey,baseid,tableid,keywords,topic):
-    # keywords=['genshin']
-    # topic='genshin'
-    apikey=os.environ['AIRTABLE_API_KEY']
-    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
-
+    keywords=['genshin']
+    topic='genshin'
+    apikey=os.environ.get('AIRTABLE_API_KEY')
+    baseid=os.environ.get(topic.upper()+'_AIRTABLE_BASE_KEY')
+    tableid=os.environ.get(topic.upper()+'_AIRTABLE_TABLE_KEY')
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
 
     for k in keywords:
 
-        save(table,k,topic)
-#     craw_all_pl('genshin')
+        # save(table,k,topic)
+        
+        # await run(playwright)
+        asyncio.run(craw_all_pl('genshin'))

@@ -202,3 +202,4 @@ Thumbs.db #thumbnail cache on Windows
 
 
 t.py
+.env
