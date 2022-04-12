@@ -51,7 +51,7 @@ async def get_playright(proxy:bool=False,headless:bool=True):
     if proxy==False:
         try:
             print("start pl without proxy")
-            browser = await  playwright.webkit.launch(headless=headless)
+            browser = await  playwright.firefox.launch(headless=headless)
             print('start is ok')
             return browser
 
@@ -134,12 +134,13 @@ async def coldstart(topic,table):
     start = time.time()
     url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
     try:
-        browser = await get_playright(False,False)
+        browser = await get_playright(False,True)
         context = await browser.new_context()
         page = await browser.new_page()
         print('this url',url)
         res=await page.goto(url)
         print('user home url',url)
+        # time.sleep(60)
         count =  page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)')
         count = await count.text_content()
         print(count.strip())
