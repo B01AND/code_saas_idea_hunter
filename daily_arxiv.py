@@ -101,26 +101,26 @@ def json_to_md(filename):
     print("finished")        
 cats={
 "ComputerScience":["cs"],
-"Economics":["econ"],
+# "Economics":["econ"],
 "ElectricalEngineeringandSystemsScience":["eess"],
-"Mathematics":["math"],
-"Physics":["physics"],
-"Astrophysics":["physics:astro-ph"],
-"CondensedMatter":["physics:cond-mat"],
-"GeneralRelativityandQuantumCosmology":["physics:gr-qc"],
-"HighEnergyPhysics-Experiment":["physics:hep-ex"],
-"HighEnergyPhysics-Lattice":["physics:hep-lat"],
-"HighEnergyPhysics-Phenomenology":["physics:hep-ph"],
-"HighEnergyPhysics-Theory":["physics:hep-th"],
-"MathematicalPhysics":["physics:math-ph"],
-"NonlinearSciences":["physics:nlin"],
-"NuclearExperiment":["physics:nucl-ex"],
-"NuclearTheory":["physics:nucl-th"],
-"Physics(Other)":["physics:physics"],
-"QuantumPhysics":["physics:quant-ph"],
-"QuantitativeBiology":["q-bio"],
-"QuantitativeFinance":["q-fin"],
-"Statistics":["stat"]
+# "Mathematics":["math"],
+# "Physics":["physics"],
+# "Astrophysics":["physics:astro-ph"],
+# "CondensedMatter":["physics:cond-mat"],
+# "GeneralRelativityandQuantumCosmology":["physics:gr-qc"],
+# "HighEnergyPhysics-Experiment":["physics:hep-ex"],
+# "HighEnergyPhysics-Lattice":["physics:hep-lat"],
+# "HighEnergyPhysics-Phenomenology":["physics:hep-ph"],
+# "HighEnergyPhysics-Theory":["physics:hep-th"],
+# "MathematicalPhysics":["physics:math-ph"],
+# "NonlinearSciences":["physics:nlin"],
+# "NuclearExperiment":["physics:nucl-ex"],
+# "NuclearTheory":["physics:nucl-th"],
+# "Physics(Other)":["physics:physics"],
+# "QuantumPhysics":["physics:quant-ph"],
+# "QuantitativeBiology":["q-bio"],
+# "QuantitativeFinance":["q-fin"],
+# "Statistics":["stat"]
 }
 if __name__ == "__main__":
 
@@ -134,5 +134,5 @@ if __name__ == "__main__":
         healthcare_papar_code={'abstract':['healthcare','medical','hospital']}
         data = get_daily_code(day,cats,healthcare_papar_code)
         data_all.append(data)
-    update_daily_json("web/{}.json".format('healthcare_papar_code'),data_all)
-    json_to_md("web/{}.json".format('healthcare_papar_code'))
+    update_daily_json("data/{}.json".format('healthcare_papar_code'),data_all)
+    json_to_md("data/{}.json".format('healthcare_papar_code'))
