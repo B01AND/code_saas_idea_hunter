@@ -242,6 +242,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: fl
             if(len(items))>0:
                 save(table,keyword,topic,items)
                 result=True
+                print('type',type(item_list),type(items))
                 item_list.extend(items)
                 proxylist.append(proxy)
                 result=True
