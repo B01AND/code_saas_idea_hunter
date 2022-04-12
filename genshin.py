@@ -25,7 +25,7 @@ from playwright.async_api import async_playwright
 
 keywords=''
 # from .util import *
-async def get_playright(url,proxy,headless:bool=True):
+async def get_playright(proxy,headless:bool=True):
     print('proxy',proxy,'headless',headless)
     browser=''
     playwright =await  async_playwright().start()
