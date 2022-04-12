@@ -208,7 +208,8 @@ async def coldstart(topic,table):
         
     except:
         print("请求数量的时候发生错误")
-    update_daily_json("data/{}.json".format(topic),datall)
+    if len(datall)>0:
+        update_daily_json("data/{}.json".format(topic),datall)
 
     return item_list
 
