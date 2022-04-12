@@ -324,14 +324,14 @@ if __name__ == "__main__":
 # def gitcode(apikey,baseid,tableid,keywords,topic):
     # keywords=['genshin']
     # topic='genshin'
-    # apikey=os.environ['AIRTABLE_API_KEY']
-    # baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
-    # tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
+    apikey=os.environ['AIRTABLE_API_KEY']
+    baseid=os.environ[topic.upper()+'_AIRTABLE_BASE_KEY']
+    tableid=os.environ[topic.upper()+'_AIRTABLE_TABLE_KEY']
 
-    # api = Api(apikey)
-    # table = Table(apikey, baseid, tableid)
+    api = Api(apikey)
+    table = Table(apikey, baseid, tableid)
 
-    # for k in keywords:
+    for k in keywords:
 
-    #     save(table,k,topic)
-    craw_all_pl('genshin')
+        save(table,k,topic)
+#     craw_all_pl('genshin')
