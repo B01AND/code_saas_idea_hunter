@@ -114,7 +114,7 @@ async def craw_all_pl(topic):
     start = time.time()
     url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
     try:
-        browser = await get_playright(url,False,True)
+        browser = await get_playright(url,False,False)
         context = await browser.new_context()
         page = await browser.new_page()
         res=await page.goto(url)
@@ -164,13 +164,15 @@ async def craw_all_pl(topic):
                                     tmp =await ife.nth(i).get_attribute("title")
                                     topic=topic+','+tmp.split(":")[1]
                             language=keyword.split('&')[0]
+
+                            FORMAT='%Y-%m-%dT%H:%M:%S%z'
                             row ={
                                 "name": full_name,
                                 "description": description.strip(),
                                 "url": url,
                                 "topic":topics,
                                 "language":language,
-                                "created_at": ''
+                                "created_at": datetime.now().strftime(FORMAT)
                             }
                             print(row,'============')
                             datall.append(row)

@@ -171,7 +171,9 @@ async def coldstart(topic,table):
                         for i in range(await items.count()):
                             full_name =await items.nth(i).locator('a.v-align-middle').text_content()
                             print('fullname',full_name)
-                            description=await items.nth(i).locator('p.mb-1').text_content()
+                            des =items.nth(i).locator('p.mb-1')
+                            if await des.count()>0:
+                                description=await des.text_content()
                             url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
                             ife=items.nth(i).locator("div > div > div >a.topic-tag")
                             topics =topic
@@ -181,13 +183,15 @@ async def coldstart(topic,table):
                                     tmp =await ife.nth(i).get_attribute("title")
                                     topic=topic+','+tmp.split(":")[1]
                             language=keyword.split('&')[0]
+                            FORMAT='%Y-%m-%dT%H:%M:%S%z'
+
                             row ={
                                 "name": full_name,
                                 "description": description.strip(),
                                 "url": url,
                                 "topic":topics,
                                 "language":language,
-                                "created_at": ''
+                                "created_at": datetime.now().strftime(FORMAT)
                             }
                             print(row,'============')
                             datall.append(row)
