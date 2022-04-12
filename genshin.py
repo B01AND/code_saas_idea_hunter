@@ -14,6 +14,7 @@ from datetime import datetime
 import time
 import random
 import math
+import json
 import os
 from pyairtable.formulas import match
 from pyairtable import *
@@ -87,6 +88,26 @@ def url_ok(url):
         else:
 
             return True   
+
+def update_daily_json(filename,data_all):
+    if not os.path.exists(filename):
+        open(filename,'w').write('')
+    with open(filename,"r") as f:
+        content = f.read()
+        if not content:
+            m = {}
+        else:
+            m = json.loads(content)
+    
+    #将datas更新到m中
+    for data in data_all:
+        m.update(data)
+
+    # save data to daily.json
+
+    with open(filename,"w") as f:
+        json.dump(m,f)
+    
 async def craw_all_pl(topic):
     item_list = []
 
@@ -113,7 +134,7 @@ async def craw_all_pl(topic):
         
         filterscount=await filters.count()
         print(filterscount,type(filterscount))
-
+        datall=[]
         if filterscount>0:
             for i in range(filterscount):
                 element =filters.nth(i)
@@ -143,23 +164,26 @@ async def craw_all_pl(topic):
                                     tmp =await ife.nth(i).get_attribute("title")
                                     topic=topic+','+tmp.split(":")[1]
                             language=keyword.split('&')[0]
-                            row =[{
+                            row ={
                                 "name": full_name,
                                 "description": description.strip(),
                                 "url": url,
                                 "topic":topics,
                                 "language":language,
                                 "created_at": ''
-                            }]
+                            }
                             print(row,'============')
-                            updaterow(table,row)
+                            datall.append(row)
+                            updaterow(table,[row])
 
                     
                     except Exception as e:
                         print("网络发生错误", e)
                         continue
 
-                    time.sleep(random.randint(30, 60))            
+                    time.sleep(random.randint(30, 60))    
+            update_daily_json("data/{}.json".format(topic),datall)
+        
     except:
         print("请求数量的时候发生错误")
 
