@@ -153,6 +153,8 @@ def craw_all(topic):
     try:
         reqtem = requests.get(api).json()
         total_count = reqtem["total_count"]
+        total_count =1000
+#         github api limit
         if total_count<30:
             for_count=0
         for_count = math.ceil(total_count / 30) + 1
