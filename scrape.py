@@ -22,7 +22,7 @@ import time
 import json
 from pyairtable.formulas import match
 from pyairtable import *
-from playwright.sync_api import sync_playwright,Mouse
+from playwright.async_api import async_playwright
 
 HEADERS = {
     'User-Agent':
@@ -49,6 +49,7 @@ async def get_playright(proxy:bool=False,headless:bool=True):
     # browser=''
     if proxy==False:
         try:
+            print("start pl without proxy")
             browser = await  playwright.firefox.launch(headless=headless)
             print('start is ok')
             return browser
@@ -135,6 +136,7 @@ async def coldstart(topic,table):
         browser = await get_playright(False,False)
         context = await browser.new_context()
         page = await browser.new_page()
+        print('this url',url)
         res=await page.goto(url)
         print('user home url',url)
         count =  page.locator('div.flex-column:nth-child(1) > h3:nth-child(1)')
@@ -181,7 +183,7 @@ async def coldstart(topic,table):
                             if await ife.count()>0:
                                 for i in range(await ife.count()):
                                     tmp =await ife.nth(i).get_attribute("title")
-                                    topic=topic+','+tmp.split(":")[1]
+                                    topics=topics+','+tmp.split(":")[1]
                             language=keyword.split('&')[0]
                             FORMAT='%Y-%m-%dT%H:%M:%S%z'
 

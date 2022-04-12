@@ -164,7 +164,7 @@ async def craw_all_pl(topic):
                             if await ife.count()>0:
                                 for i in range(await ife.count()):
                                     tmp =await ife.nth(i).get_attribute("title")
-                                    topic=topic+','+tmp.split(":")[1]
+                                    topics=topics+','+tmp.split(":")[1]
                             language=keyword.split('&')[0]
                             FORMAT='%Y-%m-%dT%H:%M:%S%z'
 
