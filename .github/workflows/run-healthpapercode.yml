@@ -37,9 +37,9 @@ jobs:
         run: |
           git config --global user.email action@github.com
           git config --global user.name action
+          git pull
           git add .
           git commit -m "update db" -a
-          git pull
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:

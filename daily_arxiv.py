@@ -131,8 +131,8 @@ if __name__ == "__main__":
         day = str(DateToday + timedelta(-i))
         # you can add the categories in cats
 
-        healthcare_papar_code={'abstract':['healthcare','medical','hospital']}
+        healthcare_papar_code={'categories':['cs', 'eess'],'abstract':['healthcare','medical','hospital']}
         data = get_daily_code(day,cats,healthcare_papar_code)
         data_all.append(data)
     update_daily_json("data/{}.json".format('healthcare_papar_code'),data_all)
-    json_to_md("data/{}.json".format('healthcare_papar_code'),'healthcare_papar_code')
+    json_to_md("data/{}.json".format('healthcare_papar_code'),'-healthcare_papar_code')
