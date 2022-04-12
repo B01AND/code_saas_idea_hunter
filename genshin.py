@@ -125,7 +125,7 @@ async def craw_all_pl(topic):
                 pages=int(total_count/10)+1
                 urls=[]
                 for i in range(pages):
-                    url=href+'&p='+str(i)
+                    url=href+'&s=updated&p='+str(i)
                     print('keyword',keyword,'page-',url)
                     try:
                         res=await page.goto(url)
@@ -135,9 +135,9 @@ async def craw_all_pl(topic):
                             print('fullname',full_name)
                             description=await items.nth(i).locator('p.mb-1').text_content()
                             url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
-                            ife=items.nth(i).locator("a.topic-tag")
+                            ife=items.nth(i).locator("div > div > div >a.topic-tag")
                             if await ife.count()>0:
-                                topics=await items.nth(i).locator("a.topic-tag").text_content()
+                                topics=await ife.text_content()
                             else:
                                 topics =topic
                             language=keyword.split('&')[0]
