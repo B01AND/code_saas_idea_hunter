@@ -110,11 +110,12 @@ def update_daily_json(filename,data_all):
     
 async def craw_all_pl(topic):
     item_list = []
+    datall=[]
 
     start = time.time()
     url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
     try:
-        browser = await get_playright(url,False,False)
+        browser = await get_playright(False,False)
         context = await browser.new_context()
         page = await browser.new_page()
         res=await page.goto(url)
@@ -134,7 +135,6 @@ async def craw_all_pl(topic):
         
         filterscount=await filters.count()
         print(filterscount,type(filterscount))
-        datall=[]
         if filterscount>0:
             for i in range(filterscount):
                 element =filters.nth(i)
@@ -154,7 +154,9 @@ async def craw_all_pl(topic):
                         for i in range(await items.count()):
                             full_name =await items.nth(i).locator('a.v-align-middle').text_content()
                             print('fullname',full_name)
-                            description=await items.nth(i).locator('p.mb-1').text_content()
+                            des =items.nth(i).locator('p.mb-1')
+                            if await des.count()>0:
+                                description=await des.text_content()
                             url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
                             ife=items.nth(i).locator("div > div > div >a.topic-tag")
                             topics =topic
@@ -164,8 +166,8 @@ async def craw_all_pl(topic):
                                     tmp =await ife.nth(i).get_attribute("title")
                                     topic=topic+','+tmp.split(":")[1]
                             language=keyword.split('&')[0]
-
                             FORMAT='%Y-%m-%dT%H:%M:%S%z'
+
                             row ={
                                 "name": full_name,
                                 "description": description.strip(),
@@ -184,12 +186,14 @@ async def craw_all_pl(topic):
                         continue
 
                     time.sleep(random.randint(30, 60))    
-            update_daily_json("data/{}.json".format(topic),datall)
         
     except:
         print("请求数量的时候发生错误")
+    update_daily_json("data/{}.json".format(topic),datall)
 
     return item_list
+
+
 
 def craw_all(topic):
     # 这是爬取所有的,github api限制每分钟请求最多30次
