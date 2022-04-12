@@ -41,12 +41,12 @@ def signalHandler(signal, frame):
     global signalTag
     signalTag = True
 # from .util import *
-async def get_playright(url,proxy,headless:bool=True):
+async def get_playright(proxy:bool=False,headless:bool=True):
     print('proxy',proxy,'headless',headless)
     browser=''
     playwright =await  async_playwright().start()
     PROXY_SOCKS5 = "socks5://127.0.0.1:1080"
-    browser=''
+    # browser=''
     if proxy==False:
         try:
             browser = await  playwright.firefox.launch(headless=headless)
@@ -107,6 +107,7 @@ def url_ok(url):
 
 def update_daily_json(filename,data_all):
     if not os.path.exists(filename):
+        print('create a  new file',filename)
         open(filename,'w').write('')
     with open(filename,"r") as f:
         content = f.read()
@@ -126,11 +127,12 @@ def update_daily_json(filename,data_all):
     
 async def coldstart(topic,table):
     item_list = []
+    datall=[]
 
     start = time.time()
     url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
     try:
-        browser = await get_playright(url,False,True)
+        browser = await get_playright(False,False)
         context = await browser.new_context()
         page = await browser.new_page()
         res=await page.goto(url)
@@ -150,7 +152,6 @@ async def coldstart(topic,table):
         
         filterscount=await filters.count()
         print(filterscount,type(filterscount))
-        datall=[]
         if filterscount>0:
             for i in range(filterscount):
                 element =filters.nth(i)
@@ -198,10 +199,10 @@ async def coldstart(topic,table):
                         continue
 
                     time.sleep(random.randint(30, 60))    
-            update_daily_json("data/{}.json".format(topic),datall)
         
     except:
         print("请求数量的时候发生错误")
+    update_daily_json("data/{}.json".format(topic),datall)
 
     return item_list
 
@@ -290,7 +291,8 @@ async def main(opts):
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
     if not os.path.exists('data/'+topic+'.json'):
-        coldstart(topic,table)
+        await coldstart(topic,table)
+    
     for k in keywords:
         # Assign tasks
         timeSt = str2time(timeSt)
