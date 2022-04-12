@@ -51,7 +51,7 @@ async def get_playright(proxy:bool=False,headless:bool=True):
     if proxy==False:
         try:
             print("start pl without proxy")
-            browser = await  playwright.firefox.launch(headless=headless)
+            browser = await  playwright.webkit.launch(headless=headless)
             print('start is ok')
             return browser
 

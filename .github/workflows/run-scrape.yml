@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: run-scrape-proxypool
+name: run-a
 
 # Controls when the action will run.
 on:
@@ -39,7 +39,7 @@ jobs:
         run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable playwright colorlog httpx
       - name: Install dependencies
         run: |      
-          python -m playwright install firefox  
+          python -m playwright install  
       - name: run script
         run: python  scrape.py
 
