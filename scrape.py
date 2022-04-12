@@ -299,10 +299,13 @@ async def main(opts):
     tableid=os.environ.get(topic.upper()+'_AIRTABLE_TABLE_KEY')
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
-    if not os.path.exists('data/'+topic+'.json'):
+    if  os.path.exists('data/'+topic+'.json'):
         with open('data/'+topic+'.json',encoding='utf8') as f:
             if len(json.load(f.read()))==0:
                 await coldstart(topic,table)
+    else:
+        await coldstart(topic,table)
+
     
     for k in keywords:
         # Assign tasks
