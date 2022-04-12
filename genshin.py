@@ -145,7 +145,7 @@ async def craw_all_pl(topic):
                             language=keyword.split('&')[0]
                             row =[{
                                 "name": full_name,
-                                "description": description,
+                                "description": description.strip(),
                                 "url": url,
                                 "topic":topics,
                                 "language":language,
