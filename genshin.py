@@ -136,10 +136,12 @@ async def craw_all_pl(topic):
                             description=await items.nth(i).locator('p.mb-1').text_content()
                             url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
                             ife=items.nth(i).locator("div > div > div >a.topic-tag")
+                            topics =topic
+
                             if await ife.count()>0:
-                                topics=await ife.text_content()
-                            else:
-                                topics =topic
+                                for i in range(await ife.count()):
+                                    tmp =await ife.nth(i).get_attribute("title")
+                                    topic=topic+','+tmp.split(":")[1]
                             language=keyword.split('&')[0]
                             row =[{
                                 "name": full_name,
