@@ -36,7 +36,10 @@ jobs:
         with:
           python-version: 3.7        
       - name: install python packages
-        run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable
+        run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable playwright colorlog httpx
+      - name: Install dependencies
+        run: |      
+          python -m playwright install  
       - name: run script
         run: python  scrape.py -k "shopify" -n shopify
 
