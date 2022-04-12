@@ -3,6 +3,7 @@
 # Author: RogerRordo
 
 from ast import keyword
+import encodings
 import logging
 import optparse
 import asyncio
@@ -298,7 +299,9 @@ async def main(opts):
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
     if not os.path.exists('data/'+topic+'.json'):
-        await coldstart(topic,table)
+        with open('data/'+topic+'.json',encodings='utf8') as f:
+            if len(json.load(f.read()))==0:
+                await coldstart(topic,table)
     
     for k in keywords:
         # Assign tasks
