@@ -134,7 +134,7 @@ async def coldstart(topic,table):
     start = time.time()
     url = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
     try:
-        browser = await get_playright(False,True)
+        browser = await get_playright(False,False)
         context = await browser.new_context()
         page = await browser.new_page()
         print('this url',url)
@@ -177,7 +177,7 @@ async def coldstart(topic,table):
                             print('fullname',full_name)
                             des =items.nth(i).locator('p.mb-1')
                             if await des.count()>0:
-                                description=await des.text_content()
+                                des=await des.text_content()
                             url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
                             ife=items.nth(i).locator("div > div > div >a.topic-tag")
                             topics =topic
@@ -191,7 +191,7 @@ async def coldstart(topic,table):
 
                             row ={
                                 "name": full_name,
-                                "description": description.strip(),
+                                "description": des.strip(),
                                 "url": url,
                                 "topic":topics,
                                 "language":language,
@@ -303,71 +303,76 @@ async def main(opts):
     if  os.path.exists('data/'+topic+'.json'):
         with open('data/'+topic+'.json',encoding='utf8') as f:
             if len(json.load(f.read()))==0:
+                print('there is empty json,cold start ')
                 await coldstart(topic,table)
     else:
+        print('there is no json,cold start ')
+
         await coldstart(topic,table)
+    if  os.path.exists('data/'+topic+'.json'):
+        with open('data/'+topic+'.json',encoding='utf8') as f:
+            if len(json.load(f.read()))>0:
+                
+                for k in keywords:
+                    # Assign tasks
+                    timeSt = str2time(timeSt)
+                    timeEd = str2time(timeEd)
+                    dt = (timeEd - timeSt) / opts.threads
+                    try:
+                        url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
-    
-    for k in keywords:
-        # Assign tasks
-        timeSt = str2time(timeSt)
-        timeEd = str2time(timeEd)
-        dt = (timeEd - timeSt) / opts.threads
-        try:
-            url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
+                        reqtem = requests.get(url).json()
+                        # print('raw json',reqtem)
+                        total_count = reqtem["total_count"]
+                        total_count=1000
+                        # github api limit 1000
+                        if total_count<100:
+                            for_count=0
+                        for_count = math.ceil(total_count / 100) + 1
 
-            reqtem = requests.get(url).json()
-            # print('raw json',reqtem)
-            total_count = reqtem["total_count"]
-            total_count=1000
-            # github api limit 1000
-            if total_count<100:
-                for_count=0
-            for_count = math.ceil(total_count / 100) + 1
+                        if total_count<100:
+                            for_count=0
+                        for_count = math.ceil(1000 / 100) + 1
+                        # https://docs.github.com/en/rest/reference/search
+                        # The Search API helps you search for the specific item you want to find. For example, you can find a user or a specific file in a repository. Think of it the way you think of performing a search on Google. It's designed to help you find the one result you're looking for (or maybe the few results you're looking for). Just like searching on Google, you sometimes want to see a few pages of search results so that you can find the item that best meets your needs. To satisfy that need, the GitHub Search API provides up to 1,000 results for each search.
+                        print(total_count)
+                    except:
+                        print('here=========')
+                    proxypool=opts.proxypool
+                    times=list(chunk(range(for_count), 10))
+                    for item in times:
+                        proxylist=[]
 
-            if total_count<100:
-                for_count=0
-            for_count = math.ceil(1000 / 100) + 1
-            # https://docs.github.com/en/rest/reference/search
-            # The Search API helps you search for the specific item you want to find. For example, you can find a user or a specific file in a repository. Think of it the way you think of performing a search on Google. It's designed to help you find the one result you're looking for (or maybe the few results you're looking for). Just like searching on Google, you sometimes want to see a few pages of search results so that you can find the item that best meets your needs. To satisfy that need, the GitHub Search API provides up to 1,000 results for each search.
-            print(total_count)
-        except:
-            print('here=========')
-        proxypool=opts.proxypool
-        times=list(chunk(range(for_count), 10))
-        for item in times:
-            proxylist=[]
+                        while len(proxylist)<20:    
+                            proxy = requests.get(proxypool).text
+                            if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
+                                proxylist.append(proxy)
+                                print('add one',proxy)
+                        print('page ',item)
+                        coroutines = []
 
-            while len(proxylist)<20:    
-                proxy = requests.get(proxypool).text
-                if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
-                    proxylist.append(proxy)
-                    print('add one',proxy)
-            print('page ',item)
-            coroutines = []
+                        for i in item:
+                            proxy=random.choice(proxylist)
 
-            for i in item:
-                proxy=random.choice(proxylist)
+                            coroutines.append(
+                                worker(id=i,
+                                    st=timeSt + dt * i,
+                                    ed=timeSt + dt * (i + 1),
+                                    proxylist=proxylist,
+                                    delay=opts.delay,
+                                    timeout=opts.timeout,
+                                    topic=topic,
+                                    keyword=k,
+                                    index=i,
+                                    table=table))
+                        # Run tasks
+                        print('run task',item)
+                        workerRes = await asyncio.gather(*coroutines)
+                        proxylist=[]
+                        print(item,'task result',len(workerRes))
 
-                coroutines.append(
-                    worker(id=i,
-                        st=timeSt + dt * i,
-                        ed=timeSt + dt * (i + 1),
-                        proxylist=proxylist,
-                        delay=opts.delay,
-                        timeout=opts.timeout,
-                        topic=topic,
-                        keyword=k,
-                        index=i,
-                        table=table))
-            # Run tasks
-            print('run task',item)
-            workerRes = await asyncio.gather(*coroutines)
-            proxylist=[]
-            print(item,'task result',len(workerRes))
-
-            time.sleep(60)
-        page(table,topic)
+                        time.sleep(60)
+                    page(table,topic)
 
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
