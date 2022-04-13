@@ -313,7 +313,7 @@ async def main(opts):
         await coldstart(topic,table)
     if  os.path.exists('data/'+topic+'.json'):
         with open('data/'+topic+'.json',encoding='utf8') as f:
-            if len(json.load(f.read()))>0:
+            if len(json.loads(f.read()))>0:
                 
                 for k in keywords:
                     # Assign tasks
