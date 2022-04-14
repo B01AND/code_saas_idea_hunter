@@ -181,6 +181,8 @@ async def coldstart(topic,table):
                             des =items.nth(i).locator('p.mb-1')
                             if await des.count()>0:
                                 des=await des.text_content()
+                            else:
+                                des=''
                             url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
                             ife=items.nth(i).locator("div > div > div >a.topic-tag")
                             topics =topic
@@ -516,7 +518,7 @@ def save(table,keyword,topic,items):
     items=formatapiresult(items)
     oldcontent=[]
     with open('data/'+topic+'.json',encoding="utf8") as f:
-        oldcontent = json.loads(f.read())
+        oldcontent.extend(json.loads(f.read()))
 
     for item in items:
         url=item['url']
