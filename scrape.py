@@ -325,36 +325,42 @@ async def main(opts):
                     timeSt = str2time(timeSt)
                     timeEd = str2time(timeEd)
                     dt = (timeEd - timeSt) / opts.threads
+                    for_count=10
                     try:
                         url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
                         reqtem = requests.get(url).json()
                         # print('raw json',reqtem)
                         total_count = reqtem["total_count"]
-                        total_count=1000
+                        print('total result',total_count)
                         # github api limit 1000
                         if total_count<100:
                             for_count=0
-                        for_count = math.ceil(total_count / 100) + 1
+                        else:
+                            for_count = math.ceil(1000 / 100) 
 
-                        if total_count<100:
-                            for_count=0
-                        for_count = math.ceil(1000 / 100) + 1
                         # https://docs.github.com/en/rest/reference/search
                         # The Search API helps you search for the specific item you want to find. For example, you can find a user or a specific file in a repository. Think of it the way you think of performing a search on Google. It's designed to help you find the one result you're looking for (or maybe the few results you're looking for). Just like searching on Google, you sometimes want to see a few pages of search results so that you can find the item that best meets your needs. To satisfy that need, the GitHub Search API provides up to 1,000 results for each search.
                         print(total_count)
                     except:
                         print('here=========')
                     proxypool=opts.proxypool
-                    times=list(chunk(range(for_count), 10))
-                    for item in times:
-                        proxylist=[]
+                    times=list(chunk(range(total_count), 10))
+                    print('---',times)
+                    proxylist=[]
 
-                        while len(proxylist)<20:    
-                            proxy = requests.get(proxypool).text
-                            if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
-                                proxylist.append(proxy)
-                                print('add one',proxy)
+                    while len(proxylist)<20:    
+                        proxy = requests.get(proxypool).text
+                        if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
+                            proxylist.append(proxy)
+                            print('add one',proxy)
+
+
+
+
+                    for item in times:
+
+
                         print('page ',item)
                         coroutines = []
 
@@ -524,7 +530,8 @@ def save(table,keyword,topic,items):
         url=item['url']
         if not url in oldcontent:
             oldcontent.extend(item)
-    update_daily_json("data/{}.json".format(topic),oldcontent)
+    print(oldcontent)
+    update_daily_json("data/{}.json".format(topic),items)
 
     sorted = db_match_airtable(table,items,keyword)
     print("record in db:{}条".format(len(sorted)))
