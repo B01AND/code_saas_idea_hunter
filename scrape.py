@@ -117,14 +117,16 @@ def update_daily_json(filename,data_all):
     with open(filename,"r") as f:
         content = f.read()
         if not content:
-            m = {}
+            m = []
         else:
             m = json.loads(content)
     
     #将datas更新到m中
-    for data in data_all:
-        m.update(data)
-
+    # for data in data_all:
+    #     print('item---',data)
+        
+    #     m.append(data)
+    # print('mmm',m)
     # save data to daily.json
 
     with open(filename,"w") as f:
@@ -150,72 +152,129 @@ async def coldstart(topic,table):
         count=count.strip().split(' ')[0].replace(',','')
         print(count)
         total_count = int(count)
-        if total_count<30:
-            for_count=0
-        for_count = math.ceil(total_count / 30) + 1
+        if total_count<10:
+            pages=1
+        else:
+            pages = math.ceil(total_count / 10) + 1
 
         print('total count',total_count)
-        filters=page.locator("a.filter-item")
-        
-        filterscount=await filters.count()
-        print(filterscount,type(filterscount))
-        if filterscount>0:
-            for i in range(filterscount):
-                element =filters.nth(i)
-                href="https:github.com"+await element.get_attribute("href")
-                keyword=href.split('=')[1]
-                count = await element.locator('span').text_content()
-                print(keyword,count)
-                total_count=int(count)
-                pages=int(total_count/10)+1
-                urls=[]
-                for i in range(pages):
-                    url=href+'&s=updated&p='+str(i)
-                    print('keyword',keyword,'page-',url)
-                    try:
-                        res=await page.goto(url)
-                        items = page.locator('li.repo-list-item')
-                        for i in range(await items.count()):
-                            full_name =await items.nth(i).locator('a.v-align-middle').text_content()
-                            print('fullname',full_name)
-                            des =items.nth(i).locator('p.mb-1')
-                            if await des.count()>0:
-                                des=await des.text_content()
-                            else:
-                                des=''
-                            url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
-                            ife=items.nth(i).locator("div > div > div >a.topic-tag")
-                            topics =topic
+        if total_count < 1000:
+            print('total <1000, pagination is',pages)
+            for i in range(pages):
+                href = "https://github.com/search?o=desc&q={}&s=updated&type=Repositories".format(topic)
 
-                            if await ife.count()>0:
-                                for i in range(await ife.count()):
-                                    tmp =await ife.nth(i).get_attribute("title")
-                                    topics=topics+','+tmp.split(":")[1]
-                            language=keyword.split('&')[0]
-                            FORMAT='%Y-%m-%dT%H:%M:%S%z'
-
-                            row ={
-                                "name": full_name,
-                                "description": des.strip(),
-                                "url": url,
-                                "topic":topics,
-                                "language":language,
-                                "created_at": datetime.now().strftime(FORMAT)
-                            }
-                            print(row,'============')
-                            datall.append(row)
-                            updaterow(table,[row])
-
-                    
-                    except Exception as e:
-                        print("网络发生错误", e)
-                        continue
-
+                url=href+'&s=updated&p='+str(i)
+                print('===============',url)
+                try:
                     time.sleep(random.randint(30, 60))    
+
+                    res=await page.goto(url)
+                    items = page.locator('li.repo-list-item')
+                    for i in range(await items.count()):
+                        full_name =await items.nth(i).locator('a.v-align-middle').text_content()
+                        print('fullname',full_name)
+                        des =items.nth(i).locator('p.mb-1')
+                        if await des.count()>0:
+                            des=await des.text_content()
+                        else:
+                            des=''
+                        url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
+                        print('repo url',url)
+                        ife=items.nth(i).locator("div > div > div >a.topic-tag")
+                        topics =topic
+
+                        if await ife.count()>0:
+                            for i in range(await ife.count()):
+                                tmp =await ife.nth(i).get_attribute("title")
+                                topics=topics+','+tmp.split(":")[1]
+                        language=''
+                        if await items.nth(i).locator('//div[2]/div[2]/div/div[2]/span/span[2]').count()>0:
+                            language=await items.nth(i).locator('//div[2]/div[2]/div/div[2]/span/span[2]').text_content()
+                            print('language exist',language)
+                        
+                        FORMAT='%Y-%m-%dT%H:%M:%S%z'
+
+                        row ={
+                            "name": full_name,
+                            "description": des.strip(),
+                            "url": url,
+                            "topic":topics,
+                            "language":language,
+                            "created_at": datetime.now().strftime(FORMAT)
+                        }
+                        print(row,'============')
+                        datall.append(row)
+                        # updaterow(table,[row])
+
+                
+                except Exception as e:
+                    print("网络发生错误", e)
+                    continue
+
+        else:
+            filters=page.locator("a.filter-item")
+            
+            filterscount=await filters.count()
+            print(filterscount,type(filterscount))
+            if filterscount>0:
+                for i in range(filterscount):
+                    element =filters.nth(i)
+                    href="https:github.com"+await element.get_attribute("href")
+                    keyword=href.split('=')[1]
+                    count = await element.locator('span').text_content()
+                    print(keyword,count)
+                    total_count=int(count)
+                    pages=int(total_count/10)+1
+                    urls=[]
+                    for i in range(pages):
+                        url=href+'&s=updated&p='+str(i)
+                        print('keyword',keyword,'page-',url)
+                        try:
+                            time.sleep(random.randint(30, 60))    
+
+                            res=await page.goto(url)
+                            items = page.locator('li.repo-list-item')
+                            for i in range(await items.count()):
+                                full_name =await items.nth(i).locator('a.v-align-middle').text_content()
+                                print('fullname',full_name)
+                                des =items.nth(i).locator('p.mb-1')
+                                if await des.count()>0:
+                                    des=await des.text_content()
+                                else:
+                                    des=''
+                                url ="https:github.com"+await items.nth(i).locator('a.v-align-middle').get_attribute("href")
+                                ife=items.nth(i).locator("div > div > div >a.topic-tag")
+                                topics =topic
+
+                                if await ife.count()>0:
+                                    for i in range(await ife.count()):
+                                        tmp =await ife.nth(i).get_attribute("title")
+                                        topics=topics+','+tmp.split(":")[1]
+                                language=keyword.split('&')[0]
+                                FORMAT='%Y-%m-%dT%H:%M:%S%z'
+
+                                row ={
+                                    "name": full_name,
+                                    "description": des.strip(),
+                                    "url": url,
+                                    "topic":topics,
+                                    "language":language,
+                                    "created_at": datetime.now().strftime(FORMAT)
+                                }
+                                print(row,'============')
+                                datall.append(row)
+                                # updaterow(table,[row])
+
+                        
+                        except Exception as e:
+                            print("网络发生错误", e)
+                            continue
+
         
     except:
         print("请求数量的时候发生错误")
     if len(datall)>0:
+        print('datall',datall)
         update_daily_json("data/{}.json".format(topic),datall)
 
     return item_list
@@ -288,9 +347,7 @@ def chunk(it, size):
 
 async def main(opts):
     # Catch signal to exit gracefully
-    signal.signal(signal.SIGINT, signalHandler)
-    timeSt = '2021-05-01 00:00:00'
-    timeEd = '2021-05-01 01:00:00'
+
     keywords=[]
     print('keywords list ',opts.keywords)
     
@@ -309,13 +366,34 @@ async def main(opts):
         with open('data/'+topic+'.json',encoding='utf8') as f:
             # print(f.read())
             data=f.read()
-            if len(json.loads(data))==0:
+            if len(json.loads(data))<1000:
                 print('there is empty json,cold start ')
-                await coldstart(topic,table)
+                for k in keywords:
+
+                    await coldstart(k,table)
     else:
         print('there is no json,cold start ')
+        for k in keywords:
 
-        await coldstart(topic,table)
+            await coldstart(k,table)
+
+async def latest(opts):
+    signal.signal(signal.SIGINT, signalHandler)
+
+    keywords=[]
+    print('keywords list ',opts.keywords)
+    timeSt = '2021-05-01 00:00:00'
+    timeEd = '2021-05-01 01:00:00'    
+    if ',' in opts.keywords:
+        keywords=opts.keywords.split(',')
+    else:
+        keywords.append(opts.keywords)
+    topic=opts.topic    
+    apikey=os.environ.get('AIRTABLE_API_KEY')
+    baseid=os.environ.get(topic.upper()+'_AIRTABLE_BASE_KEY')
+    tableid=os.environ.get(topic.upper()+'_AIRTABLE_TABLE_KEY')
+    api = Api(apikey)
+    table = Table(apikey, baseid, tableid)
     if  os.path.exists('data/'+topic+'.json'):
         with open('data/'+topic+'.json',encoding='utf8') as f:
             if len(json.loads(f.read()))>0:
@@ -345,47 +423,51 @@ async def main(opts):
                     except:
                         print('here=========')
                     proxypool=opts.proxypool
-                    times=list(chunk(range(total_count), 10))
-                    print('---',times)
-                    proxylist=[]
+                    if total_count<1000:
+                        pass
+                    else:
 
-                    while len(proxylist)<20:    
-                        proxy = requests.get(proxypool).text
-                        if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
-                            proxylist.append(proxy)
-                            print('add one',proxy)
-
-
-
-
-                    for item in times:
-
-
-                        print('page ',item)
-                        coroutines = []
-
-                        for i in item:
-                            proxy=random.choice(proxylist)
-
-                            coroutines.append(
-                                worker(id=i,
-                                    st=timeSt + dt * i,
-                                    ed=timeSt + dt * (i + 1),
-                                    proxylist=proxylist,
-                                    delay=opts.delay,
-                                    timeout=opts.timeout,
-                                    topic=topic,
-                                    keyword=k,
-                                    index=i,
-                                    table=table))
-                        # Run tasks
-                        print('run task',item)
-                        workerRes = await asyncio.gather(*coroutines)
+                        times=list(chunk(range(for_count), 10))
+                        print('---',times)
                         proxylist=[]
-                        print(item,'task result',len(workerRes))
 
-                        time.sleep(60)
-                    page(table,topic)
+                        while len(proxylist)<20:    
+                            proxy = requests.get(proxypool).text
+                            if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
+                                proxylist.append(proxy)
+                                print('add one',proxy)
+
+
+
+
+                        for item in times:
+
+
+                            print('page ',item)
+                            coroutines = []
+
+                            for i in item:
+                                proxy=random.choice(proxylist)
+
+                                coroutines.append(
+                                    worker(id=i,
+                                        st=timeSt + dt * i,
+                                        ed=timeSt + dt * (i + 1),
+                                        proxylist=proxylist,
+                                        delay=opts.delay,
+                                        timeout=opts.timeout,
+                                        topic=topic,
+                                        keyword=k,
+                                        index=i,
+                                        table=table))
+                            # Run tasks
+                            print('run task',item)
+                            workerRes = await asyncio.gather(*coroutines)
+                            proxylist=[]
+                            print(item,'task result',len(workerRes))
+
+                            time.sleep(60)
+                        page(table,topic)
 
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
@@ -522,10 +604,11 @@ def save(table,keyword,topic,items):
     print("获取dao原始数据:{}条".format(len(items)))
 
     items=formatapiresult(items)
+    print('items',items)
     oldcontent=[]
     with open('data/'+topic+'.json',encoding="utf8") as f:
         oldcontent.extend(json.loads(f.read()))
-
+    print('old content',oldcontent)
     for item in items:
         url=item['url']
         if not url in oldcontent:

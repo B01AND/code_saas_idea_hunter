@@ -38,3 +38,9 @@ https://github.com/gtalarico/pyairtable
 
 
 ## proxy pool support
+
+
+
+## new site
+
+https://github.com/zernonia/madewithsupabase
