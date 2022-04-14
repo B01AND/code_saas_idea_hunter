@@ -122,12 +122,13 @@ def update_daily_json(filename,data_all):
             m = json.loads(content)
     
     #将datas更新到m中
-    # for data in data_all:
-    #     print('item---',data)
+    for data in data_all:
+        print('item---',data)
         
-    #     m.append(data)
+        m.append(data)
     # print('mmm',m)
     # save data to daily.json
+    m= {elem["name"]:elem for elem in m}.values()
 
     with open(filename,"w") as f:
         json.dump(m,f)
