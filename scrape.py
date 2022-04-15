@@ -429,7 +429,8 @@ async def latest(opts):
                         pass
                     else:
 
-                        times=list(chunk(range(for_count), 10))
+                        # times=list(chunk(range(for_count), 10))
+                        times=range(for_count)
                         print('---',times)
                         proxylist=[]
 
