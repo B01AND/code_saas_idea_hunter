@@ -3,3 +3,4 @@ airtable
 Manim
 affiliate
 amazon
+Supabase 

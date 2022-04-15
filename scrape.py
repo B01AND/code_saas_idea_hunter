@@ -123,15 +123,16 @@ def update_daily_json(filename,data_all):
     
     #将datas更新到m中
     for data in data_all:
-        print('item---',data)
+        # print('item---',data)
+
         
         m.append(data)
     # print('mmm',m)
     # save data to daily.json
-    m= {elem["name"]:elem for elem in m}.values()
-
-    with open(filename,"w") as f:
-        json.dump(m,f)
+    m= list({elem["name"]:elem for elem in m}.values())
+    print('/',type(m),m)
+    with open(filename,"w") as fp:
+        json.dump(m,fp)
     
 async def coldstart(topic,table):
     item_list = []
@@ -167,7 +168,7 @@ async def coldstart(topic,table):
                 url=href+'&s=updated&p='+str(i)
                 print('===============',url)
                 try:
-                    time.sleep(random.randint(30, 60))    
+                    time.sleep(random.randint(10, 30))    
 
                     res=await page.goto(url)
                     items = page.locator('li.repo-list-item')
@@ -364,9 +365,9 @@ async def main(opts):
     api = Api(apikey)
     table = Table(apikey, baseid, tableid)
     if  os.path.exists('data/'+topic+'.json'):
-        with open('data/'+topic+'.json',encoding='utf8') as f:
+        with open('data/'+topic+'.json',encoding='utf8') as f1:
             # print(f.read())
-            data=f.read()
+            data=f1.read()
             if len(json.loads(data))<1000:
                 print('there is empty json,cold start ')
                 for k in keywords:
