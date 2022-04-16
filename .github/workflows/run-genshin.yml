@@ -42,7 +42,7 @@ jobs:
         run: |      
           python -m playwright install firefox  
       - name: run script
-        run: python scrape.py -k genshin -n genshin
+        run: python genshin.py
       - name: commit
         run: |
           git config --global user.email action@github.com
