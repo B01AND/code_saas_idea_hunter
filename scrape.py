@@ -42,7 +42,6 @@ proxylist=[]
 USERNAME = os.getenv("GITHUB_USERNAME")
 TOKEN = os.getenv("GITHUB_TOKEN")
 
-
 def signalHandler(signal, frame):
     log.warning('Signal catched...')
     global signalTag
@@ -274,9 +273,12 @@ async def coldstart(topic,table):
         
     except:
         print("请求数量的时候发生错误")
+    if len(datall)>0:
+        print('datall',datall)
+        m = update_daily_json("data/{}.json".format(topic),datall)
+        json2md(m,topic)  
 
-
-    return datall
+    return item_list
 
 
 
@@ -347,7 +349,6 @@ async def main(opts):
     # Catch signal to exit gracefully
 
     keywords=[]
-    result=[]
     print('keywords list ',opts.keywords)
     
     if ',' in opts.keywords:
@@ -365,19 +366,17 @@ async def main(opts):
         with open('data/'+topic+'.json',encoding='utf8') as f1:
             # print(f.read())
             data=f1.read()
-            result.extend(json.loads(data))
-            for k in keywords:
+            if len(json.loads(data))<1000:
+                print('there is empty json,cold start ')
+                for k in keywords:
 
-                result.extend(await coldstart(k,table))
+                    await coldstart(k,table)
     else:
         print('there is no json,cold start ')
         for k in keywords:
 
             await coldstart(k,table)
-    if len(datall)>0:
-        print('datall',datall)
-        m = update_daily_json("data/{}.json".format(topic),datall)
-        json2md(m,topic)  
+
 async def latest(opts):
     signal.signal(signal.SIGINT, signalHandler)
 
