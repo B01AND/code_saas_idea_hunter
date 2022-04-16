@@ -4,3 +4,4 @@ Manim
 affiliate
 amazon
 Supabase 
+PaddleClas

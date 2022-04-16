@@ -84,16 +84,10 @@ async def get_playright(proxy:bool=False,headless:bool=True):
 
 def write_file(new_contents,topic):
     if not os.path.exists("web/README-{}.md".format(topic)):
-        open("web/README-{}.md".format(topic),'w').write('')
-    with open("web/README-{}.md".format(topic),'r',encoding='utf8') as f:
-        #去除标题
-        for _ in range(7):
-            f.readline()
+        open("web/README-{}.md".format(topic),'w',encoding='utf-8').write('')
 
-        old = f.read()
-    new = new_contents + old
-    with open("web/README-{}.md".format(topic), "w") as f:
-        f.write(new)
+    with open("web/README-{}.md".format(topic), "w",encoding='utf-8') as fw:
+        fw.write(new_contents)
 def url_ok(url):
     try:
         response = requests.head(url)
@@ -113,7 +107,7 @@ def url_ok(url):
 def update_daily_json(filename,data_all):
     if not os.path.exists(filename):
         print('create a  new file',filename)
-        open(filename,'w').write('')
+        open(filename,'w',encoding='utf-8').write('')
     with open(filename,"r") as f:
         content = f.read()
         if not content:
@@ -131,9 +125,9 @@ def update_daily_json(filename,data_all):
     # save data to daily.json
     m= list({elem["name"]:elem for elem in m}.values())
     print('/',type(m),m)
-    with open(filename,"w") as fp:
+    with open(filename,"w",encoding='utf-8') as fp:
         json.dump(m,fp)
-    
+    return m
 async def coldstart(topic,table):
     item_list = []
     datall=[]
@@ -277,7 +271,8 @@ async def coldstart(topic,table):
         print("请求数量的时候发生错误")
     if len(datall)>0:
         print('datall',datall)
-        update_daily_json("data/{}.json".format(topic),datall)
+        m = update_daily_json("data/{}.json".format(topic),datall)
+        json2md(m,topic)  
 
     return item_list
 
@@ -329,7 +324,6 @@ async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: fl
             proxy=newproxy
             result=False
             print('another try',index)
-            
     return item_list
 
 def str2time(x: str) -> datetime:
@@ -472,18 +466,6 @@ async def latest(opts):
                             time.sleep(60)
                         page(table,topic)
 
-def write_file(new_contents,topic):
-    if not os.path.exists("web/README-{}.md".format(topic)):
-        open("web/README-{}.md".format(topic),'w').write('')
-    with open("web/README-{}.md".format(topic),'r',encoding='utf8') as f:
-        #去除标题
-        for _ in range(7):
-            f.readline()
-
-        old = f.read()
-    new = new_contents + old
-    with open("web/README-{}.md".format(topic), "w") as f:
-        f.write(new)
 def url_ok(url):
     try:
         response = requests.head(url)
@@ -622,32 +604,39 @@ def save(table,keyword,topic,items):
     sorted = db_match_airtable(table,items,keyword)
     print("record in db:{}条".format(len(sorted)))
 
-def page(table,topic):
+def json2md(items,topic):
     result=[]
-    for idx,item in enumerate(table.all()):
-        print(idx,item['fields'])
-        result.append(item['fields'])    
-    # print(sorted_list)
+    # for idx,item in enumerate(table.all()):
+    #     print(idx,item['fields'])
+    #     result.append(item['fields'])    
+    print('start convert json 2 md')
     DateToday = datetime.today()
     day = str(DateToday)    
+    print('wwhty',items)
     newline = ""
     urls=[]
-    for idx,s in enumerate(sorted):
+    for idx,s in enumerate(items):
         print(s,'-')
         if not s['url'] in urls:
-            line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx),
-            s["name"], s["description"], s["created_at"],s["url"],s["topic"],s["language"])    
+            if s["description"] is None or s["description"]=='':
+                des='-'
+            if s["topic"] is None or s["topic"]=='':
+                topic='-'                
+            if s["language"] is None or s["language"]=='':
+                language='-'                
+            line = "|{}|{}|{}|{}|{}|{}|{}|\n".format(str(idx+1),
+            s["name"], des, s["created_at"],s["url"],s["topic"],language)    
 
             newline = newline+line
             urls.append(s['url'])
-    # print(newline)
+    print(newline)
     if newline != "":
         old=f"## {day}\n"
         old=old+"|id|name|description|update_at|url|topic|language|\n" + "|---|---|---|---|---|---|---|\n"                   
-        newline = "# Automatic monitor github {} using Github Actions \n\n > update time: {}  total: {} \n\n \n ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_hunter)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_hunter/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=code_saas_idea_hunter) \n\n{}".format(
+        newline = "# Automatic monitor trending code under topic **{}** using Github Actions \n\n > update time: {}  total: {} \n\n \n ![star me](https://img.shields.io/badge/star%20me-click%20--%3E-orange) [code saas idea monitor](https://github.com/wanghaisheng/code_saas_idea_hunter)  [Browsing through the web](https://wanghaisheng.github.io/code_saas_idea_hunter/)  ![visitors](https://visitor-badge.glitch.me/badge?page_id=code_saas_idea_hunter) \n\n{}".format(
             topic,
             datetime.now(),
-            len(sorted)
+            len(items)
             ,old) + newline
 
         write_file(newline,topic)
