@@ -38,6 +38,10 @@ signalTag = False
 
 proxylist=[]
 
+
+USERNAME = os.getenv("GITHUB_USERNAME")
+TOKEN = os.getenv("GITHUB_TOKEN")
+
 def signalHandler(signal, frame):
     log.warning('Signal catched...')
     global signalTag
@@ -295,7 +299,7 @@ async def worker(id: int, st: datetime, ed: datetime, proxylist: list, delay: fl
             url = "https://api.github.com/search/repositories?q={}&sort=updated&per_page=100&page={}".format(topic,j)
                 # client.get() may get stuck due to unknown reasons
                 # resp = await client.get(url=url, headers=HEADERS, timeout=timeout)
-            resp = requests.get(url,proxies={'http': proxy})
+            resp = requests.get(url,proxies={'http': proxy}, auth=(USERNAME, TOKEN))
             req = resp.json()
             items=[]
             if 'items' in req:
@@ -403,7 +407,7 @@ async def latest(opts):
                     try:
                         url = "https://api.github.com/search/repositories?q={}&sort=updated".format(topic)
 
-                        reqtem = requests.get(url).json()
+                        reqtem = requests.get(url, auth=(USERNAME, TOKEN)).json()
                         # print('raw json',reqtem)
                         total_count = reqtem["total_count"]
                         print('total result',total_count)
@@ -430,7 +434,7 @@ async def latest(opts):
 
                         while len(proxylist)<20:    
                             proxy = requests.get(proxypool).text
-                            if requests.get('https://api.github.com',proxies={'http': proxy}).status_code==200:
+                            if requests.get('https://api.github.com',proxies={'http': proxy}, auth=(USERNAME, TOKEN)).status_code==200:
                                 proxylist.append(proxy)
                                 print('add one',proxy)
 
@@ -464,7 +468,7 @@ async def latest(opts):
                             print(item,'task result',len(workerRes))
 
                             time.sleep(60)
-                        page(table,topic)
+                        # js(table,topic)
 
 def url_ok(url):
     try:
