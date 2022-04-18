@@ -41,7 +41,7 @@ jobs:
         run: |      
           python -m playwright install  
       - name: run script
-        run: python  scrape.py
+        run: python  scrape.py -k genshin -n genshin
 
       - name: commit
         run: |
