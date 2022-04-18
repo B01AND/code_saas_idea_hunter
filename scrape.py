@@ -3,7 +3,6 @@
 # Author: RogerRordo
 
 from ast import keyword
-import encodings
 import logging
 import optparse
 import asyncio
@@ -337,12 +336,6 @@ def time2str(x: datetime) -> str:
     return x.strftime("%Y-%m-%d %H:%M:%S")
 
 
-from itertools import islice
-
-def chunk(it, size):
-    it = iter(it)
-    while slice := tuple(islice(it, size)):
-        yield slice
 
 async def main(opts):
     # Catch signal to exit gracefully
