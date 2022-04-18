@@ -1,0 +1,48 @@
+,login,url,type,name,company,location,email,hireable,bio,public_repos,public_gists,followers,following
+0,sirodeneko,https://api.github.com/users/sirodeneko,User,siro zou,Jiangxi University of Finance and Economics，JUFE,shanghai,,True,,40.0,0.0,15.0,2.0
+1,lim1202,https://api.github.com/users/lim1202,User,lim,,,,,"码农
+",17.0,5.0,4.0,3.0
+2,chenxsc,https://api.github.com/users/chenxsc,User,CYY,TKPSS,,,,>>> import this,3.0,0.0,2.0,2.0
+3,EugeneWong2002,https://api.github.com/users/EugeneWong2002,User,,,Malaysia,,,,3.0,0.0,0.0,0.0
+4,bitqiu,https://api.github.com/users/bitqiu,User,Bit Qiu,Eshine.,Hangzhou,,,,68.0,21.0,34.0,61.0
+5,7eu7d7,https://api.github.com/users/7eu7d7,User,,,,,,,34.0,0.0,159.0,0.0
+6,wasabiegg,https://api.github.com/users/wasabiegg,User,wasabiegg,,,,True,"Rust, Python, CSS, HTML, JS",12.0,0.0,4.0,0.0
+7,FishMagic,https://api.github.com/users/FishMagic,User,,,,,,,29.0,1.0,10.0,0.0
+8,wydy,https://api.github.com/users/wydy,User,Wydy,,,,,,26.0,0.0,1.0,1.0
+9,hgjazhgj,https://api.github.com/users/hgjazhgj,User,hgjazhgj,,"Liyue, Teyvat",,,,24.0,0.0,44.0,21.0
+10,Dimbreath,https://api.github.com/users/Dimbreath,User,Dimbreath,,,,,,18.0,0.0,383.0,6.0
+11,biuuu,https://api.github.com/users/biuuu,User,,,,,,,15.0,10.0,134.0,9.0
+12,umbrella22,https://api.github.com/users/umbrella22,User,Sky,,,,,,50.0,2.0,54.0,25.0
+13,mrwan200,https://api.github.com/users/mrwan200,User,M-307,,Thailand,,,Keqing 💞,46.0,1.0,15.0,15.0
+14,NeiL978,https://api.github.com/users/NeiL978,User,NeiL,,,,,,12.0,0.0,0.0,1.0
+15,Zenshio,https://api.github.com/users/Zenshio,User,Ludovic Six,,,,,,11.0,0.0,0.0,0.0
+16,ntuan2502,https://api.github.com/users/ntuan2502,User,Tún,,,,,,42.0,0.0,1.0,0.0
+17,toxicfusi0n,https://api.github.com/users/toxicfusi0n,User,,,,,,,1.0,0.0,1.0,2.0
+18,chenjunyu19,https://api.github.com/users/chenjunyu19,User,,,"Dongguan, China.",,,,14.0,0.0,6.0,8.0
+19,Dorisnov,https://api.github.com/users/Dorisnov,User,David,,,,,,3.0,0.0,2.0,3.0
+20,Viole403,https://api.github.com/users/Viole403,User,Masalief Maulana,Yoimiya Project,"✈ Surabaya, Indonesia",,,Do not give up just because it failed at the first opportunity. You will not have something precious easily. Keep trying!,49.0,12.0,21.0,7.0
+21,Lightczx,https://api.github.com/users/Lightczx,User,DismissedLight,DGP Studio,,,,barely did nothing.,12.0,0.0,19.0,7.0
+22,zhouhaixian,https://api.github.com/users/zhouhaixian,User,Zhou Haixian,,Earth,,,,7.0,0.0,0.0,0.0
+23,Masterain98,https://api.github.com/users/Masterain98,User,Masterain,,"San Jose, CA",,,A data analyst.,21.0,1.0,3.0,1.0
+24,XTsat,https://api.github.com/users/XTsat,User,,,,,,,42.0,0.0,2.0,9.0
+25,emako,https://api.github.com/users/emako,User,ema,,China,,,,36.0,0.0,15.0,40.0
+26,ss22219,https://api.github.com/users/ss22219,User,gool,,,,True,,64.0,11.0,15.0,11.0
+27,y1ndan,https://api.github.com/users/y1ndan,User,,,,,,,16.0,0.0,81.0,2.0
+28,voderl,https://api.github.com/users/voderl,User,笑沐泽,,NanJing,,,,17.0,0.0,3.0,3.0
+29,KimigaiiWuyi,https://api.github.com/users/KimigaiiWuyi,User,Wuyi无疑,,,,,,9.0,1.0,15.0,0.0
+30,MingxuanGame,https://api.github.com/users/MingxuanGame,User,MingxuanGame,,"Changchun, Jilin, China",,,Do what you like.,7.0,2.0,1.0,1.0
+31,wudifeixue,https://api.github.com/users/wudifeixue,User,,,Canada,,,,77.0,0.0,88.0,56.0
+32,chenchenriver,https://api.github.com/users/chenchenriver,User,,,,,,,3.0,0.0,0.0,0.0
+33,lgc2333,https://api.github.com/users/lgc2333,User,student_2333,,"Guangshui Hubei, China",,,高一猝死狗,18.0,0.0,3.0,3.0
+34,Zoe-Wh1t3zZ,https://api.github.com/users/Zoe-Wh1t3zZ,User,Zoe新小白白白,,,,,牙不齐不会塞牙，不会码代码的小白。,10.0,0.0,1.0,10.0
+35,uzair-ashraf,https://api.github.com/users/uzair-ashraf,User,Uzair Ashraf,Wildfire Systems Inc.,"Southern California, US",,True,Software Engineer,100.0,0.0,125.0,57.0
+36,elebitzero,https://api.github.com/users/elebitzero,User,,,,,,,5.0,0.0,2.0,0.0
+37,lauslim12,https://api.github.com/users/lauslim12,User,Nicholas,,,,,Iconic Pioneer of the Stars who strives for the impossible things.,18.0,15.0,45.0,34.0
+38,NathanPang001,https://api.github.com/users/NathanPang001,User,,,,,,,11.0,0.0,0.0,0.0
+39,frzyc,https://api.github.com/users/frzyc,User,Fred,,,,,,4.0,0.0,13.0,0.0
+40,,,,,,,,,,,,,
+41,,,,,,,,,,,,,
+42,,,,,,,,,,,,,
+43,,,,,,,,,,,,,
+44,,,,,,,,,,,,,
+45,,,,,,,,,,,,,
