@@ -48,7 +48,7 @@ def signalHandler(signal, frame):
 async def get_playright(proxy:bool=False,headless:bool=True):
     print('proxy',proxy,'headless',headless)
     browser=''
-    if 'Linux' in platform.system():
+    if 'linux' in platform.system():
         headless=True
     playwright =await  async_playwright().start()
     PROXY_SOCKS5 = "socks5://127.0.0.1:1080"
