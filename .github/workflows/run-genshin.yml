@@ -37,7 +37,7 @@ jobs:
         with:
           python-version: 3.8        
       - name: install python packages
-        run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable playwright colorlog httpx pandas top-github-scraper
+        run: pip install -r requirements.txt
       - name: Install dependencies
         run: |      
           python -m playwright install firefox  

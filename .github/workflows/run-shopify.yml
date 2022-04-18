@@ -36,7 +36,7 @@ jobs:
         with:
           python-version: 3.7        
       - name: install python packages
-        run: pip install peewee requests mkdocs mkdocs-bootstrap386 pyairtable playwright colorlog httpx
+        run: pip install -r requirements.txt
       - name: Install dependencies
         run: |      
           python -m playwright install  
